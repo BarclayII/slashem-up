@@ -1,0 +1,164 @@
+2014-2-23	SLASH'EM UP	0.0.1
+	* Applied bugfixes:
+		- C343-17:  After polymorphing into a xorn and returning to 
+		            human form, player can be stuck in a pit that isn't 
+			    there.
+		- C343-19:  Dipping acid in a fountain may not destroy the acid.
+		- C343-30:  Cursed scroll of destroy armor on cursed armor 
+		            doesn't always interact correctly.
+		- C343-52:  Worn or wielded objects destroyed by dipping into 
+		            lit potions of oil are not handled properly; this 
+			    can result in odd game behavior.
+		- C343-72:  You get confusing messages when you stop levitating 
+		            while on a flying steed.
+		- C343-95:  If killed by the wish from a magic lamp (or similar 
+		            situation) and a bones file is produced, the bones 
+			    file has the lamp in the wrong state.
+		- C343-100: Game may crash if thrown potion hits bars before a 
+		            monster. 
+		- C343-115: Sleeping or paralyzed unicorns can catch gems.
+		- C343-134: Being petrified by swallowing a cockatrice violates
+		            foodless conduct.
+		- C343-172: Crash could occur when monster uses potion or food 
+		            to cure stoning or confusion.
+		- C343-175: Chatting to hostile prisoners may give an in-
+		            appropriate message.
+		- C343-179: If a monster is killed by a drawbridge while 
+		            carrying a potion of acid, the game may panic.
+		- C343-218: Applying a wielded cream pie can crash the game. 
+		            This generalizes to wielded objects being destroyed.
+		- C343-243: Hero can throw without hands.
+		- C343-248: You can't put candles in a candelabrum while under-
+		            water.
+		- C343-268: Used up potion of acid may end up in bones file.
+		- C343-275: If a lit, wielded, candle or potion of oil burns 
+			    out, the game may crash.
+		- C343-276: If a figuring auto-transforms while wielded or worn,
+	  		    the game may crash.
+		- C343-290: Rings do not show up in the "what do you want to 
+			    charge?" prompt when they should. Applies to oil 
+			    lamps (and brass lanterns), too.
+		- C343-305: Attacking with an applied polearm ignores the
+			    "confirm" option.
+		- C343-324: Cutting a long worm in two will crash the game if
+		            the cut takes the worm to 1 HP or if long worms had 
+			    become extinct.
+		- C343-343: Helm of Opposite alignment gives incorrect piety 
+			    level.
+		- C343-351: Alchemy-caused explosions don't wake nearby 
+		            monsters.
+		- C343-355: Archeologists start out at basic skill level in
+			    sling.
+		- C343-383: Applying a bullwhip while hero is at edge of map may
+			    cause a panic or crash.
+		- C343-394: Throwing a potion of acid into water may panic the 
+			    game.
+		- C343-409: Unlocking a mimic pretending to be a door is not 
+			    handled properly.
+		- SC343-11: It's possible to easily find the identity of a high 
+			    priest on the Astral plane.
+		- SC343-12: Hero using telepathy can abuse Call on the Astral 
+			    Plane.
+	* Demon and devil levels are now shuffled, so Asmodeus' Lair may
+	  appear before Demogorgon's Lair.
+	* The gray dragon scales at the arch-lich statue trap now only have
+	  50% chance of being generated. Silver and deep dragon scales may be
+	  generated there as well.
+	* Applied Randomized Sokoban Prize patch, with a chance of generating
+	  cloak of magic resistance.
+	* Players can select Sokoban prize like UnNetHack by enabling 
+	  CHOOSABLE_SOKOPRIZE in config.h.
+	* Ettins and their undead counterparts, as well as titans, now have
+	  their M2_GIANT flag set.
+	* Flame/ice mage quest artifacts and first sacrifice gift are changed
+	  by enabling ENHANCED_MAGE_ARTI in config.h.
+	  	- Firewall Deep Freeze now summons fire/water elementals.
+		  Earth/air elementals are summoned when invoked while
+		  confused.
+		- The Candle of Eternal Flame now confers hungerless
+		  regeneration, teleport control, cold resistance, and a
+		  passive 1d10 fire attack when carried.
+		- The Storm Whistle now confers energy regeneration, teleport
+		  control, fire resistance, and a passive 1d10 cold attack
+		  when carried.
+	* Applied Enhanced Artifacts patch, with some differences:
+		- Giantkiller is an axe which warns the player of giants while
+		  wielded, deals an extra 20 damage, gives a +8 bonus to hit, 
+		  and has a small chance of instakilling at most 7 adjacent 
+		  giants (including titans and ettins).
+		- Dragonbane is a dwarvish spear which deals double damage and
+		  provides a +8 to-hit bonus against dragons. It also grants
+		  reflection while wielded.
+		- Sunsword is a long sword which detects and deals double
+		  damage against undead, has a chance of blinding any
+		  opponent, and prevents light-based blinding.
+		- Demonbane is now a silver long sword which deals double
+		  damage and gives a +8 to-hit bonus against major demons, and
+		  prevents demon-gating.
+		- Trollsbane grants hungerless regeneration while wielded, and
+		  has a +20 to-damage and +8 to-hit bonus against trolls.
+		  Trolls killed by Trollsbane STILL MAY REVIVE.
+		- Ogresmasher provides a bonus +8 to-hit and +20 to-damage,
+		  and sets constitution to a constant 25 when carried.
+		- Sword of Balance now deals double damage and gives +5 to-hit
+		  against cross-aligned enemies.
+		- Vorpal Blade gives a +8 bonus to-damage.
+		- Added a new artifact called Mouser's Scalpel, and
+		  uncommented the relevant code in artifact.c. It's a rapier
+		  which gives +5 to-hit bonus and +1 to-damage. Since rapiers
+		  are not randomly generated, one can only find a naturally
+		  generated Mouser's Scalpel in Grund's Stronghold.
+		- Grimtooth is a permanently poisoned weapon, much like
+		  Serpent's Tongue.
+		- Deathsword now sometimes confuses enemy if hit.
+		- Elfrist now detects elves.
+		- Invoking Nighthorn causes all hostile enemies who can see
+		  you and are not mindless flee, or even paralyze. Of course,
+		  invoking an alignment quest artifact induce a penalty to
+		  alignment and luck.
+		- The Heart of Ahriman confers stealth, displacement and
+		  energy regeneration when carried.
+		- The Sceptre of Might again deals double damage against
+		  cross-aligned monsters. It also sets the wielder's strength
+		  at 18 + enchantment, to the maximum of 25.
+		- Re-enabled the Palantir of Westernesse. It is now an
+		  unaligned crystal ball which tame nearby creatures when
+		  invoked.
+	* Lycanthropes gain intrinsic polymorph control at level 5.
+	* Introduced Dungeon Overview patch by Hojita Discordia into SLASH'EM.
+	* Applied Ask Order patch by Pasi Kallinen.
+	* Necromancers now receive a +1 alignment bonus when digging graves,
+	  and will exercise wisdom if found a corpse.
+	* Applied Polysink patch by L. Dropping a ring of polymorph into the
+	  sink could also convert it into a toilet.
+	* Applied Flipped Levels patch by Pasi Kallinen.
+		- Directions of drawbridges are not flipped in the original
+		  patch. This is now fixed.
+	* Applied Watchmen Bribery patch by L.
+	* Vlad the Impaler and Doctor Frankenstein is tougher.
+	* Vlad the Impaler and all quest nemeses ignores Elbereth, scroll of
+	  scare monster and anything that will normally scares them.
+	* Floating eyes are now bright green in TTY.
+	* Cancelled monsters, except riders, can't revive.
+	* Materials for boots are now shuffled, as seeing brown streaks on the
+	  stones when rubbing steel boots is weird. Kicking boots are no
+	  longer guaranteed iron boots any more.
+	* Pistols, bullets, silver bullets and frag grenades may randomly
+	  generate if FIREARM_RANDGEN is enabled.
+	* The times a long worm attack per move is equal to the length of the
+	  long worm.
+	* Cutting long worm in the middle now has a 2 in 3 chance to create
+	  two shorter worms.
+	* Applied Golem-Shattering patch by L.
+	* Cancelling monsters now have a visible effect.
+	* More object upgrading:
+		- Elven/dark elven daggers can now upgrade to wooden stakes,
+		  and vice versa.
+		- Knives can upgrade to scalpels, and vice versa.
+		- High boots can upgrade to any magic leather boots except for
+		  fumble boots, and vice versa.
+		- Iron shoes can upgrade to iron magic boots unless the magic
+		  boots are fumble boots, and vice versa.
+		- Flintstones can upgrade to touchstones and whetstones.
+		- Touchstones and whetstones can upgrade to luckstones and
+		  healthstones, and vice versa.
