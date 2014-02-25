@@ -3070,7 +3070,7 @@ use_pole (obj)
 	if (mtmp) {
 	    int oldhp = mtmp->mhp;
 
-	    if (attack_checks(mtmp, !uwep))
+	    if (!attack_checks(mtmp, !uwep))
 		    return res;
 
 	    bhitpos = cc;
