@@ -298,7 +298,46 @@ boolean forcecontrol;
 	}
 	old_light = Upolyd ? emits_light(youmonst.data) : 0;
 
-	if (Polymorph_control || forcecontrol) {
+	/* [BarclayII] made werecreatures and vampires polymorph into animal
+	 * form even if have polymorph control */
+	if (draconian || iswere || isvamp) {
+		/* special changes that don't require polyok() */
+		if (Polymorph_control || forcecontrol) {
+			if (yn("Change form? ") == 'n')
+				return;
+		}
+		if (draconian) {
+		    do_merge:
+			mntmp = armor_to_dragon(uarm->otyp);
+
+			if (!(mvitals[mntmp].mvflags & G_GENOD)) {
+				/* Code that was here is now in merge_with_armor */
+				merge_with_armor();
+			}
+		} else if (iswere) {
+#if 0
+			if (is_were(youmonst.data))
+				mntmp = PM_HUMAN; /* Illegal; force newman() */
+			else
+				mntmp = u.ulycn;
+#endif
+			if (u.umonnum == u.ulycn) /* animal form? */
+				you_unwere(FALSE);
+			else
+				you_were();
+			goto made_change;
+		} else if (isvamp) {
+			if (u.umonnum != PM_VAMPIRE_BAT)
+				mntmp = PM_VAMPIRE_BAT;
+			else
+				mntmp = PM_HUMAN; /* newman() */
+		}
+		/* if polymon fails, "you feel" message has been given
+		   so don't follow up with another polymon or newman */
+		if (mntmp == PM_HUMAN) newman();	/* werecritter */
+		else (void) polymon(mntmp);
+		goto made_change;    /* maybe not, but this is right anyway */
+	} else if (Polymorph_control || forcecontrol) {
 		do {
 			getlin("Become what kind of monster? [type the name]",
 				buf);
@@ -353,32 +392,6 @@ boolean forcecontrol;
 		if (draconian &&
 		    (mntmp == armor_to_dragon(uarm->otyp) || tries == 5))
 		    goto do_merge;
-	} else if (draconian || iswere || isvamp) {
-		/* special changes that don't require polyok() */
-		if (draconian) {
-		    do_merge:
-			mntmp = armor_to_dragon(uarm->otyp);
-
-			if (!(mvitals[mntmp].mvflags & G_GENOD)) {
-				/* Code that was here is now in merge_with_armor */
-				merge_with_armor();
-			}
-		} else if (iswere) {
-			if (is_were(youmonst.data))
-				mntmp = PM_HUMAN; /* Illegal; force newman() */
-			else
-				mntmp = u.ulycn;
-		} else if (isvamp) {
-			if (u.umonnum != PM_VAMPIRE_BAT)
-				mntmp = PM_VAMPIRE_BAT;
-			else
-				mntmp = PM_HUMAN; /* newman() */
-		}
-		/* if polymon fails, "you feel" message has been given
-		   so don't follow up with another polymon or newman */
-		if (mntmp == PM_HUMAN) newman();	/* werecritter */
-		else (void) polymon(mntmp);
-		goto made_change;    /* maybe not, but this is right anyway */
 	}
 	if (mntmp < LOW_PM) {
 		tries = 0;

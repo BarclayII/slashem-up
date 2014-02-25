@@ -2161,6 +2161,7 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 		     * Drain magical energy, identical to the anti-magic field.
 		     */
 		    if(!mtmp->mcan && rn2(2)){
+			/* should it be a magic attack? */
 			if(Antimagic){
 			    shieldeff(u.ux, u.uy);
 			    You_feel("momentarily lethargic.");

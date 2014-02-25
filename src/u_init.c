@@ -724,12 +724,20 @@ static const struct def_skill Skill_U[] = {
  * -removed Trident skill - from Skilled to Restricted
  * -removed Lance skill - from Basic to Restricted
  */
+/*
+ * BarclayII
+ * Weird for undead slayer wielding a silver saber or a silver short sword but 
+ * can't use it well.
+ */
     { P_DAGGER, P_EXPERT },             { P_LONG_SWORD, P_SKILLED },
     { P_CLUB, P_SKILLED },              { P_PADDLE, P_SKILLED },
     { P_MACE, P_SKILLED },              { P_MORNING_STAR, P_SKILLED },
     { P_FLAIL, P_SKILLED },             { P_HAMMER, P_SKILLED },
     { P_QUARTERSTAFF, P_SKILLED },      { P_POLEARMS, P_SKILLED },
     { P_SPEAR, P_EXPERT },              { P_JAVELIN, P_SKILLED },
+    /* BarclayII 
+     * Added saber and short sword skills */
+    { P_SABER, P_SKILLED },		{ P_SHORT_SWORD, P_BASIC},
     { P_BOW, P_BASIC },			        { P_SLING, P_BASIC },
 #ifdef FIREARMS
     { P_FIREARM, P_EXPERT },
