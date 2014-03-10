@@ -383,6 +383,11 @@ register struct obj *obj;
 			obj->oeroded = obj->oeroded2 = 0;
 			obj->oerodeproof = TRUE;
 			exercise(A_WIS, TRUE);
+		} else {
+			You("have a %s feeling for a moment, then it passes.",
+				Hallucination ? "peculiarly normal" 
+					      : "peculiar");
+			return;
 		}
 		update_inventory();
 		levl[u.ux][u.uy].typ = ROOM;
