@@ -373,7 +373,8 @@ boolean forcecontrol;
 #ifdef EATEN_MEMORY
 			else if (!mvitals[mntmp].eaten) {
 				You("attempt an unfamiliar polymorph.");
-				if ((rn2(5) + u.ulevel) < mons[mntmp].mlevel)
+				/* [BarclayII] always have 1/3 chance of failing */
+				if (((rn2(5) + u.ulevel) < mons[mntmp].mlevel) && !rn2(2))
 				    mntmp = LOW_PM - 1; /* Didn't work for sure */
 				/* Either way, give it a shot */
 				break;

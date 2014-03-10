@@ -104,7 +104,7 @@ struct obj {
 	Bitfield(yours,1);	/* obj is yours (eg. thrown by you) */
 	Bitfield(was_thrown,1); /* thrown by the hero since last picked up */
 #ifdef CHOOSABLE_SOKOPRIZE
-#define sokoprize olocked
+	Bitfield(sokoprize,1);
 #endif
 	/* ? free bits */
 
@@ -209,12 +209,11 @@ struct obj {
 #else
 #define is_unpoisonable_firearm_ammo(otmp)	0
 #endif
-#define is_poisonable(otmp)	(((otmp)->oclass == WEAPON_CLASS && \
+#define is_poisonable(otmp)	((otmp)->oclass == WEAPON_CLASS && \
 			 (objects[(otmp)->otyp].oc_skill <= P_SABER || \
 			 (objects[(otmp)->otyp].oc_skill >= P_POLEARMS && \
 			 objects[(otmp)->otyp].oc_skill <= P_LANCE)) && \
-			 !is_unpoisonable_firearm_ammo(otmp)) || \
-				otmp->oartifact==ART_GRIMTOOTH)
+			 !is_unpoisonable_firearm_ammo(otmp))
 #define uslinging()	(uwep && objects[uwep->otyp].oc_skill == P_SLING)
 #define is_weptool(o)	((o)->oclass == TOOL_CLASS && \
 			 objects[(o)->otyp].oc_skill != P_NONE)

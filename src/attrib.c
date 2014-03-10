@@ -123,7 +123,7 @@ const struct innate {
 
 	/* Intrinsics conferred by race */
 	dop_abil[] = {/* {   1, &(HPolymorph), "", "" },*/
-		       {   9, &(HPolymorph_control), "your choices improve", "choiceless" },
+		       /*{   9, &(HPolymorph_control), "your choices improve", "choiceless" },*/
 		       {   0, 0, 0, 0 } },
 
 #ifdef DWARF
@@ -147,12 +147,24 @@ const struct innate {
 
 	lyc_abil[] = { /*{   1, &(HPoison_resistance), "", "" },*/
 		     {   1, &(HRegeneration), "", "" },
-		     {   5, &(HPolymorph_control), "more controlled", "less controlled"},
+#ifdef LYC_POLYCONTROL
+#if !(LYC_POLYCONTROL + 0)	/* LYC_POLYCONTROL defined but not set */
+		     {   9, &(HPolymorph_control), "more controlled", "less controlled"},
+#else
+		     {   LYC_POLYCONTROL, &(HPolymorph_control), "more controlled", "less controlled"},
+#endif
+#endif
 /*		     {   7, &(HStealth), "stealthy", "" },*/
 		     {   0, 0, 0, 0 } },
 
 	orc_abil[] = { {	1, &(HPoison_resistance), "", "" },
-		     {	 0, 0, 0, 0 } };
+		     {	 0, 0, 0, 0 } },
+/* undead creatures should be immune to sleep and poison... 
+ * at least at a sufficiently high level.
+ * actual values needs further testing to balance */
+	vam_abil[] = { {  7, &(HSleep_resistance), "awake", "tired"},
+		       {  7, &(HPoison_resistance), "hardy", "sick"},
+		       {  0, 0, 0, 0} };
 
 static long next_check = 600L;	/* arbitrary first setting */
 STATIC_DCL void NDECL(exerper);
@@ -662,8 +674,11 @@ int oldlevel, newlevel;
 	case PM_HOBBIT:		rabil = hob_abil;	break;
 	case PM_ORC:            rabil = orc_abil;	break;
 	case PM_HUMAN_WEREWOLF:	rabil = lyc_abil;	break;
-	case PM_HUMAN:
 	case PM_VAMPIRE:
+#ifdef EASIER_VAMPIRE
+				rabil = vam_abil;	break;
+#endif
+	case PM_HUMAN:
 	default:                rabil = 0;		break;
 	}
 

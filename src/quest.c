@@ -95,8 +95,8 @@ artitouch()
 boolean
 ok_to_quest()
 {
-	return((boolean)((Qstat(got_quest) || Qstat(got_thanks)))
-			&& (is_pure(FALSE) > 0));
+	return((boolean)(((Qstat(got_quest) || Qstat(got_thanks)))
+			&& (is_pure(FALSE) > 0)) || quest_status.leader_is_dead);
 }
 
 STATIC_OVL boolean

@@ -12,6 +12,7 @@ struct objclass {
 	short	oc_descr_idx;		/* description when name unknown */
 	char *	oc_uname;		/* called by user */
 	Bitfield(oc_name_known,1);
+#define otype_known(otyp)	(objects[otyp].oc_name_known)
 	Bitfield(oc_merge,1);	/* merge otherwise equal objects */
 	Bitfield(oc_uses_known,1); /* obj->known affects full decription */
 				/* otherwise, obj->dknown and obj->bknown */

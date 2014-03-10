@@ -294,7 +294,10 @@ moveloop()
 			if(Polymorph && !rn2(100))
 			    change = 1;
 			else if (u.ulycn >= LOW_PM && !Upolyd &&
-				 !rn2(80 - (20 * night())))
+				 !rn2((80 - (40 * night())) / 2 * 
+					 (Race_if(PM_HUMAN_WEREWOLF) ? 
+					  u.ulevel * u.ulevel :
+					  2)))
 			    change = 2;
 			if (change && !Unchanging) {
 			    if (multi >= 0) {

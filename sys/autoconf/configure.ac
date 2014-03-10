@@ -349,6 +349,18 @@ NETHACK_ARG(display-layers,[Support transparent tilesets],DISPLAY_LAYERS,yes)
 NETHACK_ARG(goldobj,[Gold is kept on object chains (experimental)],GOLDOBJ,no)
 NETHACK_ARG(autopickup-exceptions,[Exceptions to autopickup (experimental)],
   AUTOPICKUP_EXCEPTIONS,no)
+NETHACK_ARG(toughvlad,[Vlad the Impaler is tougher],TOUGHVLAD,yes)
+NETHACK_ARG(toughfrank,[Dr. Frankenstein is tougher],TOUGHFRANK,yes)
+NETHACK_ARG(enhanced-mage-artifact,[Enhanced flame and ice mage artifact],ENHANCED_MAGE_ARTI,yes)
+NETHACK_ARG(flip-special,[Flip Levels patch],FLIP_SPECIAL,yes)
+NETHACK_ARG(palantir,[The Palantir of Westernesse],PALANTIR,yes)
+NETHACK_ARG(firearm-randgen,[Randomly generated firearms],FIREARM_RANDGEN,no)
+NETHACK_ARG(tough-longworm,[Tougher long worms],TOUGH_LONGWORM,yes)
+NETHACK_ARG(scalpel,[Mouser's Scalpel],ARTIFACT_SCALPEL,yes)
+NETHACK_ARG(choosable-sokoprize,[Sokoban prize selectable],CHOOSABLE_SOKOPRIZE,yes)
+NETHACK_ARG(nemeses-ignore-scare,[Unique covetous monsters ignores Elbereth and alike],NEMESES_IGNORE_SCARE,yes)
+NETHACK_ARG(easier-vampire,[Easier player-vampires],EASIER_VAMPIRE,yes)
+
 
 AC_MSG_CHECKING([whether to enable wizmode])
 AC_ARG_ENABLE([wizmode], AC_HELP_STRING([--enable-wizmode=USER],

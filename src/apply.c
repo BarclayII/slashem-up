@@ -1804,7 +1804,7 @@ struct obj *obj;
 #define PROP_COUNT 6		/* number of properties we're dealing with */
 #define ATTR_COUNT (A_MAX*3)	/* number of attribute points we might fix */
 	int idx, val, val_limit,
-	    trouble_count, unfixable_trbl, did_prop, did_attr;
+	    trouble_count, unfixable_trbl, did_prop, did_attr, neg_attr;
 	int trouble_list[PROP_COUNT + ATTR_COUNT];
 	int chance;	/* KMH */
 
@@ -1841,6 +1841,7 @@ struct obj *obj;
 #define attr_trouble(Y) trouble_list[trouble_count++] = attr2trbl(Y)
 
 	trouble_count = unfixable_trbl = did_prop = did_attr = 0;
+	neg_attr = 0;
 
 	/* collect property troubles */
 	if (Sick) prop_trouble(SICK);
@@ -1858,7 +1859,7 @@ struct obj *obj;
 	    /* don't recover strength lost from hunger */
 	    if (idx == A_STR && u.uhs >= WEAK) val_limit--;
 	    /* don't recover more than 3 points worth of any attribute */
-	    if (val_limit > ABASE(idx) + 3) val_limit = ABASE(idx) + 3;
+	    if (val_limit > ABASE(idx) + obj->spe) val_limit = ABASE(idx) + obj->spe;
 
 	    for (val = ABASE(idx); val < val_limit; val++)
 		attr_trouble(idx);
@@ -1896,11 +1897,15 @@ struct obj *obj;
 	 * ENCHANT  +0 or less  +1   +2   +3   +4   +5   +6 or more
 	 * CHANCE       30%     40%  50%  60%  70%  80%     90%
 	 */
+	/* [BarclayII] slightly modified the chance table:
+	 * ENCHANT  +0 or less  +1   +2   +3 or more
+	 * CHANCE       20%     30%  40%     50%
+	 */
 	val_limit = (obj && obj->blessed) ? trouble_count : 1;
 	if (obj && obj->spe > 0)
-		chance = (obj->spe < 6) ? obj->spe+3 : 9;
+		chance = (obj->spe < 3) ? obj->spe+2 : 5;
 	else
-		chance = 3;
+		chance = 2;
 #endif
 
 	/* fix [some of] the troubles */
@@ -1940,10 +1945,20 @@ struct obj *obj;
 		} else
 		    panic("use_unicorn_horn: bad trouble? (%d)", idx);
 		break;
+	    } else {
+		/* [BarclayII] a chance to permanently not fix an attribute
+		 * problem. (like SLASH'EM Extended)*/
+		if (idx >= 0 && idx < A_MAX) {
+		    AMAX(idx) = ABASE(idx);
+		    neg_attr++;
+		}
 	    }
 	}
 
-	if (did_attr)
+	if (neg_attr)
+	    You("have a %s feeling for a moment, then it passes.",
+		    Hallucination ? "normal" : "strange");
+	else if (did_attr)
 	    pline("This makes you feel %s!",
 		  (did_prop + did_attr) == (trouble_count + unfixable_trbl) ?
 		  "great" : "better");

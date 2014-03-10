@@ -176,9 +176,11 @@ struct monst *mtmp;
 			mtmp->data == &mons[PM_VLAD_THE_IMPALER] ||
 #endif
 #ifdef NEMESES_IGNORE_SCARE
-			/* All covetous monsters now ignores Elbereth or alike*/
-			/* except master and arch-liches */
-			(mtmp->data->mflags3 & (M3_WANTSAMUL | M3_WANTSARTI)) ||
+			/* All covetous monsters except master and arch liches
+			 * now ignores Elbereth and alike.
+			 */
+			(mtmp->data->mflags3 & 
+			 (M3_WANTSARTI|M3_WANTSAMUL)) ||
 #endif
 	    mtmp->data == &mons[PM_CTHULHU] ||
 	    is_rider(mtmp->data) || mtmp->data == &mons[PM_MINOTAUR])

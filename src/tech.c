@@ -80,6 +80,7 @@ STATIC_OVL NEARDATA const char *tech_names[] = {
 	"power surge",
 	"spirit bomb",
 	"draw blood",
+	"sleeping punch",
 	""
 };
 
@@ -161,6 +162,9 @@ static const struct innate_tech
 		       {   0, 0, 0} },		       
 	/* Races */
 	dop_tech[] = { {   1, T_LIQUID_LEAP, 1},
+		       {   0, 0, 0} },
+	/* Droven techniques and elven techniques are now seperated... */
+	dro_tech[] = { {   1, T_SLEEP_PUNCH, 1},
 		       {   0, 0, 0} },
 	dwa_tech[] = { {   1, T_RAGE, 1},
 		       {   0, 0, 0} },
@@ -629,6 +633,15 @@ int tech_no;
 		aggravate();
 		techt_inuse(tech_no) = d(2,4) + techlev(tech_no)/5 + 2;
 		t_timeout = rn1(1000,1000);
+		break;
+	    case T_SLEEP_PUNCH:
+		if (Upolyd || uwep) {
+		    You("must be bare-handed to use your sleeping punch.");
+		    return 0;
+		}
+		Your("hands are surrounded with a dark blue aura.");
+		techt_inuse(tech_no) = rn1(techlev(tech_no),1) * d(5,4);
+		t_timeout = rn1(500,500);
 		break;
             case T_BERSERK:
 		You("fly into a berserk rage!");
@@ -1541,8 +1554,11 @@ tech_timeout()
 			/* Lose berserk status */
 			repeat_hit = 0;
 			break;
+		    case T_SLEEP_PUNCH:
+			pline_The("dark blue aura around your hands fades.");
+			break;
 		    case T_BERSERK:
-			The("red haze in your mind clears.");
+			pline_The("red haze in your mind clears.");
 			break;
 		    case T_KIII:
 			You("calm down.");
@@ -1663,11 +1679,11 @@ race_tech()
 {
 	switch (Race_switch) {
 		case PM_DOPPELGANGER:	return (dop_tech);
+		case PM_DROW:		return (dro_tech);
 #ifdef DWARF
 		case PM_DWARF:		return (dwa_tech);
 #endif
-		case PM_ELF:
-		case PM_DROW:		return (elf_tech);
+		case PM_ELF:		return (elf_tech);
 		case PM_GNOME:		return (gno_tech);
 		case PM_HOBBIT:		return (hob_tech);
 		case PM_HUMAN_WEREWOLF:	return (lyc_tech);

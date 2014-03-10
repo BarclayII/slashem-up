@@ -3390,10 +3390,22 @@ boolean shk_buying;
 		break;
 	case WAND_CLASS:
 		if (obj->spe == -1) tmp = 0L;
+		else if (!otype_known(obj->otyp))
+			/* [BarclayII] shopkeepers buy at the price of 
+			 * cheapest and sell at the price of most expensive if
+			 * the object is not identified */
+			tmp = shk_buying ? 100  /* The cheapest wand */
+					 : 500; /* The dearest wand */
 		break;
 	case POTION_CLASS:
 		if (obj->otyp == POT_WATER && !obj->blessed && !obj->cursed)
 			tmp = 0L;
+		else if (!otype_known(obj->otyp) &&
+			 obj->otyp != POT_WATER &&
+			 obj->otyp != POT_AMNESIA &&
+			 obj->otyp != POT_BLOOD &&
+			 obj->otyp != POT_VAMPIRE_BLOOD)
+			tmp = shk_buying ? 50 : 300;
 		break;
 	case ARMOR_CLASS:
 	case WEAPON_CLASS:
@@ -3419,6 +3431,17 @@ boolean shk_buying;
 		  }
 		}
 		break;
+	case SPBOOK_CLASS:
+		if (!otype_known(obj->otyp))
+			tmp = shk_buying ? 100 : 700;
+		break;
+	case SCROLL_CLASS:
+		if (!otype_known(obj->otyp))
+			tmp = shk_buying ? 20 : 300;
+		break;
+	case RING_CLASS:
+		if (!otype_known(obj->otyp))
+			tmp = shk_buying ? 100 : 300;
 	}
 	return tmp;
 }

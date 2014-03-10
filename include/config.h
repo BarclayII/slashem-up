@@ -412,10 +412,12 @@ typedef unsigned char	uchar;
 
 #define FLIP_SPECIAL
 
+/* the Gray Mouser's Scalpel */
 #define ARTIFACT_SCALPEL
 
-#define FIREARM_RANDGEN
+/* #define FIREARM_RANDGEN */
 
+/* Re-enable the Palantir of Westernesse */
 #define PALANTIR
 
 #define TOUGH_LONGWORM
@@ -425,6 +427,12 @@ typedef unsigned char	uchar;
 
 /* Quest nemeses ignores Elbereth */
 #define NEMESES_IGNORE_SCARE
+
+/*#define LYC_POLYCONTROL*/
+
+/* Toggle this on to make player-vampires gain intrinsic poison and sleep
+ * resistance by leveling up */
+#define EASIER_VAMPIRE
 
 /* I/O */
 #define REDO		/* support for redoing last command - DGK */
@@ -499,6 +507,7 @@ typedef unsigned char	uchar;
 
 /*#define GOLDOBJ */	/* Gold is kept on obj chains - Helge Hafting */
 /*#define AUTOPICKUP_EXCEPTIONS */ /* exceptions to autopickup */
+#define EPITAPH		/* 'write your own epitaph' patch */
 
 /* End of Section 5 */
 

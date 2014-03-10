@@ -73,5 +73,6 @@ struct artifact {
 #define SUMMON_WATER_ELEMENTAL          (LAST_PROP+15)
 #define OBJ_DETECTION	(LAST_PROP+16)
 #define SCARING		(LAST_PROP+17)
+#define SMOKE_CLOUD	(LAST_PROP+18)
 
 #endif /* ARTIFACT_H */

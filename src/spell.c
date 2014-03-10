@@ -1404,11 +1404,11 @@ int spell;
 	 * to cast a spell.  The penalty is not quite so bad for the
 	 * player's class-specific spell.
 	 */
-	if (uarms && weight(uarms) > (int) objects[SMALL_SHIELD].oc_weight) {
-		if (spellid(spell) == urole.spelspec || 
-		   (uarms->oartifact == ART_MIRRORBRIGHT && Role_switch == PM_HEALER && !uarms->blessed && !uarms->cursed)) {
+	if (uarms && weight(uarms) > (int) objects[SMALL_SHIELD].oc_weight &&
+			uarms->oartifact != ART_MIRRORBRIGHT) {
+		if (spellid(spell) == urole.spelspec) {
 			chance /= 2;
-		} else if (!(uarms->oartifact == ART_MIRRORBRIGHT && Role_switch == PM_HEALER && uarms->blessed)) {
+		} else  {
 			chance /= 4;
 		}
 	}

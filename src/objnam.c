@@ -614,10 +614,9 @@ register struct obj *obj;
 	 * combining both into one function taking a parameter.
 	 */
 	/* must check opoisoned--someone can have a weirdly-named fruit */
-	if(obj->opoisoned) {
+	if (!strncmp(bp, "poisoned ", 9)) {
+		bp += 9;
  		ispoisoned = TRUE;
-		if (!strncmp(bp, "poisoned ", 9))
-			bp += 9;
  	}
 
 	if(obj->quan != 1L)
@@ -3006,9 +3005,6 @@ typfnd:
 			otmp->quan = 1L;
 			u.uconduct.wisharti++;	/* KMH, conduct */
 		}
-
-		if(otmp->oartifact == ART_GRIMTOOTH)
-			otmp->opoisoned = 1;
 	}
 
 	/* more wishing abuse: don't allow wishing for certain artifacts */

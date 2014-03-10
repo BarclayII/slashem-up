@@ -378,13 +378,13 @@ BULLET("rocket", (char *)0,
 	1,  0, 200, 450, 45, 60, 0, WP_ROCKET, P|E,   IRON, -P_FIREARM, CLR_BLUE),
 #ifdef FIREARM_RANDGEN
 BULLET("frag grenade", (char *)0,
-	1,  1,  25, 350, 0, 0, 0,  WP_GRENADE, B|E,   IRON, -P_FIREARM, CLR_GREEN),
+	1,  1,  15, 350, 0, 0, 0,  WP_GRENADE, B|E,   IRON, -P_FIREARM, CLR_GREEN),
 #else
 BULLET("frag grenade", (char *)0,
-	1,  0,  25, 350, 0, 0, 0,  WP_GRENADE, B|E,   IRON, -P_FIREARM, CLR_GREEN),
+	1,  0,  15, 350, 0, 0, 0,  WP_GRENADE, B|E,   IRON, -P_FIREARM, CLR_GREEN),
 #endif
 BULLET("gas grenade", (char *)0,
-	1,  0,  25, 350, 0, 0, 0,  WP_GRENADE, B|E,   IRON, -P_FIREARM, CLR_ORANGE),
+	1,  0,  15, 350, 0, 0, 0,  WP_GRENADE, B|E,   IRON, -P_FIREARM, CLR_ORANGE),
 BULLET("stick of dynamite", "red stick",
 	0,  0,  30, 150, 0, 0, 0,  WP_GENERIC,   B,   PLASTIC, P_NONE, CLR_RED),
 #endif

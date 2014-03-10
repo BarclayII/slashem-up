@@ -24,6 +24,8 @@ MONSTER: '@', "mugger", random, hostile
 MONSTER: '@', "mugger", random, hostile
 MONSTER: '@', "mugger", random, hostile
 MONSTER: '@', "mugger", random, hostile
+MONSTER: '@', "mugger", random, hostile
+MONSTER: '@', "mugger", random, hostile
 MONSTER: 'r', "sewer rat", random, hostile
 MONSTER: 'r', "sewer rat", random, hostile
 MONSTER: 'd', "little dog", random, hostile

@@ -841,7 +841,10 @@ doengrave()
 		} else /* end if zappable */
 		    if (!can_reach_floor()) {
 			You_cant("reach the %s!", surface(u.ux,u.uy));
-			return(0);
+			if (wrestable(otmp))
+				return 1;
+			else
+				return 0;
 		    }
 		break;
 

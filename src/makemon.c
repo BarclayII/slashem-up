@@ -184,8 +184,19 @@ register struct monst *mtmp;
 		}
 		break;
 	    case 3:
-		(void) mongets(mtmp, BOW);
-		m_initthrow(mtmp, ARROW, 12);
+		/* [BarclayII] guns are fun! */
+#ifdef FIREARMS
+		if (!rn2(10)) {
+			(void) mongets(mtmp, PISTOL);
+    			m_initthrow(mtmp, (!rn2(5) ? SILVER_BULLET : BULLET), 
+					12);			
+		} else {
+#endif
+			(void) mongets(mtmp, BOW);
+			m_initthrow(mtmp, ARROW, 12);
+#ifdef FIREARMS
+		}
+#endif
 		break;
 	    case 4:
 		if(strongmonst(ptr)) (void) mongets(mtmp, LONG_SWORD);
@@ -650,7 +661,8 @@ register struct monst *mtmp;
 			}		      
 		      }
 		    }
-		}
+		} else
+		    m_initweap_normal(mtmp);
 		break;
 
 	    case S_ANGEL:
@@ -658,12 +670,18 @@ register struct monst *mtmp;
 		    int spe2;
 
 		    /* create minion stuff; can't use mongets */
-		    otmp = mksobj(LONG_SWORD, FALSE, FALSE);
 
 		    /* maybe make it special */
-		    if (!rn2(20) || is_lord(ptr))
-			otmp = oname(otmp, artiname(
-				rn2(2) ? ART_DEMONBANE : ART_SUNSWORD));
+		    if (!rn2(20) || is_lord(ptr)) {
+			if (rn2(2)) {
+			    otmp = mksobj(SILVER_LONG_SWORD, FALSE, FALSE);
+			    otmp = oname(otmp, artiname(ART_DEMONBANE));
+			} else {
+			    otmp = mksobj(LONG_SWORD, FALSE, FALSE);
+			    otmp = oname(otmp, artiname(ART_SUNSWORD));
+			}
+		    } else
+			otmp = mksobj(!rn2(10) ? SILVER_LONG_SWORD : LONG_SWORD, FALSE, FALSE);
 		    bless(otmp);
 		    otmp->oerodeproof = TRUE;
 		    spe2 = rn2(4);
@@ -798,6 +816,13 @@ register struct monst *mtmp;
 				 */
 		if (!rn2(4)) m_initthrow(mtmp, CREAM_PIE, 2);
 		if (!rn2(3)) (void)mongets(mtmp,(rn2(2)) ? CLUB : RUBBER_HOSE);
+#ifdef FIREARMS
+		else {
+			m_initthrow(mtmp, (rn2(10)) ? BULLET : SILVER_BULLET, 15);
+			(void)mongets(mtmp, PISTOL);
+			(void)mongets(mtmp, (rn2(2)) ? DAGGER : KNIFE);
+		}
+#endif
 		break;
 # endif
 	    case S_ORC:

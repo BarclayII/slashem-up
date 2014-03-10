@@ -27,6 +27,7 @@ static const char *artifact_names[] = {
 #define     FIRE(a,b)	{0,AD_FIRE,a,b}
 #define     ELEC(a,b)	{0,AD_ELEC,a,b}		/* electrical shock */
 #define     STUN(a,b)	{0,AD_STUN,a,b}		/* magical attack */
+#define	    ACID(a,b)   {0,AD_ACID,a,b}
 
 STATIC_OVL NEARDATA struct artifact artilist[] = {
 #endif	/* MAKEDEFS_C */
@@ -86,7 +87,7 @@ A("Dragonbane",			DWARVISH_SPEAR,
 	PHYS(8,0),	NO_DFNS,	NO_CARY,	0, A_NONE, NON_PM, NON_PM, 500L ),
 
 A("Excalibur",                  LONG_SWORD,
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_SEEK|SPFX_DEFN|SPFX_INTEL|SPFX_SEARCH),0,0,
+	(SPFX_RESTR|SPFX_SEEK|SPFX_DEFN|SPFX_INTEL|SPFX_SEARCH),0,0,
 	PHYS(5,10),	DRLI(0,0),	NO_CARY,	0, A_LAWFUL, PM_KNIGHT, NON_PM, 4000L ),
 
 A("Sunsword",                   LONG_SWORD,
@@ -197,8 +198,8 @@ A("Gauntlets of Defense",    GAUNTLETS_OF_DEXTERITY,
 	NO_ATTK,        NO_DFNS,        NO_CARY,    INVIS, A_NEUTRAL, PM_MONK, NON_PM, 5000L ),
 
 A("Mirrorbright",               SHIELD_OF_REFLECTION,
-	(SPFX_RESTR|SPFX_HALRES|SPFX_REFLECT), 0, 0,
-	NO_ATTK,      NO_DFNS,        NO_CARY,        0, A_NEUTRAL, PM_HEALER, NON_PM, 5000L ),
+	(SPFX_RESTR|SPFX_REFLECT), 0, 0,
+	NO_ATTK,      NO_DFNS,        NO_CARY,        0, A_NEUTRAL, NON_PM, NON_PM, 5000L ),
 
 A("Deluder",               CLOAK_OF_DISPLACEMENT,
 	(SPFX_RESTR|SPFX_STLTH|SPFX_LUCK), 0, 0,
@@ -222,8 +223,8 @@ A("Mouser\'s Scalpel",			RAPIER,
 
 /*** Chaotic artifacts ***/
 A("Grimtooth",                  ORCISH_DAGGER,
-	SPFX_RESTR, 0, 0,
-	PHYS(2,6),	NO_DFNS,	NO_CARY,	0, A_CHAOTIC, NON_PM, PM_ORC, 300L ),
+	(SPFX_RESTR|SPFX_ATTK), 0, 0,
+	ACID(5,0),	NO_DFNS,	NO_CARY,	0, A_CHAOTIC, NON_PM, PM_ORC, 300L ),
 
 #ifdef ENHANCED_MAGE_ARTI
 A("Deep Freeze",                ATHAME,
@@ -335,10 +336,10 @@ A("The Key of Chaos", SKELETON_KEY,
 
 /*** The artifacts for the quest dungeon, all self-willed ***/
 
-A("The Orb of Detection",	CRYSTAL_BALL,
+A("Itlachiayaque",             SHIELD_OF_REFLECTION,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), (SPFX_ESP|SPFX_HSPDAM), 0,
-	NO_ATTK,	NO_DFNS,	CARY(AD_MAGM),
-	INVIS,		A_LAWFUL, PM_ARCHEOLOGIST, NON_PM, 2500L ),
+        NO_ATTK,        NO_DFNS,        CARY(AD_FIRE),
+	SMOKE_CLOUD,    A_LAWFUL, PM_ARCHEOLOGIST, NON_PM, 3000L ),
 
 A("The Heart of Ahriman",	LUCKSTONE,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), (SPFX_STLTH|SPFX_DISPL|SPFX_EREGEN), 0,

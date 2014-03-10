@@ -372,7 +372,7 @@ register struct obj *obj;
 			if (obj->spe > -6 && !rn2(3)) obj->spe--;
 			obj->oerodeproof = FALSE;
 			exercise(A_WIS, FALSE);
-		} else {
+		} else if (Role_switch == PM_KNIGHT) {
 			/* The lady of the lake acts! - Eric Backus */
 			/* Be *REAL* nice */
 	  pline("From the murky depths, a hand reaches up to bless the sword.");

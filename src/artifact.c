@@ -256,17 +256,27 @@ aligntyp alignment;	/* target alignment, or A_NONE */
 	    a = &artilist[m];
 
 	    /* make an appropriate object if necessary, then christen it */
+#if 0
 make_artif: if (by_align) otmp = mksobj((int)a->otyp, TRUE, FALSE);
 	    otmp = oname(otmp, a->name);
+#endif
+	    /* a possible bugfix for 
+	     * http://sourceforge.net/p/slashem/bugs/907/ 
+	     * credits to Nobody/Anonymous 
+	     * at least I didn't find any problems with it currently... */
+make_artif: if (by_align) {
+		    otmp = mksobj((int)a->otyp, TRUE, FALSE);
+		    place_object(otmp, u.ux, u.uy);
+		    otmp = oname(otmp, a->name);
+		    obj_extract_self(otmp);
+	    }else
+		    otmp = oname(otmp, a->name);
 	    otmp->oartifact = m;
 	    artiexist[m] = TRUE;
 	} else {
 	    /* nothing appropriate could be found; return the original object */
 	    if (by_align) otmp = 0;	/* (there was no original object) */
 	}
-
-	if(otmp->oartifact == ART_GRIMTOOTH)
-		otmp->opoisoned = 1;
 	return otmp;
 }
 
@@ -750,6 +760,10 @@ struct monst *mtmp;
 			if (yours ? Shock_resistance : resists_elec(mtmp))
 			    retval = FALSE;
 			break;
+		case AD_ACID:
+			if (yours ? Acid_resistance : resists_acid(mtmp))
+				retval = FALSE;
+			break;
 		case AD_MAGM:
 		case AD_STUN:
 			if (yours ? Antimagic : (rn2(100) < ptr->mr))
@@ -1171,6 +1185,14 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			  hittee, !spec_dbon_applies ? '.' : '!');
 	    if (!rn2(5)) (void) destroy_mitem(mdef, RING_CLASS, AD_ELEC);
 	    if (!rn2(5)) (void) destroy_mitem(mdef, WAND_CLASS, AD_ELEC);
+	    return realizes_damage;
+	}
+	if (attacks(AD_ACID, otmp)) {
+	    if (realizes_damage)
+		pline_The("acidic blade %s %s%c",
+			  !spec_dbon_applies ? "hits" :
+				"burns",
+			  hittee, !spec_dbon_applies ? '.' : '!');
 	    return realizes_damage;
 	}
 	if (attacks(AD_MAGM, otmp)) {
@@ -1888,6 +1910,29 @@ arti_invoke(obj)
 				       aobjnam(otmp, "fall"), (const char *)0);
 	    break;
 	  }
+	case SMOKE_CLOUD: {
+            coord cc;
+            cc.x = u.ux;
+            cc.y = u.uy;
+            /* Cause trouble if cursed or player is wrong role */
+            if (obj->cursed || (Role_switch == oart->role || !oart->role)) {
+                You("may summon a stinking cloud.");
+                pline("Where do you want to center the cloud?");
+                if (getpos(&cc, TRUE, "the desired position") < 0) {
+                    pline(Never_mind);
+                    obj->age = 0;
+                    return 0;
+                }
+                if (!cansee(cc.x, cc.y) || distu(cc.x, cc.y) >= 32) {
+                    You("smell rotten eggs.");
+                    return 0;
+                }
+            }
+            pline("A cloud of toxic smoke pours out!");
+            (void) create_gas_cloud(cc.x, cc.y, 3+bcsign(obj),
+                                            8+4*bcsign(obj));
+	    break;
+	}
 	}
     } else {
 	long eprop = (u.uprops[oart->inv_prop].extrinsic ^= W_ARTI),

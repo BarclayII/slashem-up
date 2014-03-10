@@ -1950,47 +1950,52 @@ int mdead;
 	int i, tmp;
 
 #ifdef ENHANCED_MAGE_ARTI
-	struct obj *otmp;
-	for (otmp = mdef->minvent; otmp; otmp = otmp->nobj) {
-		if (otmp->oartifact == ART_STORM_WHISTLE) {
-			tmp = d(1, 10);
-			if (resists_cold(magr)) {
-			    if (canseemon(magr)) {
-				pline("%s is mildly chilly.", Monnam(magr));
-			    }
-			    golemeffects(magr, AD_COLD, tmp);
-			}else{
-				if (canseemon(magr)){
-					pline("%s is suddenly very cold!", Monnam(magr));
-					if((magr->mhp -= tmp) <= 0) {
-						/* get experience from spell creatures */
-						if (mdef->uexp) mon_xkilled(magr, "", AD_COLD);
-						else monkilled(magr, "", AD_COLD);
-
-						return (mdead | mhit | MM_AGR_DIED);
-					}
-				}
-			}
+	if (m_carrying_arti(mdef, ART_STORM_WHISTLE)) {
+		tmp = d(1, 10);
+		if (canseemon(magr)){
+			pline("%s is suddenly covered in frost!", Monnam(magr));
 		}
-		if (otmp->oartifact == ART_CANDLE_OF_ETERNAL_FLAME) {
-			tmp = d(1, 10);
-			if (resists_fire(magr)) {
-			    if (canseemon(magr)) {
-				pline("%s is mildly warm.", Monnam(magr));
-			    }
-			    golemeffects(magr, AD_FIRE, tmp);
-			}else{
-				if (canseemon(magr)){
-					pline("%s is suddenly very hot!", Monnam(magr));
-					if((magr->mhp -= tmp) <= 0) {
-						/* get experience from spell creatures */
-						if (mdef->uexp) mon_xkilled(magr, "", AD_FIRE);
-						else monkilled(magr, "", AD_FIRE);
-
-						return (mdead | mhit | MM_AGR_DIED);
-					}
-				}
-			}
+		if (resists_cold(magr)) {
+		    if (canseemon(magr)) {
+			pline("%s is mildly chilly.", Monnam(magr));
+		    }
+		    golemeffects(magr, AD_COLD, tmp);
+		    tmp = 0;
+		}else{
+			if (resists_fire(magr))
+				tmp += 3;
+		}
+		tmp += destroy_mitem(magr, POTION_CLASS, AD_COLD);
+		if((magr->mhp -= tmp) <= 0) {
+			/* get experience from spell creatures */
+			if (mdef->uexp) mon_xkilled(magr, "", AD_COLD);
+			else monkilled(magr, "", AD_COLD);
+				return (mdead | mhit | MM_AGR_DIED);
+		}
+	}
+	if (m_carrying_arti(mdef, ART_CANDLE_OF_ETERNAL_FLAME)) {
+		tmp = d(1, 10);
+		if (canseemon(magr)){
+			pline("%s is suddenly on fire!", Monnam(magr));
+		}
+		tmp += destroy_mitem(magr, SCROLL_CLASS, AD_FIRE);
+		tmp += destroy_mitem(magr, SPBOOK_CLASS, AD_FIRE);
+		if (resists_fire(magr)) {
+		    if (canseemon(magr)) {
+			pline("%s is mildly warm.", Monnam(magr));
+		    }
+		    golemeffects(magr, AD_FIRE, tmp);
+		    tmp = 0;
+		}else{
+			if (resists_cold(magr))
+				tmp += 3;
+		}
+		tmp += destroy_mitem(magr, POTION_CLASS, AD_FIRE);
+		if((magr->mhp -= tmp) <= 0) {
+			/* get experience from spell creatures */
+			if (mdef->uexp) mon_xkilled(magr, "", AD_FIRE);
+			else monkilled(magr, "", AD_FIRE);
+				return (mdead | mhit | MM_AGR_DIED);
 		}
 	}
 #endif

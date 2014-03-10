@@ -692,6 +692,18 @@ register int type;
 	return((struct obj *) 0);
 }
 
+struct obj *
+carrying_arti(arti)
+register char arti;
+{
+	register struct obj *otmp;
+
+	for(otmp = invent; otmp; otmp = otmp->nobj)
+		if(otmp->oartifact == arti)
+			return(otmp);
+	return((struct obj *) 0);
+}
+
 const char *
 currency(amount)
 long amount;

@@ -2990,39 +2990,44 @@ register struct attack *mattk;
 	int i, tmp;
 
 #ifdef ENHANCED_MAGE_ARTI
-	struct obj *otmp;
-	for (otmp = invent; otmp; otmp = otmp->nobj) {
-		if (otmp->oartifact == ART_STORM_WHISTLE) {
-			tmp = d(1, 10);
-			if (resists_cold(mtmp)) {
-			    shieldeff(mtmp->mx, mtmp->my);
-			    pline("%s is mildly chilly.", Monnam(mtmp));
-			    golemeffects(mtmp, AD_COLD, tmp);
-			} else {
-				pline("%s is suddenly very cold!", Monnam(mtmp));
-				if((mtmp->mhp -= tmp) <= 0) {
-					pline("%s dies!", Monnam(mtmp));
-					xkilled(mtmp,0);
-					if (mtmp->mhp > 0) return 1;
-					return 2;
-				}
-			}
+	if (carrying_arti(ART_STORM_WHISTLE)) {
+		tmp = d(1, 10);
+		pline("%s is suddenly covered in frost!", Monnam(mtmp));
+		if (resists_cold(mtmp)) {
+		    shieldeff(mtmp->mx, mtmp->my);
+		    pline("The frost doesn't freezes %s.", Monnam(mtmp));
+		    golemeffects(mtmp, AD_COLD, tmp);
+		} else {
+			if (resists_fire(mtmp))
+				tmp += 3;
 		}
-		if (otmp->oartifact == ART_CANDLE_OF_ETERNAL_FLAME) {
-			tmp = d(1, 10);
-			if (resists_fire(mtmp)) {
-			    shieldeff(mtmp->mx, mtmp->my);
-			    pline("%s is mildly warm.", Monnam(mtmp));
-			    golemeffects(mtmp, AD_FIRE, tmp);
-			} else {
-				pline("%s is suddenly very hot!", Monnam(mtmp));
-				if((mtmp->mhp -= tmp) <= 0) {
-					pline("%s dies!", Monnam(mtmp));
-					xkilled(mtmp,0);
-					if (mtmp->mhp > 0) return 1;
-					return 2;
-				}
-			}
+		tmp += destroy_mitem(mtmp, POTION_CLASS, AD_COLD);
+		if((mtmp->mhp -= tmp) <= 0) {
+			pline("%s dies!", Monnam(mtmp));
+			xkilled(mtmp,0);
+			if (mtmp->mhp > 0) return 1;
+			return 2;
+		}		
+	}
+	if (carrying_arti(ART_CANDLE_OF_ETERNAL_FLAME)) {
+		tmp = d(1, 10);
+		pline("%s is suddenly on fire!", Monnam(mtmp));
+		tmp += destroy_mitem(mtmp, SCROLL_CLASS, AD_FIRE);
+		tmp += destroy_mitem(mtmp, SPBOOK_CLASS, AD_FIRE);
+		if (resists_fire(mtmp)) {
+		    shieldeff(mtmp->mx, mtmp->my);
+		    pline("The fire doesn't burns %s.", Monnam(mtmp));
+		    golemeffects(mtmp, AD_FIRE, tmp);
+		} else {
+			if (resists_cold(mtmp))
+				tmp += 3;
+		}
+		tmp += destroy_mitem(mtmp, POTION_CLASS, AD_FIRE);
+		if((mtmp->mhp -= tmp) <= 0) {
+			pline("%s dies!", Monnam(mtmp));
+			xkilled(mtmp,0);
+			if (mtmp->mhp > 0) return 1;
+			return 2;
 		}
 	}
 #endif

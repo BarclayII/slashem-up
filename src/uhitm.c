@@ -1342,7 +1342,7 @@ int thrown;
 		You_feel("like an evil coward for using a poisoned weapon.");
 		adjalign(-1);
 	    }
-	    if (obj && !obj->oartifact && !rn2(nopoison)) {
+	    if (obj && !rn2(nopoison)) {
 		obj->opoisoned = FALSE;
 		Your("%s %s no longer poisoned.", xname(obj),
 		     otense(obj, "are"));
@@ -2199,8 +2199,9 @@ register struct attack *mattk;
 		}
 
 		if (!negated && !mdef->msleeping &&
-			(mattk->aatyp != AT_WEAP || barehanded_hit) &&
-			sleep_monst(mdef, rnd(10), -1)) {
+			(mattk->aatyp != AT_WEAP || 
+			 (barehanded_hit && tech_inuse(T_SLEEP_PUNCH))) &&
+			sleep_monst(mdef, rnd(15), -1)) {
 		    if (!Blind)
 			pline("%s is put to sleep by you!", Monnam(mdef));
 		    slept_monst(mdef);
@@ -3036,33 +3037,34 @@ uchar aatyp;
 /*	char buf[BUFSZ]; */
 
 #ifdef ENHANCED_MAGE_ARTI
-	struct obj *otmp;
-	for (otmp = mon->minvent; otmp; otmp = otmp->nobj) {
-		/* If carrying the Storm Whistle, deal passive cold damage */
-		if (otmp->oartifact == ART_STORM_WHISTLE) {
-			tmp = d(1, 10);
-			if (monnear(mon, u.ux, u.uy)) {
-				pline("Magic frost suddenly surrounds you!");
-				if (Cold_resistance) {
-					shieldeff(u.ux, u.uy);
-					pline_The("frost doesn't seem cold.");
-					ugolemeffects(AD_COLD, tmp);
-				}else
-					mdamageu(mon, tmp);
-			}
+	/* If carrying the Storm Whistle, deal passive cold damage */
+	if (m_carrying_arti(mon, ART_STORM_WHISTLE)) {
+		tmp = d(1, 10);
+		if (monnear(mon, u.ux, u.uy)) {
+			pline("Magic frost suddenly surrounds you!");
+			if (Cold_resistance) {
+				shieldeff(u.ux, u.uy);
+				pline_The("frost doesn't seem cold.");
+				ugolemeffects(AD_COLD, tmp);
+			}else
+				mdamageu(mon, tmp);
+			destroy_item(POTION_CLASS, AD_COLD);
 		}
-		/* If carrying the Candle of Eternal Flame, deal passive fire damage */
-		if (otmp->oartifact == ART_CANDLE_OF_ETERNAL_FLAME) {
-			tmp = d(1, 10);
-			if (monnear(mon, u.ux, u.uy)) {
-				pline("Magic fire suddenly surrounds you!");
-				if (Fire_resistance) {
-					shieldeff(u.ux, u.uy);
-					pline_The("fire doesn't feel hot.");
-					ugolemeffects(AD_FIRE, tmp);
-				}else
-					mdamageu(mon, tmp);
-			}
+	}
+	/* If carrying the Candle of Eternal Flame, deal passive fire damage */
+	if (m_carrying_arti(mon, ART_CANDLE_OF_ETERNAL_FLAME)) {
+		tmp = d(1, 10);
+		if (monnear(mon, u.ux, u.uy)) {
+			pline("Magic fire suddenly surrounds you!");
+			if (Fire_resistance) {
+				shieldeff(u.ux, u.uy);
+				pline_The("fire doesn't feel hot.");
+				ugolemeffects(AD_FIRE, tmp);
+			}else
+				mdamageu(mon, tmp);
+			destroy_item(SCROLL_CLASS, AD_FIRE);
+			destroy_item(POTION_CLASS, AD_FIRE);
+			destroy_item(SPBOOK_CLASS, AD_FIRE);
 		}
 	}
 #endif
@@ -3109,6 +3111,7 @@ uchar aatyp;
 	    exercise(A_STR, FALSE);
 	    break;
 	  case AD_STON:
+	  case AD_SLIM:
 	    if (mhit) {		/* successful attack */
 		long protector = attk_protection((int)aatyp);
 		boolean barehanded = mhit & HIT_BODY ||
@@ -3124,12 +3127,27 @@ uchar aatyp;
 			(protector == W_ARMF && !uarmf) ||
 			(protector == W_ARMH && !uarmh) ||
 			(protector == (W_ARMC|W_ARMG) && (!uarmc || !uarmg))) {
-		if (!Stone_resistance &&
+		if (ptr->mattk[i].adtyp == AD_STON && 
+			!Stone_resistance &&
 			    !(poly_when_stoned(youmonst.data) &&
 				polymon(PM_STONE_GOLEM))) {
 			You("turn to stone...");
 			done_in_by(mon);
 			return 2;
+		} else if (ptr->mattk[i].adtyp == AD_SLIM) {
+			if (flaming(youmonst.data))
+				pline_The("slime burns away!");
+			else if (Unchanging ||
+					youmonst.data == &mons[PM_GREEN_SLIME])
+				You("are unaffected.");
+			else if (!Slimed) {
+				You("touch %s and don't feel well.", mon_nam(mon));
+				Slimed = 10L;
+				flags.botl = 1;
+				killer_format = KILLED_BY_AN;
+				delayed_killer = mon->data->mname;
+			} else
+				pline("Yuck!");
 		}
 	      }
 	    }

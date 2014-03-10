@@ -162,3 +162,84 @@
 		- Flintstones can upgrade to touchstones and whetstones.
 		- Touchstones and whetstones can upgrade to luckstones and
 		  healthstones, and vice versa.
+
+2014-2-27	SLASH'EM UP	0.0.1E1
+	* Undead slayers can reach saber skills to skilled, short sword skills
+	basic.
+	* Undead slayers can be dwarves.
+	* Yeoman's calm steed technique is implemented. Calming steed will
+	raise its tameness by 1, to a maximum of 10.
+	* Vampires and lycanthropes now can only switch between human form and
+	animal form, even stepped on a polymorph trap.
+	* Killing quest leader can unlock the lower quest levels. (from
+	SporkHack)
+	* Drain energy attack against player is implemented and works as if
+	stepping on an anti-magic field.
+	* Player-lycanthropes now gain intrinsic polymorph control at level
+	LYC_POLYCONTROL, default 9, and would not have intrinsic polycontrol
+	if LYC_POLYCONTROL is not defined.
+	* Applied Itlachiayaque patch by L.
+	* Angelic beings now have a small chance of generating with silver long
+	sword.
+	* Doppelgangers can no longer gain intrinsic polymorph control by
+	leveling up.
+	* Grenades are lighter.
+	* Keystone Kops may generate with pistols, bullets and dagger/knife.
+	* Lycanthropes change form about once per 80 turns, multiplied by your
+	level for player-lycanthropes, halved if at night.
+
+2014-3-10	SLASHEM'UP	0.0.1E2
+	* The form-changing chance for player-lycanthropes is now 
+	  80 * u.ulevel ^ 2 / 2.
+	* Bug fixed: begin_burn error when receiving Holy Spear of Light as
+	gift. (http://sourceforge.net/p/slashem/bugs/907/)
+	* Bug fixed: picking up drained corpses may receive "You hear
+	something popping" message.
+	* Bug fixed (Zero-turn wresting, C343-246): Players who unsuccessfully
+	try to engrave with empty, wrestable wands while levitating will spend
+	1 turn doing so with this patch. This removes the bug which allows the
+	player to wrest a wand in zero turns.
+	* Mirrorbright no longer hinders spell-casting.
+	* Mirrorbright is not the first guaranteed gift to healers any more.
+	* Drows' sleeping punch is made a technique.
+	* Alchemy, including mixing potions and dissolving gems, is much more
+	dangerous (there's now 1 in 3 chance of exploding) unless you are
+	wearing a lab coat, in which case the chance is reduced to 1 in 10.
+	* Inspired by Color Alchemy patch, the product of mixing two potions
+	other than blood or vampire blood is no longer random if the player is
+	wearing a lab coat.
+		- Mixing with a potion of amnesia always produces an undiluted
+		potion of amnesia.
+		- Mixing with potion of blood or vampire blood still produces
+		random results.
+	* Empty wands may crumble after an unsuccessful wresting.
+	* Green slimes' passive sliming attack is implemented. Hitting while
+	bare-handed starts the sliming process.
+	* Mugger can steals items, and will teleport if succeeds. (This makes
+	the mall a much more annoying place)
+	* Applied Epitaph patch by Ross Presser. Enabled ability to write
+	epitaphs.
+	* Flame mage quest artifact can destroy potions/scrolls/spellbooks
+	through passive fire attack. Similarly, ice mage quest artifact can
+	destroy potions. The passive fire/cold attack code is made more
+	readable.
+	* Player-vampires gain intrinsic sleep resistance and poison
+	resistance at level 7 if EASIER_VAMPIRE is enabled.
+		- Still needs further testing to balance...
+	* Cursed potion of gain ability can decrease one's attributes.
+	* Unicorn horn's chance of fixing attribute problems are reduced. A
+	unicorn horn can permanently not fix the problem if it fails to
+	restore the attribute.
+	* Price identification is no longer available, as shopkeepers always
+	buy at lowest price and sell at highest price as possible, unless the
+	item is identified.
+	* FIREARM_RANDGEN is default disabled.
+	* Pistols and bullets can be randomly generated in intelligent
+	monsters' starting inventory.
+	* '@'s now have initial weapons.
+	* Grimtooth now does acid damage against non-acid-resistant monsters,
+	like Fire and Frost Brand against non-fire/cold-resistant enemies.
+	* Excalibur can randomly generate, and could not be obtained by
+	dipping unless you are a knight.
+	* Autoconf script modified. Execute sys/autoconf/bootstrap.sh before
+	./configure if you need to change the default settings.

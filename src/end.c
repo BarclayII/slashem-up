@@ -654,8 +654,12 @@ int how;
 {
 	boolean taken;
 	char kilbuf[BUFSZ], pbuf[BUFSZ];
+#ifdef EPITAPH
+	char ebuf[BUFSZ];
+#endif
 	winid endwin = WIN_ERR;
 	boolean bones_ok, have_windows = iflags.window_inited;
+	boolean write_epitaph = FALSE;
 	struct obj *corpse = (struct obj *)0;
 	long umoney;
 
@@ -796,6 +800,15 @@ die:
         if(iflags.usealleg && (how < PANICKED))
                 fade_to_black();
 #endif
+#ifdef EPITAPH
+	/* ask player if he wants a custom epitaph */
+	if (how < GENOCIDED && 
+			'y' == yn("Do you want to write your own epitaph?")) {
+		getlin("What do you want your epitaph to be?",ebuf);
+		write_epitaph = TRUE;
+	}
+#endif
+
 
 	bones_ok = (how < GENOCIDED) && can_make_bones();
 
@@ -827,6 +840,16 @@ die:
 			killer_format == NO_KILLER_PREFIX ? "" :
 			killed_by_prefix[how],
 			killer_format == KILLED_BY_AN ? an(killer) : killer);
+#ifdef EPITAPH
+		/* ask player if he wants a custom epitaph */
+		if (write_epitaph) {
+			Sprintf(pbuf, "%s %s. %s", 
+					Hallucination ? "Rest In Pieces" :
+					(rn2(2) ? "Here lies" : 
+					 "Rest In Peace"),
+					plname, ebuf);
+		}
+#endif
 		make_grave(u.ux, u.uy, pbuf);
 	    }
 	}

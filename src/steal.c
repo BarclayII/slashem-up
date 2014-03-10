@@ -259,7 +259,10 @@ nothing_to_steal:
 	    return(1);  /* let thief flee */
 	}
 
-	monkey_business = is_animal(mtmp->data);
+	monkey_business = (is_animal(mtmp->data) || 
+			mtmp->data == &mons[PM_MUGGER] ||
+			mtmp->data == &mons[PM_DWARF_THIEF] ||
+			mtmp->data == &mons[PM_GNOME_THIEF]);
 	if (monkey_business) {
 	    ;	/* skip ring special cases */
 	} else if (Adornment & LEFT_RING) {

@@ -21,6 +21,7 @@ static NEARDATA const char beverages[] = { POTION_CLASS, 0 };
 STATIC_DCL long FDECL(itimeout, (long));
 STATIC_DCL long FDECL(itimeout_incr, (long,int));
 STATIC_DCL void NDECL(ghost_from_bottle);
+STATIC_DCL void NDECL(alchemy_init);
 STATIC_DCL short FDECL(mixtype, (struct obj *,struct obj *));
 
 STATIC_DCL void FDECL(healup_mon, (struct monst *, int,int,BOOLEAN_P,BOOLEAN_P));
@@ -827,8 +828,20 @@ peffects(otmp)
 		break;
 	case POT_GAIN_ABILITY:
 		if(otmp->cursed) {
+/*
 		    pline("Ulch!  That potion tasted foul!");
 		    unkn++;
+*/
+		    /* [BarclayII]
+		     * cursed potions randomly decrease your attribute */
+		    boolean happened = FALSE;
+		    for (i = 0; i < A_MAX; ++i)
+			if (rn2(2)) {
+			    adjattrib(i, -1, 0);
+			    happened = TRUE;
+			}
+		    if (!happened)
+			nothing++;
 		} else if (Fixed_abil) {
 		    nothing++;
 		} else {      /* If blessed, increase all; if not, try up to */
@@ -1669,11 +1682,32 @@ register struct obj *obj;
 	}
 }
 
+/* assumes booze comes first in potions... */
+short alchemy_table[POT_WATER-POT_BOOZE][POT_WATER-POT_BOOZE];
+
+STATIC_OVL void
+alchemy_init()
+{
+	int p1, p2, i, j;
+	static boolean initialized = FALSE;
+	if (initialized) return;
+	for(p1 = POT_BOOZE, i = 0; p1 < POT_WATER; ++p1, ++i)
+		for(p2 = POT_BOOZE, j = 0; p2 < POT_WATER; ++p2, ++j)
+			if (p1 > p2)
+				alchemy_table[i][j] = alchemy_table[j][i];
+			else if (p1 == p2)
+				alchemy_table[i][j] = p1;
+			else
+				alchemy_table[i][j] = rn1(POT_WATER-POT_BOOZE, POT_BOOZE);
+	initialized = TRUE;
+}
+
 STATIC_OVL short
 mixtype(o1, o2)
 register struct obj *o1, *o2;
 /* returns the potion type when o1 is dipped in o2 */
 {
+	alchemy_init();
 	/* cut down on the number of cases below */
 	if (o1->oclass == POTION_CLASS &&
 	    (o2->otyp == POT_GAIN_LEVEL ||
@@ -1771,6 +1805,8 @@ register struct obj *o1, *o2;
 			}
 			break;
 	}
+	if (o1->oclass == POTION_CLASS && o2->oclass == POTION_CLASS)
+		return alchemy_table[o1->otyp - POT_BOOZE][o2->otyp - POT_BOOZE];
 	/* MRKR: Extra alchemical effects. */
 
 	if (o2->otyp == POT_ACID && o1->oclass == GEM_CLASS) {
@@ -2696,6 +2732,7 @@ dodip()
 	char allowall[2], qbuf[QBUFSZ], Your_buf[BUFSZ];
 	short mixture;
 	int res;
+	int prob = (uarmc && uarmc->otyp == LAB_COAT) ? 10 : 3;
 
 	allowall[0] = ALL_CLASSES; allowall[1] = '\0';
 	if(!(obj = getobj(allowall, "dip")))
@@ -2874,7 +2911,7 @@ dodip()
 		pline_The("potions mix...");
 		/* KMH, balance patch -- acid is particularly unstable */
 		if (obj->cursed || obj->otyp == POT_ACID ||
-		    potion->cursed || potion->otyp == POT_ACID || !rn2(10)) {
+		    potion->cursed || potion->otyp == POT_ACID || !rn2(prob)) {
 			pline("BOOM!  They explode!");
 			wake_nearby();
 			exercise(A_STR, FALSE);
@@ -2891,11 +2928,17 @@ dodip()
 
 		obj->blessed = obj->cursed = obj->bknown = 0;
 		if (Blind || Hallucination) obj->dknown = 0;
-
-		if ((mixture = mixtype(obj, potion)) != 0) {
+		/* [BarclayII]
+		 * potion of amnesia always produces potion of amnesia */
+		if (obj->otyp == POT_AMNESIA || potion->otyp == POT_AMNESIA)
+			obj->otyp = POT_AMNESIA;
+		else if ((mixture = mixtype(obj, potion)) != 0 &&
+				uarmc &&
+				uarmc->otyp == LAB_COAT) {
 			obj->otyp = mixture;
 		} else {
-		    switch (obj->odiluted ? 1 : rnd(8)) {
+		    switch (obj->odiluted ? 1 : 
+				rnd(8)) {
 			case 1:
 				obj->otyp = POT_WATER;
 				break;
@@ -2920,11 +2963,15 @@ dodip()
 		    }
 		}
 
-		obj->odiluted = (obj->otyp != POT_WATER);
+		obj->odiluted = (obj->otyp != POT_WATER && 
+				obj->otyp != POT_AMNESIA);
 
 		if (obj->otyp == POT_WATER && !Hallucination) {
 			pline_The("mixture bubbles%s.",
 				Blind ? "" : ", then clears");
+		} else if (obj->otyp == POT_AMNESIA && !Hallucination) {
+			pline_The("mixture bubbles%s.",
+				Blind ? "" : " and sparkles");
 		} else if (!Blind) {
 			pline_The("mixture looks %s.",
 				hcolor(OBJ_DESCR(objects[obj->otyp])));
@@ -3128,7 +3175,7 @@ dodip()
 		    singlegem->in_use = TRUE;
 		    if (potion->otyp == POT_ACID && 
 		      (obj->otyp == DILITHIUM_CRYSTAL || 
-		       potion->cursed || !rn2(10))) {
+		       potion->cursed || !rn2(prob))) {
 			/* Just to keep them on their toes */
 
 			singlepotion->in_use = TRUE;

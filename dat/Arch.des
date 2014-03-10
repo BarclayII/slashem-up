@@ -41,7 +41,7 @@ REGION: (32,06,48,06),unlit,"ordinary"
 REGION: (50,06,56,08),lit,"ordinary"
 REGION: (40,08,46,08),unlit,"ordinary"
 REGION: (22,08,22,12),unlit,"ordinary"
-REGION: (24,08,38,12),unlit,"ordinary"
+REGION: (24,08,38,12),lit,"ordinary"
 REGION: (48,08,48,08),lit,"ordinary"
 REGION: (40,10,56,10),lit,"ordinary"
 REGION: (48,12,48,12),lit,"ordinary"
@@ -289,6 +289,7 @@ MAP
                                   ---------                                 
                                                                             
 ENDMAP
+RANDOM_PLACES:(26,05),(26,14),(50,05),(50,14)
 # Dungeon Description
 REGION:(00,00,75,19),lit,"ordinary"
 REGION:(35,02,36,03),unlit,"ordinary"
@@ -319,9 +320,9 @@ STAIR:(38,10),up
 # Non diggable walls
 NON_DIGGABLE:(00,00,75,19)
 # The altar of Huhetotl.  Unattended.
-ALTAR:(50,14),chaos,altar
+ALTAR:place[0],chaos,altar
 # Objects
-OBJECT:'(',"crystal ball",(50,14),blessed,5,"The Orb of Detection"
+OBJECT:'[',"shield of reflection",place[0],uncursed,1,"Itlachiayaque"
 OBJECT:random,random,random
 OBJECT:random,random,random
 OBJECT:random,random,random
@@ -343,9 +344,12 @@ TRAP:random,random
 TRAP:random,random
 TRAP:random,random
 TRAP:random,random
+TRAP:"rolling boulder",(30,05)
+TRAP:"rolling boulder",(30,14)
+TRAP:"rolling boulder",(46,05)
 TRAP:"rolling boulder",(46,14)
 # Random monsters.
-MONSTER:'&',"Minion of Huhetotl",(50,14)
+MONSTER:'&',"Minion of Huhetotl",place[0]
 MONSTER:'S',random,random
 MONSTER:'S',random,random
 MONSTER:'S',random,random
@@ -421,40 +425,73 @@ MONSTER: 'S', random, random
 
 RANDOM_CORRIDORS
 
-LEVEL: "Arc-filb"
-#
-ROOM: "ordinary" , random, random, random, random
-STAIR: random, up
-OBJECT: random,random,random
-MONSTER: 'M', random, random
-
-ROOM: "ordinary" , random, random, random, random
+MAZE: "Arc-filb",' '
+FLAGS: hardfloor
+GEOMETRY:center,center
+#         1         2         3         4         5         6         7
+#123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+-------------------------------
+|.........|....|....|.........|
+|.........|....S....|.........|
+|.........|....|....|.........|
+|----S----|....|....|----S----|
+|.........|-S-----S-|.........|
+|.........|.........|.........|
+|.........S.........S.........|
+|.........|.........|.........|
+|.........|-S-----S-|.........|
+|----S----|....|....|----S----|
+|.........|....|....|.........|
+|.........|....S....|.........|
+|.........|....|....|.........|
+-------------------------------
+ENDMAP
+STAIR:random,up
+STAIR:random,down
+NON_DIGGABLE:(0,0,30,14)
+REGION:(0,0,30,14),random,"ordinary"
+# Some statues of archeological worth
+OBJECT: '`', "statue",random,uncursed,"couatl",3
+OBJECT: '`', "statue",random,uncursed,"couatl",3
+OBJECT: '`', "statue",random,uncursed,"couatl",3
+OBJECT: '`', "statue",random,uncursed,"couatl",3
+# This one will stone to flesh into a doppelganger
+OBJECT: '`', "statue",(15,7),uncursed,"Minion of Huhetotl",3
+# Some bronze-age weaponry
+OBJECT: ')', random, random
+OBJECT: ')', random, random
+OBJECT: '[', random, random
+OBJECT: '[', random, random
+OBJECT[50%]: '[', "bronze plate mail", random
+OBJECT[50%]: '[', "bronze plate mail", random
+# Treasure
+OBJECT: '(', "chest", random
 OBJECT: random, random, random
-OBJECT: random,random,random
-MONSTER: 'M', random, random
-
-ROOM: "ordinary" , random, random, random, random
 OBJECT: random, random, random
-TRAP: random, random
-OBJECT: random,random,random
-MONSTER: 'M', random, random
-
-ROOM: "ordinary" , random, random, random, random
-STAIR: random, down
 OBJECT: random, random, random
-TRAP: random, random
+# Traps
+TRAP: "dart", random
+TRAP: "dart", random
+TRAP: "dart", random
+TRAP: "spiked pit", random
+TRAP: "spiked pit", random
+TRAP: "spiked pit", random
+# Monsters
+MONSTER: 'S', random, (14,6)
+MONSTER: 'M', random, (15,6)
+MONSTER: 'S', random, (16,6)
+MONSTER: 'M', random, (14,7)
+MONSTER: 'S', random, (15,7)
+MONSTER: 'M', random, (16,7)
+MONSTER: 'S', random, (14,8)
+MONSTER: 'M', random, (15,8)
+MONSTER: 'S', random, (16,8)
+MONSTER: 'S', random, random
+MONSTER: 'S', random, random
+MONSTER: 'S', random, random
 MONSTER: 'S', random, random
 MONSTER: 'M', "human mummy", random
-
-ROOM: "ordinary" , random, random, random, random
-OBJECT: random, random, random
-OBJECT: random, random, random
-TRAP: random, random
-MONSTER: 'S', random, random
-
-ROOM: "ordinary" , random, random, random, random
-OBJECT: random, random, random
-TRAP: random, random
-MONSTER: 'S', random, random
-
-RANDOM_CORRIDORS
+MONSTER: 'M', "giant mummy", random
+MONSTER: 'M', "giant mummy", random
+MONSTER: 'A', "couatl", random
