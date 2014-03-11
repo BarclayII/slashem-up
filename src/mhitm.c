@@ -1129,7 +1129,7 @@ physical:
 			    struct obj *monwep;
 			    int chance;
 			    if (dieroll == 2 &&
-				    strongmonst(mtmp->data) &&
+				    strongmonst(magr->data) &&
 				    otmp && otmp->oclass == WEAPON_CLASS &&
 				    bimanual(otmp) &&
 				    !is_flimsy(otmp) &&
@@ -1150,7 +1150,7 @@ physical:
 					s_suffix(Monnam(mdef)),
 					xname(monwep),
 					otense(monwep, "shatter"),
-					s_suffix(monnam(magr)));
+					s_suffix(noit_mon_nam(magr)));
 				m_useup(mdef, monwep);
 			    }
 			}
