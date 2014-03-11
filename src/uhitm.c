@@ -727,6 +727,7 @@ int thrown;
 	boolean no_obj = !obj;	/* since !obj can change if weapon breaks, etc. */
 	boolean noeffect;
 	int wtype;
+	int chance;
 	struct obj *monwep;
 	struct obj *launcher;
 	char yourbuf[BUFSZ];
@@ -971,7 +972,11 @@ int thrown;
 			  ((monwep = MON_WEP(mon)) != 0 &&
 			   !is_flimsy(monwep) &&
 			   !obj_resists(monwep,
-				 50 + 15 * greatest_erosion(obj), 100))) {
+				 (chance = 50 + 15 * greatest_erosion(obj)
+				 - 15 * greatest_erosion(monwep)
+				 + monwep->spe * 2
+				 + monwep->blessed * 5
+				 - monwep->cursed * 5), chance + 30))) {
 			/*
 			 * 2.5% chance of shattering defender's weapon when
 			 * using a two-handed weapon; less if uwep is rusted.
@@ -980,6 +985,12 @@ int thrown;
 			 * the percentage chance is (1/20)*(50/100).]
 			 * WAC.	Bimanual, or samurai and Katana without shield.
 			 *	No twoweapon.
+			 */
+			/*
+			 * [BarclayII] Eroded weapons are more likely to be
+			 * shattered.
+			 * Blessed, well-enchanted ones are less likely.
+			 * Artifact shattering is difficult but NOT IMPOSSIBLE.
 			 */
 			setmnotwielded(mon,monwep);
 			MON_NOWEP(mon);

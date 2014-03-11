@@ -1124,7 +1124,36 @@ physical:
 				    tmp++;
 		    	    }
 #endif			
-			} else tmp += dmgval(otmp, mdef);
+			} else {
+			    tmp += dmgval(otmp, mdef);
+			    struct obj *monwep;
+			    int chance;
+			    if (dieroll == 2 &&
+				    strongmonst(mtmp->data) &&
+				    otmp && otmp->oclass == WEAPON_CLASS &&
+				    bimanual(otmp) &&
+				    !is_flimsy(otmp) &&
+				    ((monwep = MON_WEP(mdef)) != 0) &&
+				    !is_flimsy(monwep) &&
+				    !obj_resists(monwep,
+					(chance = 50 
+					 + 15 * greatest_erosion(otmp)
+					 - 15 * greatest_erosion(monwep)
+					 + monwep->spe * 2
+					 + monwep->blessed * 5
+					 - monwep->cursed * 5),
+					chance + 30)) {
+				setmnotwielded(mdef,monwep);
+				MON_NOWEP(mdef);
+				mdef->weapon_check = NEED_WEAPON;
+				pline("%s %s %s from the force of %s blow!",
+					s_suffix(Monnam(mdef)),
+					xname(monwep),
+					otense(monwep, "shatter"),
+					s_suffix(monnam(magr)));
+				m_useup(mdef, monwep);
+			    }
+			}
 
 			/* MRKR: Handling damage when hitting with */
 			/*       a burning torch */
