@@ -1177,7 +1177,7 @@ hitmu(mtmp, mattk)
 						(more_than_one ? shk_your(yourbuf, weap) :
 						 Shk_Your(yourbuf, weap)),
 						xname(weap));
-					if (more_than_one) {
+					if (!more_than_one) {
 					    if (weap == uwep)
 						uwepgone();
 					    else
