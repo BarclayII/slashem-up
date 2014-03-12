@@ -971,12 +971,13 @@ int thrown;
 			    P_SKILL(wtype) >= P_SKILLED) &&
 			  ((monwep = MON_WEP(mon)) != 0 &&
 			   !is_flimsy(monwep) &&
-			   !obj_resists(monwep,
+			   /* comma operators are confusing... */
+			   !obj_resists(monwep, chance,
 				 (chance = 50 + 15 * greatest_erosion(obj)
 				 - 15 * greatest_erosion(monwep)
 				 + monwep->spe * 2
 				 + monwep->blessed * 5
-				 - monwep->cursed * 5), chance + 30))) {
+				 - monwep->cursed * 5) + 30))) {
 			/*
 			 * 2.5% chance of shattering defender's weapon when
 			 * using a two-handed weapon; less if uwep is rusted.

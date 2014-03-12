@@ -1164,13 +1164,13 @@ hitmu(mtmp, mattk)
 					weap = uwep;
 				    int more_than_one = weap->quan > 1L;
 				    if (!is_flimsy(weap) &&
-						!obj_resists(weap, 
+						!obj_resists(weap, chance,
 						(chance = 50 + 15 * greatest_erosion(otmp)
 						 - 15 * greatest_erosion(weap)
 						 + weap->spe * 2
 						 + weap->blessed * 5
 						 - weap->cursed * 5
-						 + Luck), chance + 30)) {
+						 + Luck) + 30)) {
 					/* BANG! */
 					pline("%s%s %s shatters from the blow!",
 						(more_than_one ? "One of " : ""),

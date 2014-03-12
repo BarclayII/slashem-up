@@ -1135,22 +1135,24 @@ physical:
 				    !is_flimsy(otmp) &&
 				    ((monwep = MON_WEP(mdef)) != 0) &&
 				    !is_flimsy(monwep) &&
-				    !obj_resists(monwep,
+				    !obj_resists(monwep, chance,
 					(chance = 50 
 					 + 15 * greatest_erosion(otmp)
 					 - 15 * greatest_erosion(monwep)
 					 + monwep->spe * 2
 					 + monwep->blessed * 5
-					 - monwep->cursed * 5),
-					chance + 30)) {
+					 - monwep->cursed * 5) + 30)) {
 				setmnotwielded(mdef,monwep);
 				MON_NOWEP(mdef);
 				mdef->weapon_check = NEED_WEAPON;
-				pline("%s %s %s from the force of %s blow!",
-					s_suffix(Monnam(mdef)),
+				char monbuf[BUFSZ];
+				Strcpy(monbuf, s_suffix(Monnam(mdef)));
+				pline(
+					"%s %s %s from %s blow!",
+					monbuf,
 					xname(monwep),
 					otense(monwep, "shatter"),
-					s_suffix(noit_mon_nam(magr)));
+					s_suffix(mon_nam(magr)));
 				m_useup(mdef, monwep);
 			    }
 			}
