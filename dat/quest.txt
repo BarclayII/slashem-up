@@ -966,7 +966,7 @@ Yet again you feel the air around you heavy with malevolent magical energy.
 "So.  This is what that second rate sorcerer %l sends to do his bidding.
 I have slain many before you.  You shall give me little sport.
 
-"Prepare to die, %c."
+"Prepare to face the power of water, %c."
 %E
 %Cp Fla 00051
 "I have wasted too much time on you already.  Now, you shall die."
@@ -1345,8 +1345,8 @@ The howling arctic wind is like a welcome home for you.
 Off in the distance, you can see the familiar ice crags that surround
 %H.
 
-Suddenly, the hairs on your neck stand on end as you detect the aura of
-evil magic in the air.
+Suddenly, the hairs on your neck stand on end as you detect the hellish
+aura in the air.
 
 %E
 %Cp Ice 00002
@@ -1470,24 +1470,24 @@ guard."
 %n."
 %E
 %Cc Ice 00035
-The air is heavy and claustrophobic. You know that you have located %i.
+Heat and smoke... Yes, you know that you have located %i.
 %E
 %Cp Ice 00036
 Yet again you have a chance to infiltrate %i.
 %E
 %Cc Ice 00040
-The hairs on the nape of your neck lift as you sense an energy in the
-very air around you.  You fight down a primordial panic that seeks to
-make you turn and run.  This is surely the lair of %n.
+The hairs on the nape of your neck lift as you sense incredibly intense
+heat. You feel your skin is just about to burn. Undoubtedly, this is the
+castle of %n.
 %E
 %Cp Ice 00041
-Yet again you feel the air around you heavy with malevolent magical energy.
+Yet again you feel the air around you heavy with heat and smoke.
 %E
 %Cc Ice 00050
 "So.  This is what that second rate sorcerer %l sends to do his bidding.
 I have slain many before you.  You shall give me little sport.
 
-"Prepare to die, %c."
+"Prepare to taste my great power of fire, %c."
 %E
 %Cp Ice 00051
 "I have wasted too much time on you already.  Now, you shall die."

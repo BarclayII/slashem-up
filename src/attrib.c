@@ -41,7 +41,7 @@ const struct innate {
 		     {	 0, 0, 0, 0 } },
 
 	fla_abil[] = { {   1, &(HFire_resistance), "", "" },
-		     {  13, &(HCold_resistance), "warm", "cooler" },
+/*		     {  13, &(HCold_resistance), "warm", "cooler" },*/
 		     {   0, 0, 0, 0 } },
 
 	hea_abil[] = { {	 1, &(HPoison_resistance), "", "" },
@@ -49,7 +49,7 @@ const struct innate {
 		     {	 0, 0, 0, 0 } },
 
 	ice_abil[] = { {   1, &(HCold_resistance), "", "" },
-		     {  13, &(HFire_resistance), "cool", "warmer" },
+/*		     {  13, &(HFire_resistance), "cool", "warmer" },*/
 		     {   0, 0, 0, 0 } },
 
 	kni_abil[] = { {	 7, &(HFast), "quick", "slow" },
