@@ -1078,7 +1078,13 @@ boolean init;
 		/*
 		 * Cancelled monsters, except riders, can't revive.
 		 */
-		if (!is_rider(mtmp->data) && mtmp->mcan)
+		/* if (!is_rider(mtmp->data) && mtmp->mcan)
+			otmp->norevive = 1;*/
+		/*
+		 * Monsters killed by Trollsbane won't revive.
+		 * Except for riders, of course.
+		 */
+		if (!is_rider(mtmp->data) && mtmp->mwont_revive)
 			otmp->norevive = 1;
 
 		if (!ptr) ptr = mtmp->data;

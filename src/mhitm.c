@@ -1124,7 +1124,38 @@ physical:
 				    tmp++;
 		    	    }
 #endif			
-			} else tmp += dmgval(otmp, mdef);
+			} else {
+			    tmp += dmgval(otmp, mdef);
+			    struct obj *monwep;
+			    int chance;
+			    if (dieroll == 2 &&
+				    strongmonst(magr->data) &&
+				    otmp && otmp->oclass == WEAPON_CLASS &&
+				    bimanual(otmp) &&
+				    !is_flimsy(otmp) &&
+				    ((monwep = MON_WEP(mdef)) != 0) &&
+				    !is_flimsy(monwep) &&
+				    !obj_resists(monwep, chance,
+					(chance = 50 
+					 + 15 * greatest_erosion(otmp)
+					 - 15 * greatest_erosion(monwep)
+					 + monwep->spe * 2
+					 + monwep->blessed * 5
+					 - monwep->cursed * 5) + 30)) {
+				setmnotwielded(mdef,monwep);
+				MON_NOWEP(mdef);
+				mdef->weapon_check = NEED_WEAPON;
+				char monbuf[BUFSZ];
+				Strcpy(monbuf, s_suffix(Monnam(mdef)));
+				pline(
+					"%s %s %s from %s blow!",
+					monbuf,
+					xname(monwep),
+					otense(monwep, "shatter"),
+					s_suffix(mon_nam(magr)));
+				m_useup(mdef, monwep);
+			    }
+			}
 
 			/* MRKR: Handling damage when hitting with */
 			/*       a burning torch */
@@ -1199,9 +1230,12 @@ physical:
 
                         if (otmp && otmp->oartifact) {
 			    (void)artifact_hit(magr,mdef, otmp, &tmp, dieroll);
-			    if (mdef->mhp <= 0)
+			    if (mdef->mhp <= 0) {
+				if (otmp->oartifact == ART_TROLLSBANE)
+				    mdef->mwont_revive = 1;
 				return (MM_DEF_DIED |
 					(grow_up(magr,mdef) ? 0 : MM_AGR_DIED));
+			    }
 			}
 			if (otmp && tmp)
 				mrustm(magr, mdef, otmp);
@@ -1796,6 +1830,9 @@ physical:
 		tmp *= 2; /* Double Damage! */
 	}
 	if((mdef->mhp -= tmp) < 1) {
+	    if (mattk->adtyp == AD_PHYS && mattk->aatyp == AT_WEAP &&
+		    otmp && otmp->oartifact == ART_TROLLSBANE)
+		mdef->mwont_revive = 1;
 	    if (m_at(mdef->mx, mdef->my) == magr) {  /* see gulpmm() */
 		remove_monster(mdef->mx, mdef->my);
 		mdef->mhp = 1;	/* otherwise place_monster will complain */
