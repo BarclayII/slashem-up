@@ -1023,6 +1023,7 @@ hitmu(mtmp, mattk)
 	register int uncancelled, ptmp;
 	int dmg, armpro, permdmg;
 	char	 buf[BUFSZ];
+	char yourbuf[BUFSZ];
 	struct permonst *olduasmon = youmonst.data;
 	int res;
 	boolean burnmsg = FALSE;
@@ -1139,7 +1140,53 @@ hitmu(mtmp, mattk)
 				    dmg++;
 			    }
 #endif
-			} else dmg += dmgval(otmp, &youmonst);
+			} else {
+				dmg += dmgval(otmp, &youmonst);
+				/*
+				 * [BarclayII]
+				 * strong monsters can also SHATTER YOUR WEAPON
+				 */
+				if (dieroll == 2 &&
+				    strongmonst(mtmp->data) &&
+				    otmp && otmp->oclass == WEAPON_CLASS &&
+				    bimanual(otmp) &&
+				    !is_flimsy(otmp) && (uwep || uswapwep)) {
+				    /* If you are two-weaponing, randomly pick
+				     * one weapon */
+				    struct obj *weap;
+				    int chance, swapwp;
+				    if (u.twoweap) {
+					if (!uswapwep) weap = uwep;
+					else if (!uwep) weap = uswapwep;
+					else if (rn2(2)) weap = uwep;
+					else weap = uswapwep;
+				    } else
+					weap = uwep;
+				    int more_than_one = weap->quan > 1L;
+				    if (!is_flimsy(weap) &&
+						!obj_resists(weap, chance,
+						(chance = 50 + 15 * greatest_erosion(otmp)
+						 - 15 * greatest_erosion(weap)
+						 + weap->spe * 2
+						 + weap->blessed * 5
+						 - weap->cursed * 5
+						 + Luck) + 30)) {
+					/* BANG! */
+					pline("%s%s %s shatters from the blow!",
+						(more_than_one ? "One of " : ""),
+						(more_than_one ? shk_your(yourbuf, weap) :
+						 Shk_Your(yourbuf, weap)),
+						xname(weap));
+					if (!more_than_one) {
+					    if (weap == uwep)
+						uwepgone();
+					    else
+						setuswapwep((struct obj *)0, FALSE);
+					}
+					useup(weap);
+				    }
+				}
+			}
 
 			if (objects[otmp->otyp].oc_material == SILVER &&
 				hates_silver(youmonst.data)) {

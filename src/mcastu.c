@@ -422,7 +422,21 @@ int spellnum;
 	dmg = 0;
 	break;
     case MGC_CREATE_POOL:
-	if (levl[u.ux][u.uy].typ == ROOM || levl[u.ux][u.uy].typ == CORR) {
+	if (Invisible && !perceives(mtmp->data) &&
+			(mtmp->mux != u.ux || mtmp->muy != u.uy)){
+	    pline("A pool appears beneath a spot near you!");
+	    levl[mtmp->mux][mtmp->muy].typ = POOL;
+	    del_engr_at(mtmp->mux, mtmp->muy);
+	    water_damage(level.objects[mtmp->mux][mtmp->muy], FALSE, TRUE);
+	    spoteffects(FALSE);
+	} else if (Displaced && (mtmp->mux != u.ux || mtmp->muy != u.uy)) {
+	    pline("A pool appears beneath your displaced image!");
+	    levl[mtmp->mux][mtmp->muy].typ = POOL;
+	    del_engr_at(mtmp->mux, mtmp->muy);
+	    water_damage(level.objects[mtmp->mux][mtmp->muy], FALSE, TRUE);
+	    spoteffects(FALSE);
+	}
+	else if (levl[u.ux][u.uy].typ == ROOM || levl[u.ux][u.uy].typ == CORR) {
 	    pline("A pool appears beneath you!");
 	    levl[u.ux][u.uy].typ = POOL;
 	    del_engr_at(u.ux, u.uy);
@@ -430,7 +444,7 @@ int spellnum;
 	    spoteffects(FALSE);  /* possibly drown, notice objects */
 	}
 	else
-	    impossible("bad pool creation?");
+	    pline("Some water comes down from the ceiling.");
 	dmg = 0;
 	break;
     case MGC_CLONE_WIZ:

@@ -123,10 +123,10 @@ const struct Role roles[] = {
 	{"Disintegrator", 0},   /* WAC was Incinerator */
 	{"Flame-Master",  0} },
 	"Earth", "Fire", "Ash", /* Special */
-	"Fla", "the great Circle of Flame", "the Water Mage's Cave",
+	"Fla", "the great Circle of Flame", "Throne of the Tides",
 	PM_FLAME_MAGE, NON_PM, PM_HELL_HOUND_PUP,
-	PM_HIGH_FLAME_MAGE, PM_IGNITER, PM_WATER_MAGE,
-	PM_WATER_ELEMENTAL, PM_RUST_MONSTER, S_ELEMENTAL, S_RUSTMONST,
+	PM_HIGH_FLAME_MAGE, PM_IGNITER, PM_NEPTULON,
+	PM_WATER_ELEMENTAL, PM_RUST_MONSTER, S_EEL, S_RUSTMONST,
 #if 0
 	ART_FIREWALL, ART_FIRE_BRAND,
 #endif
@@ -182,10 +182,10 @@ const struct Role roles[] = {
 	{"Sublimer",      0},   /* WAC was Freezer */
 	{"Ice-Master",    0} },
 	"Air", "Frost", "Smoke", /* Special */
-	"Ice", "the great Ring of Ice", "the Earth Mage's Cave",
+	"Ice", "the great Ring of Ice", "Sulfuron Keep",
 	PM_ICE_MAGE, NON_PM, PM_WINTER_WOLF_CUB,
-	PM_HIGH_ICE_MAGE, PM_FROSTER, PM_EARTH_MAGE,
-	PM_RUST_MONSTER, PM_XORN, S_RUSTMONST, S_XORN,
+	PM_HIGH_ICE_MAGE, PM_FROSTER, PM_RAGNAROS,
+	PM_FIRE_ELEMENTAL, PM_RED_NAGA, S_ELEMENTAL, S_NAGA,
 #if 0
 	ART_DEEP_FREEZE, ART_FROST_BRAND,
 #endif

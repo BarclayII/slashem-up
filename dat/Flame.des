@@ -34,7 +34,7 @@ LLLLLL.LLLLLLLLLL.............................LLLLLLLLLLLLLLLLLLLLLL..LLLLLL
 LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
 ENDMAP
 # Random Monsters
-RANDOM_MONSTERS: 'R', 'E'
+RANDOM_MONSTERS: 'R', 'E', 'e', 'v'
 # Dungeon Description
 REGION:(00,00,75,19),lit,"ordinary"
 # Portal arrival point
@@ -74,8 +74,13 @@ MONSTER: 'E',"water elemental",random,hostile
 MONSTER: 'E',"water elemental",random,hostile
 MONSTER: 'E',"water elemental",random,hostile
 MONSTER: 'E',"water elemental",random,hostile
-MONSTER: 'R',"rust monster",random,hostile
-MONSTER: 'R',"rust monster",random,hostile
+MONSTER: 'T',"ice troll",random,hostile
+MONSTER: 'T',"ice troll",random,hostile
+MONSTER: 'T',"water troll",random,hostile
+MONSTER: 'T',"water troll",random,hostile
+MONSTER: '&',"water demon",random,hostile
+MONSTER: 'n',"water nymph",random,hostile
+MONSTER: 'n',"water nymph",random,hostile
 MONSTER: 'R',"rust monster",random,hostile
 MONSTER: 'R',"rust monster",random,hostile
  
@@ -106,7 +111,7 @@ PPP    .......................    PPPLLP
 .PPPP..                         ....PPPP
 ENDMAP
 # Random Monsters
-RANDOM_MONSTERS: 'E', 'R'
+RANDOM_MONSTERS: 'E', 'R', 'e', 'v'
 # Dungeon Description
 REGION:(00,00,39,12),lit,"ordinary"
 # Stairs
@@ -138,13 +143,18 @@ MONSTER:'E',"water elemental",random,hostile
 MONSTER:'E',"water elemental",random,hostile
 MONSTER:'E',"water elemental",random,hostile
 MONSTER:'E',"water elemental",random,hostile
-MONSTER:'E',"water elemental",random,hostile
-MONSTER:'E',"water elemental",random,hostile
-MONSTER:'E',"water elemental",random,hostile
+MONSTER:'&',"ice devil",random,hostile
+MONSTER:'&',"water demon",random,hostile
+MONSTER:'H',"frost giant",random,hostile
+MONSTER:'H',"frost giant",random,hostile
+MONSTER: 'T',"ice troll",random,hostile
+MONSTER: 'T',"ice troll",random,hostile
+MONSTER: 'T',"water troll",random,hostile
+MONSTER: 'T',"water troll",random,hostile
 MONSTER:'R',"rust monster",random,hostile
 MONSTER:'R',"rust monster",random,hostile
 MONSTER:'R',"rust monster",random,hostile
-MONSTER:'R',"rust monster",random,hostile
+MONSTER:'R',"disenchanter",random,hostile
 
 #
 #       The "goal" level for the quest.
@@ -177,7 +187,7 @@ PPPPPPPPP|-...PPPPPPP...-|PPPPPPPPP
 .....PPPPPPPPPPPPPPPPPPPPPPPPP.....
 ENDMAP
 # Random Monsters
-RANDOM_MONSTERS: 'E', 'R'
+RANDOM_MONSTERS: 'E', 'R', 'e', 'v', ';'
 # Dungeon Description
 REGION:(00,00,34,16),lit,"ordinary"
 # Stairs
@@ -207,23 +217,37 @@ TRAP:random,random
 # KMH, balance patch 2 -- all quests now have an altar
 ALTAR:(17,08),noalign,altar
 # Random monsters.
-MONSTER:'@',"Water Mage",(17,08)
+MONSTER:'E',"Neptulon",(17,08)
+MONSTER:'D',"white dragon",(17,09),hostile
 MONSTER:'E',"water elemental",random,hostile
 MONSTER:'E',"water elemental",random,hostile
 MONSTER:'E',"water elemental",random,hostile
 MONSTER:'E',"water elemental",random,hostile
 MONSTER:'E',"water elemental",random,hostile
 MONSTER:'E',"water elemental",random,hostile
-MONSTER:'E',"water elemental",random,hostile
-MONSTER:'E',"water elemental",random,hostile
-MONSTER:'E',"water elemental",random,hostile
-MONSTER:'E',"water elemental",random,hostile
-MONSTER:'E',"water elemental",random,hostile
-MONSTER:'E',"water elemental",random,hostile
+MONSTER:'v',"ice vortex",random,hostile
+MONSTER:'v',"ice vortex",random,hostile
+MONSTER:'v',"ice vortex",random,hostile
 MONSTER:'R',"rust monster",random,hostile
 MONSTER:'R',"rust monster",random,hostile
-MONSTER:'R',"rust monster",random,hostile
-MONSTER:'R',"rust monster",random,hostile
+MONSTER:'&',"ice devil",random,hostile
+MONSTER:'&',"ice devil",random,hostile
+MONSTER:'U',"water hulk",random,hostile
+MONSTER:'U',"water hulk",random,hostile
+MONSTER:'&',"water demon",random,hostile
+MONSTER:'&',"water demon",random,hostile
+MONSTER: 'T',"water troll",random,hostile
+MONSTER: 'T',"water troll",random,hostile
+MONSTER: 'n',"water nymph",random,hostile
+MONSTER: 'n',"water nymph",random,hostile
+MONSTER:';',"electric eel",random,hostile
+MONSTER:';',"electric eel",random,hostile
+MONSTER:';',"kraken",random,hostile
+MONSTER:';',"kraken",random,hostile
+MONSTER:';',"giant eel",random,hostile
+MONSTER:';',"giant eel",random,hostile
+MONSTER:';',"giant eel",random,hostile
+MONSTER:';',"giant eel",random,hostile
 
 #
 #       The "fill" levels for the quest.
@@ -258,6 +282,12 @@ MONSTER: 'E', "water elemental", random
 MONSTER: 'R', "rust monster", random, hostile
 MONSTER: 'R', "rust monster", random, hostile
 MONSTER: 'R', "rust monster", random, hostile
+MONSTER: 'n',"water nymph",random,hostile
+MONSTER: 'n',"water nymph",random,hostile
+MONSTER:'H',"frost giant",random,hostile
+MONSTER:'H',"frost giant",random,hostile
+MONSTER: 'T',"ice troll",random,hostile
+MONSTER: 'T',"ice troll",random,hostile
 #
 TRAP: random, random
 TRAP: random, random
@@ -286,9 +316,20 @@ MONSTER: 'E', "water elemental", random
 MONSTER: 'E', "water elemental", random
 MONSTER: 'E', "water elemental", random
 MONSTER: 'E', "water elemental", random
-MONSTER: 'E', "water elemental", random
 MONSTER: 'R', "rust monster", random, hostile
 MONSTER: 'R', "rust monster", random, hostile
+MONSTER:';',"electric eel",random,hostile
+MONSTER:';',"electric eel",random,hostile
+MONSTER:';',"shark",random,hostile
+MONSTER:';',"shark",random,hostile
+MONSTER:';',"piranha",random,hostile
+MONSTER:';',"piranha",random,hostile
+MONSTER:'&',"ice devil",random,hostile
+MONSTER:'&',"water demon",random,hostile
+MONSTER:'&',"water demon",random,hostile
+MONSTER: 'T',"water troll",random,hostile
+MONSTER: 'T',"water troll",random,hostile
+MONSTER:'U',"water hulk",random,hostile
 #
 TRAP: "rust", random
 TRAP: "rust", random

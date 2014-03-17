@@ -815,7 +815,12 @@ register struct monst *mtmp;
 				 * throw. As suggested by KAA.	   [MRS]
 				 */
 		if (!rn2(4)) m_initthrow(mtmp, CREAM_PIE, 2);
-		if (!rn2(3)) (void)mongets(mtmp,(rn2(2)) ? CLUB : RUBBER_HOSE);
+#ifdef FIREARMS
+		if (rn2(3))
+#else
+		if (!rn2(3)) 
+#endif
+			(void)mongets(mtmp,(rn2(2)) ? CLUB : RUBBER_HOSE);
 #ifdef FIREARMS
 		else {
 			m_initthrow(mtmp, (rn2(10)) ? BULLET : SILVER_BULLET, 15);
