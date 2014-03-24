@@ -1663,6 +1663,26 @@ register int	mmflags;
 			otmp->blessed = otmp->cursed = 0;
 			mpickobj(mtmp, otmp);
 		}
+	/* Father Dagon holds Clavis Solis */
+	} else if (mndx == PM_FATHER_DAGON) {
+		struct obj *otmp;
+
+		otmp = oname(mksobj(SKELETON_KEY, TRUE, FALSE),
+				artiname(ART_CLAVIS_SOLIS));
+		if (otmp) {
+			otmp->blessed = otmp->cursed = 0;
+			mpickobj(mtmp, otmp);
+		}
+	/* and Mother Hydra holds Clavis Lunae */
+	} else if (mndx == PM_MOTHER_HYDRA) {
+		struct obj *otmp;
+
+		otmp = oname(mksobj(SKELETON_KEY, TRUE, FALSE),
+				artiname(ART_CLAVIS_LUNAE));
+		if (otmp) {
+			otmp->blessed = otmp->cursed = 0;
+			mpickobj(mtmp, otmp);
+		}
 	} else if (mndx == PM_GYPSY) {
 		/* KMH -- Gypsies are randomly generated; initialize them here */
 		gypsy_init(mtmp);

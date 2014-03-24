@@ -114,6 +114,7 @@ TELEPORT_REGION:levregion(01,00,79,20),(0,0,27,12)
 REGION:(09,03,17,09),unlit,"zoo"
 DOOR:closed,(15,02)
 DOOR:closed,(11,10)
+DOOR:locked,(08,01),"Clavis Lunae"
 MAZEWALK:(28,05),east
 LADDER:(12,01),up
 LADDER:(14,11),down
@@ -172,6 +173,7 @@ REGION:(17,06,18,11),unlit,"beehive"
 REGION:(20,06,26,11),unlit,"ordinary",unfilled
 DOOR:closed,(18,05)
 DOOR:closed,(19,11)
+DOOR:locked,(06,10),"Clavis Solis"
 LADDER:(11,07),up
 # Non diggable walls
 # Walls inside the moat stay diggable
@@ -220,57 +222,65 @@ OBJECT:'"',random,(11,07)
 MAZE:"fakewiz1",random
 GEOMETRY:center,center
 MAP
-.........
-.}}}}}}}.
-.}}---}}.
-.}--.--}.
-.}|...|}.
-.}--.--}.
-.}}---}}.
-.}}}}}}}.
+-----------
+|.........|
+|.}}}}}}}.|
+|.}}---}}.|
+|.}--.--}.|
+|.}|...|}.|
+|.}--.--}.|
+|.}}---}}.|
+|.}}}}}}}.|
+|.........|
+-----------
 ENDMAP
-STAIR:levregion(01,00,79,20),(0,0,8,7),up
-STAIR:levregion(01,00,79,20),(0,0,8,7),down
-BRANCH:levregion(01,00,79,20),(0,0,8,7)
-TELEPORT_REGION:levregion(01,00,79,20),(2,2,6,6)
-PORTAL:(4,4,4,4),(0,0,0,0),"wizard3"
-MAZEWALK:(08,05),east
-REGION:(04,03,06,06),unlit,"ordinary",unfilled,true
-MONSTER:'L',random,(04,04)
-MONSTER:'V',"vampire lord",(03,04)
-MONSTER:';',"kraken",(06,06)
+STAIR:levregion(01,00,79,20),(1,1,9,9),up
+STAIR:levregion(01,00,79,20),(1,1,9,9),down
+BRANCH:levregion(01,00,79,20),(1,1,9,9)
+TELEPORT_REGION:levregion(01,00,79,20),(3,3,7,7)
+PORTAL:(5,5,5,5),(0,0,0,0),"wizard3"
+MAZEWALK:(10,05),east
+REGION:(05,04,07,07),unlit,"ordinary",unfilled,true
+MONSTER:'L',random,(05,05)
+MONSTER:'V',"vampire lord",(04,05)
+MONSTER:';',"kraken",(07,07)
+MONSTER:'H',"Father Dagon",(01,01)
 # And to make things a little harder.
-TRAP:"board",(04,03)
-TRAP:"board",(04,05)
-TRAP:"board",(03,04)
 TRAP:"board",(05,04)
+TRAP:"board",(05,06)
+TRAP:"board",(04,05)
+TRAP:"board",(06,05)
 
 
 MAZE:"fakewiz2",random
 GEOMETRY:center,center
 MAP
-.........
-.}}}}}}}.
-.}}---}}.
-.}--.--}.
-.}|...|}.
-.}--.--}.
-.}}---}}.
-.}}}}}}}.
+-----------
+|.........|
+|.}}}}}}}.|
+|.}}---}}.|
+|.}--.--}.|
+|.}|...|}.|
+|.}--.--}.|
+|.}}---}}.|
+|.}}}}}}}.|
+|.........|
+-----------
 ENDMAP
-STAIR:levregion(01,00,79,20),(0,0,8,7),up
-STAIR:levregion(01,00,79,20),(0,0,8,7),down
-BRANCH:levregion(01,00,79,20),(0,0,8,7)
-TELEPORT_REGION:levregion(01,00,79,20),(2,2,6,6)
-MAZEWALK:(08,05),east
-REGION:(04,03,06,06),unlit,"ordinary",unfilled,true
-MONSTER:'L',random,(04,04)
-MONSTER:'V',"vampire lord",(03,04)
-MONSTER:';',"kraken",(06,06)
+STAIR:levregion(01,00,79,20),(1,1,9,9),up
+STAIR:levregion(01,00,79,20),(1,1,9,9),down
+BRANCH:levregion(01,00,79,20),(1,1,9,9)
+TELEPORT_REGION:levregion(01,00,79,20),(3,3,7,7)
+MAZEWALK:(10,05),east
+REGION:(05,04,07,07),unlit,"ordinary",unfilled,true
+MONSTER:'L',random,(05,05)
+MONSTER:'V',"vampire lord",(04,05)
+MONSTER:';',"kraken",(07,07)
+MONSTER:'H',"Mother Hydra",(01,01)
 # And to make things a little harder.
-TRAP:"board",(04,03)
-TRAP:"board",(04,05)
-TRAP:"board",(03,04)
 TRAP:"board",(05,04)
+TRAP:"board",(05,06)
+TRAP:"board",(04,05)
+TRAP:"board",(06,05)
 # treasures
-OBJECT:'"',random,(04,04)
+OBJECT:'"',random,(05,05)

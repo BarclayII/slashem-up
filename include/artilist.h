@@ -333,6 +333,18 @@ A("The Key of Chaos", SKELETON_KEY,
 	NO_ATTK,        NO_DFNS,        NO_CARY,
 	0,      A_CHAOTIC, NON_PM, NON_PM, 1000L ),
 
+/* To be used... for unlocking the way to the wizard's tower, like those
+ * alignment keys */
+A("Clavis Solis", SKELETON_KEY,
+	(SPFX_NOGEN|SPFX_RESTR), 0, 0,
+	NO_ATTK,	NO_DFNS,	NO_CARY,
+	0,	A_NONE, NON_PM, NON_PM, 3000L),
+
+A("Clavis Lunae", SKELETON_KEY,
+	(SPFX_NOGEN|SPFX_RESTR), 0, 0,
+	NO_ATTK,	NO_DFNS,	NO_CARY,
+	0,	A_NONE, NON_PM, NON_PM, 3000L),
+
 
 /*** The artifacts for the quest dungeon, all self-willed ***/
 
