@@ -1150,7 +1150,7 @@ hitmu(mtmp, mattk)
 				    strongmonst(mtmp->data) &&
 				    otmp && otmp->oclass == WEAPON_CLASS &&
 				    bimanual(otmp) &&
-				    !is_flimsy(otmp) && (uwep || uswapwep)) {
+				    !is_flimsy(otmp) && (uwep || (u.twoweap && uswapwep))) {
 				    /* If you are two-weaponing, randomly pick
 				     * one weapon */
 				    struct obj *weap;
@@ -1296,7 +1296,7 @@ hitmu(mtmp, mattk)
 			    /* KMH -- this is okay with unchanging */
 			    rehumanize();
 			    break;
-		    } else if (Fire_resistance) {
+		    } else if (FFire_resistance) {
 			pline_The("fire doesn't feel hot!");
 			dmg = 0;
                         } else if (u.umonnum == PM_STRAW_GOLEM ||
@@ -1314,6 +1314,9 @@ hitmu(mtmp, mattk)
 				u.mh = 0; /* Kill monster form */
 				rehumanize();
 				break;
+		    } else if (PFire_resistance) {
+			    shieldeff(u.ux, u.uy);
+			    dmg = (dmg + 1) / 2;
 		    }
 		    if((int) mtmp->m_lev > rn2(20))
 			destroy_item(SCROLL_CLASS, AD_FIRE);
@@ -1328,9 +1331,12 @@ hitmu(mtmp, mattk)
 		hitmsg(mtmp, mattk);
 		if (uncancelled) {
 		    pline("You're covered in frost!");
-		    if (Cold_resistance) {
+		    if (FCold_resistance) {
 			pline_The("frost doesn't seem cold!");
 			dmg = 0;
+		    } else if (PCold_resistance) {
+			    shieldeff(u.ux, u.uy);
+			    dmg = (dmg + 1) / 2;
 		    }
 		    if((int) mtmp->m_lev > rn2(20))
 			destroy_item(POTION_CLASS, AD_COLD);
@@ -1340,10 +1346,11 @@ hitmu(mtmp, mattk)
 		hitmsg(mtmp, mattk);
 		if (uncancelled) {
 		    You("get zapped!");
-		    if (Shock_resistance) {
+		    if (FShock_resistance) {
 			pline_The("zap doesn't shock you!");
 			dmg = 0;
-		    }
+		    } else if (PShock_resistance)
+			    dmg = (dmg + 1) / 2;
 		    if((int) mtmp->m_lev > rn2(20))
 			destroy_item(WAND_CLASS, AD_ELEC);
 		    if((int) mtmp->m_lev > rn2(20))
@@ -1353,8 +1360,8 @@ hitmu(mtmp, mattk)
 	    case AD_SLEE:
 		hitmsg(mtmp, mattk);
 		if (uncancelled && multi >= 0 && !rn2(5)) {
-		    if (Sleep_resistance) break;
-		    fall_asleep(-rnd(10), TRUE);
+		    if (FSleep_resistance) break;
+		    fall_asleep(-rnd(PSleep_resistance?5:10), TRUE);
 		    if (Blind) You("are put to sleep!");
 		    else You("are put to sleep by %s!", mon_nam(mtmp));
 		}
@@ -2174,32 +2181,43 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 		case AD_ELEC:
 		    if(!mtmp->mcan && rn2(2)) {
 			pline_The("air around you crackles with electricity.");
-			if (Shock_resistance) {
+			if (FShock_resistance) {
 				shieldeff(u.ux, u.uy);
 				You("seem unhurt.");
 				ugolemeffects(AD_ELEC,tmp);
 				tmp = 0;
-			}
+			} else if (PShock_resistance)
+				tmp = (tmp + 1) / 2;
 		    } else tmp = 0;
 		    break;
 		case AD_COLD:
 		    if(!mtmp->mcan && rn2(2)) {
-			if (Cold_resistance) {
+			if (FCold_resistance) {
 				shieldeff(u.ux, u.uy);
 				You_feel("mildly chilly.");
 				ugolemeffects(AD_COLD,tmp);
 				tmp = 0;
-			} else You("are freezing to death!");
+			} else {
+				if (PCold_resistance) {
+					shieldeff(u.ux, u.uy);
+					tmp = (tmp + 1) / 2;
+				}
+				You("are freezing to death!");
+			}
 		    } else tmp = 0;
 		    break;
 		case AD_FIRE:
 		    if(!mtmp->mcan && rn2(2)) {
-			if (Fire_resistance) {
+			if (FFire_resistance) {
 				shieldeff(u.ux, u.uy);
 				You_feel("mildly hot.");
 				ugolemeffects(AD_FIRE,tmp);
 				tmp = 0;
-			} else You("are burning to a crisp!");
+			} else {
+				You("are burning to a crisp!");
+				if (PFire_resistance)
+					tmp = (tmp + 1) / 2;
+			}
 			burn_away_slime();
 		    } else tmp = 0;
 		    break;
@@ -2264,13 +2282,16 @@ boolean ufound;
 
 	switch (mattk->adtyp) {
 	    case AD_COLD:
-		not_affected |= Cold_resistance;
+		not_affected |= FCold_resistance;
+		if (PCold_resistance) tmp = (tmp + 1) / 2;
 		goto common;
 	    case AD_FIRE:
-		not_affected |= Fire_resistance;
+		not_affected |= FFire_resistance;
+		if (PFire_resistance) tmp = (tmp + 1) / 2;
 		goto common;
 	    case AD_ELEC:
-		not_affected |= Shock_resistance;
+		not_affected |= FShock_resistance;
+		if (PShock_resistance) tmp = (tmp + 1) / 2;
 common:
 
 		if (!not_affected) {
@@ -2432,9 +2453,12 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 
 		    pline("%s attacks you with a fiery gaze!", Monnam(mtmp));
 		    stop_occupation();
-		    if (Fire_resistance) {
+		    if (FFire_resistance) {
 			pline_The("fire doesn't feel hot!");
 			dmg = 0;
+		    } else if (PFire_resistance) {
+			    shieldeff(u.ux, u.uy);
+			    dmg = (dmg + 1) / 2;
 		    }
 		    burn_away_slime();
 		    if ((int) mtmp->m_lev > rn2(20))
@@ -2491,10 +2515,10 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 			if (sleep_monst(mtmp, rnd(10), -1) && !Blind)
 			    pline("%s is put to sleep!", Monnam(mtmp));
 			break;
-		    } else if (Sleep_resistance) {
+		    } else if (FSleep_resistance) {
 			pline("You yawn.");
 		    } else {
-			nomul(-rnd(10));
+			nomul(-rnd(PSleep_resistance ? 5 : 10));
 			u.usleep = 1;
 			nomovemsg = "You wake up.";
 			if (Blind)  You("are put to sleep!");

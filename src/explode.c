@@ -308,10 +308,10 @@ boolean yours; /* is it your fault (for killing monsters) */
 				explmask = !!Antimagic;
 				break;
 			case AD_FIRE:
-				explmask = !!Fire_resistance;
+				explmask = !!FFire_resistance;
 				break;
 			case AD_COLD:
-				explmask = !!Cold_resistance;
+				explmask = !!FCold_resistance;
 				break;
 			case AD_DISN:
 				explmask = (olet == WAND_CLASS) ?
@@ -319,10 +319,10 @@ boolean yours; /* is it your fault (for killing monsters) */
 						!!Disint_resistance;
 				break;
 			case AD_ELEC:
-				explmask = !!Shock_resistance;
+				explmask = !!FShock_resistance;
 				break;
 			case AD_DRST:
-				explmask = !!Poison_resistance;
+				explmask = !!FPoison_resistance;
 				break;
 			case AD_ACID:
 				explmask = !!Acid_resistance;
@@ -560,8 +560,14 @@ boolean yours; /* is it your fault (for killing monsters) */
 		if (Invulnerable) {
 		    damu = 0;
 		    You("are unharmed!");
-		} else if (Half_physical_damage && adtyp == AD_PHYS)
+		} else if ((Half_physical_damage && adtyp == AD_PHYS) ||
+			   (PFire_resistance && adtyp == AD_FIRE) ||
+			   (PCold_resistance && adtyp == AD_COLD) ||
+			   (PShock_resistance && adtyp == AD_ELEC) ||
+			   (PPoison_resistance && adtyp == AD_DRST)) {
 		    damu = (damu+1) / 2;
+		    shieldeff(u.ux, u.uy);
+		}
 		if (adtyp == AD_FIRE) (void) burnarmor(&youmonst);
 		destroy_item(SCROLL_CLASS, (int) adtyp);
 		destroy_item(SPBOOK_CLASS, (int) adtyp);

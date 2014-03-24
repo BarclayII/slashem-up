@@ -1175,7 +1175,8 @@ struct trap *trap;
     if (cleared) {
 	display_nhwindow(WIN_MAP, TRUE);	/* wait */
 	docrt();
-    }
+    } else 
+	    display_nhwindow(WIN_MESSAGE, TRUE);
 }
 
 int
@@ -1219,6 +1220,8 @@ register int aflag;
 			    feel_location(x,y);	/* make sure it shows up */
 			else
 			    newsym(x,y);
+			You("find a secret door.");
+			display_nhwindow(WIN_MESSAGE, TRUE);
 		    } else if(levl[x][y].typ == SCORR) {
 			if(rnl(7-fund)) continue;
 			levl[x][y].typ = CORR;
@@ -1226,6 +1229,8 @@ register int aflag;
 			exercise(A_WIS, TRUE);
 			nomul(0);
 			newsym(x,y);
+			You("reveal a secret passage.");
+			display_nhwindow(WIN_MESSAGE, TRUE);
 		    } else {
 		/* Be careful not to find anything in an SCORR or SDOOR */
 			if((mtmp = m_at(x, y)) && !aflag) {

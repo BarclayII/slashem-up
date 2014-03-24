@@ -31,7 +31,6 @@ STATIC_PTR int FDECL(in_container,(struct obj *));
 STATIC_PTR int FDECL(ck_bag,(struct obj *));
 STATIC_PTR int FDECL(out_container,(struct obj *));
 STATIC_DCL long FDECL(mbag_item_gone, (int,struct obj *));
-STATIC_DCL void FDECL(observe_quantum_cat, (struct obj *));
 STATIC_DCL int FDECL(menu_loot, (int, struct obj *, BOOLEAN_P));
 STATIC_DCL int FDECL(in_or_out_menu, (const char *,struct obj *, BOOLEAN_P, BOOLEAN_P));
 STATIC_DCL int FDECL(container_at, (int, int, BOOLEAN_P));
@@ -2171,7 +2170,7 @@ struct obj *item;
     return loss;
 }
 
-STATIC_OVL void
+void
 observe_quantum_cat(box)
 struct obj *box;
 {

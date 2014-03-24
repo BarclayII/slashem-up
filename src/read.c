@@ -857,8 +857,13 @@ seffects(sobj)
 register struct obj	*sobj;
 {
 	register int cval;
-	register boolean confused = (Confusion != 0);
+	register boolean confused = (Confusion != 0 ||
+			(Role_if(PM_CAVEMAN) && !rn2(10)));
 	register struct obj *otmp;
+
+	/* a caveman can't quite understand scrolls */
+	if (confused && !Confusion)
+		You_cant("quite understand the runes...");
 
 	if (objects[sobj->otyp].oc_magic)
 		exercise(A_WIS, TRUE);		/* just for trying */
@@ -1320,6 +1325,8 @@ register struct obj	*sobj;
 		You("have found a scroll of genocide!");
 		known = TRUE;
 		if (sobj->blessed) do_class_genocide();
+		/* [BarclayII] i thought for a while and didn't change
+		 * Confusion to confused */
 		else do_genocide(!sobj->cursed | (2 * !!Confusion));
 		break;
 	case SCR_LIGHT:
@@ -1451,7 +1458,7 @@ register struct obj	*sobj;
 		else useupf(sobj, 1L);
 		makeknown(SCR_FIRE);
 		if(confused) {
-		    if(Fire_resistance) {
+		    if(FFire_resistance) {
 			shieldeff(u.ux, u.uy);
 			if(!Blind)
 			    pline("Oh, look, what a pretty fire in your %s.",

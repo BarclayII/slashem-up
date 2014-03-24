@@ -463,6 +463,7 @@ unsigned int *stuckid, *steedid;	/* STEED */
 
 	mread(fd, (genericptr_t) pl_fruit, sizeof pl_fruit);
 	mread(fd, (genericptr_t) &current_fruit, sizeof current_fruit);
+	mread(fd, (genericptr_t) &alchemy_table, sizeof (alchemy_table));
 	freefruitchn(ffruit);	/* clean up fruit(s) made by initoptions() */
 	ffruit = loadfruitchn(fd);
 

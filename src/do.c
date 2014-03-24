@@ -219,8 +219,8 @@ const char *verb;
 			(t->ttyp==PIT || t->ttyp==SPIKED_PIT)) {
 		/* you escaped a pit and are standing on the precipice */
 		if (Blind && flags.soundok)
-			You_hear("%s %s downwards.",
-				The(xname(obj)), otense(obj, "tumble"));
+			You_hear("%s tumble downwards.",
+				the(xname(obj)));
 		else
 			pline("%s %s into %s pit.",
 				The(xname(obj)), otense(obj, "tumble"),
@@ -1079,8 +1079,16 @@ boolean at_stairs, falling, portal;
 	if (dunlev(newlevel) > dunlevs_in_dungeon(newlevel))
 		newlevel->dlevel = dunlevs_in_dungeon(newlevel);
 	if (newdungeon && In_endgame(newlevel)) { /* 1st Endgame Level !!! */
-		if (u.uhave.amulet)
+		if (u.uhave.amulet) {
+			pline("Well done, mortal!");
+			pline("But now thou must face the final Test...");
+			pline("Prove thyself worthy or perish!");
+#ifdef RANDOMIZED_PLANES
+		    assign_level(newlevel, get_first_elemental_plane());
+#else
 		    assign_level(newlevel, &earth_level);
+#endif
+		}
 		else return;
 	}
 	new_ledger = ledger_no(newlevel);

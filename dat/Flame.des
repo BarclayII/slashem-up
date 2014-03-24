@@ -218,7 +218,7 @@ TRAP:random,random
 ALTAR:(17,08),noalign,altar
 # Random monsters.
 MONSTER:'E',"Neptulon",(17,08)
-MONSTER:'D',"white dragon",(17,09),hostile
+MONSTER:'D',"white dragon",(17,09),asleep,hostile
 MONSTER:'E',"water elemental",random,hostile
 MONSTER:'E',"water elemental",random,hostile
 MONSTER:'E',"water elemental",random,hostile
@@ -320,15 +320,19 @@ MONSTER: 'R', "rust monster", random, hostile
 MONSTER: 'R', "rust monster", random, hostile
 MONSTER:';',"electric eel",random,hostile
 MONSTER:';',"electric eel",random,hostile
-MONSTER:';',"shark",random,hostile
-MONSTER:';',"shark",random,hostile
-MONSTER:';',"piranha",random,hostile
-MONSTER:';',"piranha",random,hostile
+MONSTER:';',random,random,hostile
+MONSTER:';',random,random,hostile
+MONSTER:';',random,random,hostile
+MONSTER:';',random,random,hostile
 MONSTER:'&',"ice devil",random,hostile
 MONSTER:'&',"water demon",random,hostile
 MONSTER:'&',"water demon",random,hostile
 MONSTER: 'T',"water troll",random,hostile
 MONSTER: 'T',"water troll",random,hostile
+MONSTER:'H',"frost giant",random,hostile
+MONSTER:'H',"frost giant",random,hostile
+MONSTER: 'T',"ice troll",random,hostile
+MONSTER: 'T',"ice troll",random,hostile
 MONSTER:'U',"water hulk",random,hostile
 #
 TRAP: "rust", random

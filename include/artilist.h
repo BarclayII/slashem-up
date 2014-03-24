@@ -248,7 +248,7 @@ A("Cleaver",                    BATTLE_AXE,
 
 A("Doomblade",                  ORCISH_SHORT_SWORD,
 	SPFX_RESTR, 0, 0,
-	PHYS(0,10),     NO_DFNS,        NO_CARY,        0, A_CHAOTIC, PM_HUMAN_WEREWOLF, NON_PM, 1000L ),
+	PHYS(0,10),     NO_DFNS,        NO_CARY,        0, A_CHAOTIC, /*PM_HUMAN_WEREWOLF*/NON_PM, PM_HUMAN_WEREWOLF, 1000L ),
 
 /*
  *	Stormbringer only has a 2 because it can drain a level,
@@ -278,7 +278,7 @@ A("Elfrist",                    ORCISH_SPEAR,
 
 A("Plague", DARK_ELVEN_BOW,	/* KMH */
 	(SPFX_RESTR|SPFX_DEFN), 0, 0,
-	PHYS(5,7),        DFNS(AD_DRST),  NO_CARY,        0, A_CHAOTIC, PM_DROW, NON_PM, 6000L ),
+	PHYS(5,7),        DFNS(AD_DRST),  NO_CARY,        0, A_CHAOTIC, NON_PM/*PM_DROW*/, PM_DROW, 6000L ),
 	/* Auto-poison code in dothrow.c */
 
 A("Hellfire", CROSSBOW,	/* WAC */
@@ -360,6 +360,7 @@ A("The Palantir of Westernesse",	CRYSTAL_BALL,
 #endif
 
 /* STEPHEN WHITE'S NEW CODE */
+/* Passive attack code in mhitm.c, mhitu.c, uhitm.c */
 #ifdef ENHANCED_MAGE_ARTI
 A("The Candle of Eternal Flame",        MAGIC_CANDLE,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), (SPFX_TCTRL|SPFX_REGEN), 0,

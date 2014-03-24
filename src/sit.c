@@ -158,13 +158,14 @@ dosit()
 	       pline("The slime is burned away!");
 	       Slimed = 0;
 	    }
-	    losehp(d((Fire_resistance ? 2 : 10), 10),
+	    losehp(d((FFire_resistance ? 2 : 
+			(PFire_resistance ? 5 : 10)), 10),
 		   "sitting on lava", KILLED_BY);
 
 	} else if (is_ice(u.ux, u.uy)) {
 
 	    You(sit_message, defsyms[S_ice].explanation);
-	    if (!Cold_resistance) pline_The("ice feels cold.");
+	    if (!FCold_resistance) pline_The("ice feels cold.");
 
 	} else if (typ == DRAWBRIDGE_DOWN) {
 
@@ -184,8 +185,9 @@ dosit()
 			break;
 		    case 3:
 			pline("A%s electric shock shoots through your body!",
-			      (Shock_resistance) ? "n" : " massive");
-			losehp(Shock_resistance ? rnd(6) : rnd(30),
+			      (FShock_resistance) ? "n" : " massive");
+			losehp(FShock_resistance ? rnd(6) : 
+					rnd(PShock_resistance ? 15 : 30),
 			       "electric chair", KILLED_BY_AN);
 			exercise(A_CON, FALSE);
 			break;

@@ -787,12 +787,12 @@ unsigned trflags;
 
 	    case SLP_GAS_TRAP:
 		seetrap(trap);
-		if(Sleep_resistance || breathless(youmonst.data)) {
+		if(FSleep_resistance || breathless(youmonst.data)) {
 		    You("are enveloped in a cloud of gas!");
 		    break;
 		}
 		pline("A cloud of gas puts you to sleep!");
-		fall_asleep(-rnd(25), TRUE);
+		fall_asleep(-rnd(PSleep_resistance ? 12 : 25), TRUE);
 #ifdef STEED
 		(void) steedintrap(trap, (struct obj *)0);
 #endif
@@ -2564,7 +2564,7 @@ struct obj *box;	/* null for floor trap */
 	      pline("The slime that covers you is burned away!");
 	      Slimed = 0;
 	}
-	if (Fire_resistance) {
+	if (FFire_resistance) {
 	    shieldeff(u.ux, u.uy);
 	    num = rn2(2);
 	} else if (Upolyd) {
@@ -2581,6 +2581,8 @@ struct obj *box;	/* null for floor trap */
 		u.mhmax -= rn2(min(u.mhmax,num + 1)), flags.botl = 1;
 	} else {
 	    num = d(2,4);
+	    if (PFire_resistance)
+		    num = (num + 1) / 2;
 	    if (u.uhpmax > u.ulevel)
 		u.uhpmax -= rn2(min(u.uhpmax,num + 1)), flags.botl = 1;
 	}
@@ -4035,12 +4037,15 @@ boolean disarm;
 			int dmg;
 
 			You("are jolted by a surge of electricity!");
-			if(Shock_resistance)  {
+			if(FShock_resistance)  {
 			    shieldeff(u.ux, u.uy);
 			    You("don't seem to be affected.");
 			    dmg = 0;
-			} else
+			} else {
 			    dmg = d(4, 4);
+			    if (PShock_resistance)
+				    dmg = (dmg + 1) / 2;
+			}
 			destroy_item(RING_CLASS, AD_ELEC);
 			destroy_item(WAND_CLASS, AD_ELEC);
 			if (dmg) losehp(dmg, "electric shock", KILLED_BY_AN);
@@ -4241,13 +4246,13 @@ lava_effects()
     burn_away_slime();
     if (likes_lava(youmonst.data)) return FALSE;
 
-    if (!Fire_resistance) {
-	if(Wwalking) {
-	    dmg = d(6,6);
+    if (!FFire_resistance) {
+	if(Wwalking || PFire_resistance) {
+	    dmg = d(6,PFire_resistance ? 3 : 6);
 	    pline_The("lava here burns you!");
 	    if(dmg < u.uhp) {
 		losehp(dmg, lava_killer, KILLED_BY);
-		goto burn_stuff;
+		goto sink_in;
 	    }
 	} else
 	    You("fall into the lava!");
@@ -4298,6 +4303,7 @@ lava_effects()
 	return(TRUE);
     }
 
+sink_in:
     if (!Wwalking) {
 	u.utrap = rn1(4, 4) + (rn1(4, 12) << 8);
 	u.utraptype = TT_LAVA;
@@ -4307,7 +4313,7 @@ lava_effects()
     }
     /* just want to burn boots, not all armor; destroy_item doesn't work on
        armor anyway */
-burn_stuff:
+
     if(uarmf && !uarmf->oerodeproof && is_organic(uarmf)) {
 	/* save uarmf value because Boots_off() sets uarmf to null */
 	obj = uarmf;

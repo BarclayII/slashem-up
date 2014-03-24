@@ -22,6 +22,9 @@
 
 #define maybe_polyd(if_so,if_not)	(Upolyd ? (if_so) : (if_not))
 
+#define HALF_INTRINSIC(resistance)	(((resistance) & INTRINSIC) && \
+					 !((resistance) & FROMSTART))
+
 
 /*** Resistances to troubles ***/
 /* With intrinsics and extrinsics */
@@ -29,31 +32,49 @@
 #define EFire_resistance	u.uprops[FIRE_RES].extrinsic
 #define Fire_resistance		(HFire_resistance || EFire_resistance || \
 				 resists_fire(&youmonst))
+#define PFire_resistance	(HALF_INTRINSIC(HFire_resistance) && \
+				 !EFire_resistance && !resists_fire(&youmonst))
+#define FFire_resistance	(Fire_resistance && !PFire_resistance)
 
 #define HCold_resistance	u.uprops[COLD_RES].intrinsic
 #define ECold_resistance	u.uprops[COLD_RES].extrinsic
 #define Cold_resistance		(HCold_resistance || ECold_resistance || \
 				 resists_cold(&youmonst))
+#define PCold_resistance	(HALF_INTRINSIC(HCold_resistance) && \
+				 !ECold_resistance && !resists_cold(&youmonst))
+#define FCold_resistance	(Cold_resistance && !PCold_resistance)
 
 #define HSleep_resistance	u.uprops[SLEEP_RES].intrinsic
 #define ESleep_resistance	u.uprops[SLEEP_RES].extrinsic
 #define Sleep_resistance	(HSleep_resistance || ESleep_resistance || \
 				 resists_sleep(&youmonst))
+#define PSleep_resistance	(HALF_INTRINSIC(HSleep_resistance) && \
+				 !ESleep_resistance && !resists_sleep(&youmonst))
+#define FSleep_resistance	(Sleep_resistance && !PSleep_resistance)
 
 #define HDisint_resistance	u.uprops[DISINT_RES].intrinsic
 #define EDisint_resistance	u.uprops[DISINT_RES].extrinsic
 #define Disint_resistance	(HDisint_resistance || EDisint_resistance || \
 				 resists_disint(&youmonst))
+#define PDisint_resistance	(HALF_INTRINSIC(HDisint_resistance) && \
+				 !EDisint_resistance && !resists_disint(&youmonst))
+#define FDisint_resistance	(Disint_resistance && !PDisint_resistance)
 
 #define HShock_resistance	u.uprops[SHOCK_RES].intrinsic
 #define EShock_resistance	u.uprops[SHOCK_RES].extrinsic
 #define Shock_resistance	(HShock_resistance || EShock_resistance || \
 				 resists_elec(&youmonst))
+#define PShock_resistance	(HALF_INTRINSIC(HShock_resistance) && \
+				 !EShock_resistance && !resists_elec(&youmonst))
+#define FShock_resistance	(Shock_resistance && !PShock_resistance)
 
 #define HPoison_resistance	u.uprops[POISON_RES].intrinsic
 #define EPoison_resistance	u.uprops[POISON_RES].extrinsic
 #define Poison_resistance	(HPoison_resistance || EPoison_resistance || \
 				 resists_poison(&youmonst))
+#define PPoison_resistance	(HALF_INTRINSIC(HPoison_resistance) && \
+				 !EPoison_resistance && !resists_poison(&youmonst))
+#define FPoison_resistance	(Poison_resistance && !PPoison_resistance)
 
 #define HDrain_resistance	u.uprops[DRAIN_RES].intrinsic
 #define EDrain_resistance	u.uprops[DRAIN_RES].extrinsic
@@ -295,6 +316,8 @@
 #define ERegeneration		u.uprops[REGENERATION].extrinsic
 #define Regeneration		(HRegeneration || ERegeneration || \
 				 regenerates(youmonst.data))
+
+#define Bleeding		u.uprops[BLEEDING].intrinsic
 
 #define HEnergy_regeneration	u.uprops[ENERGY_REGENERATION].intrinsic
 #define EEnergy_regeneration	u.uprops[ENERGY_REGENERATION].extrinsic

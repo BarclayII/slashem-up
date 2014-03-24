@@ -1219,7 +1219,8 @@ static const char
 	You_[] = "You ",
 	are[]  = "are ",  were[]  = "were ",
 	have[] = "have ", had[]   = "had ",
-	can[]  = "can ",  could[] = "could ";
+	can[]  = "can ",  could[] = "could ",
+	resist_[] = "resist ", resisted[] = "resisted ";
 static const char
 	have_been[]  = "have been ",
 	have_never[] = "have never ", never[] = "never ";
@@ -1229,6 +1230,7 @@ static const char
 #define you_are(attr)	enl_msg(You_,are,were,attr)
 #define you_have(attr)	enl_msg(You_,have,had,attr)
 #define you_can(attr)	enl_msg(You_,can,could,attr)
+#define you_resist(attr) enl_msg(You_,resist_,resisted,attr)
 #define you_have_been(goodthing) enl_msg(You_,have_been,were,goodthing)
 #define you_have_never(badthing) enl_msg(You_,have_never,never,badthing)
 #define you_have_X(something)	enl_msg(You_,have,(const char *)"",something)
@@ -1287,18 +1289,24 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 #endif
 
 	/*** Resistances to troubles ***/
-	if (Fire_resistance) you_are("fire resistant");
-	if (Cold_resistance) you_are("cold resistant");
-	if (Sleep_resistance) you_are("sleep resistant");
-	if (Disint_resistance) you_are("disintegration-resistant");
-	if (Shock_resistance) you_are("shock resistant");
-	if (Poison_resistance) you_are("poison resistant");
-	if (Drain_resistance) you_are("level-drain resistant");
+	if (FFire_resistance) you_are("immune to fire");
+	else if (PFire_resistance) you_resist("fire");
+	if (FCold_resistance) you_are("immune to cold");
+	else if (PCold_resistance) you_resist("cold");
+	if (FSleep_resistance) you_are("immune to sleep");
+	else if (PSleep_resistance) you_resist("sleep");
+	if (FDisint_resistance) you_are("immune to disintegration");
+	else if (PDisint_resistance) you_resist("disintegration");
+	if (FShock_resistance) you_are("immune to electricity");
+	else if (PShock_resistance) you_resist("electricity");
+	if (FPoison_resistance) you_are("immune to poison");
+	else if (PPoison_resistance) you_resist("poison");
+	if (Drain_resistance) you_are("immune to level-drain");
 	if (Sick_resistance) you_are("immune to sickness");
 	if (Antimagic) you_are("magic-protected");
-	if (Acid_resistance) you_are("acid resistant");
+	if (Acid_resistance) you_are("immune to acid");
 	if (Stone_resistance)
-		you_are("petrification resistant");
+		you_are("immune to petrification");
 	if (Invulnerable) you_are("invulnerable");
 	if (u.uedibility) you_can("recognize detrimental food");
 
@@ -1633,6 +1641,7 @@ int final;
 	char *youhave = "  You have ";
 	char *youhad  = "  You had ";
 	char *youcould = "  You could ";
+	char *youresisted = "  You resisted ";
 
 	dump("", "Final attributes");
 
@@ -1673,17 +1682,23 @@ int final;
 #endif
 
 	/*** Resistances to troubles ***/
-	if (Fire_resistance) dump(youwere, "fire resistant");
-	if (Cold_resistance) dump(youwere, "cold resistant");
-	if (Sleep_resistance) dump(youwere, "sleep resistant");
-	if (Disint_resistance) dump(youwere, "disintegration-resistant");
-	if (Shock_resistance) dump(youwere, "shock resistant");
-	if (Poison_resistance) dump(youwere, "poison resistant");
-	if (Drain_resistance) dump(youwere, "level-drain resistant");
+	if (FFire_resistance) dump(youwere, "immune to fire");
+	else if (PFire_resistance) dump(youresisted, "fire");
+	if (FCold_resistance) dump(youwere, "immune to cold");
+	else if (PCold_resistance) dump(youresisted, "cold");
+	if (FSleep_resistance) dump(youwere, "immune to sleep");
+	else if (PSleep_resistance) dump(youresisted, "sleep");
+	if (FDisint_resistance) dump(youwere, "immune to disintegration");
+	else if (PDisint_resistance) dump(youresisted, "disintegration");
+	if (FShock_resistance) dump(youwere, "immune to electricity");
+	else if (PShock_resistance) dump(youresisted, "electricity");
+	if (FPoison_resistance) dump(youwere, "immune to poison");
+	else if (PPoison_resistance) dump(youresisted, "poison");
+	if (Drain_resistance) dump(youwere, "immune to level-drain");
 	if (Sick_resistance) dump(youwere, "immune to sickness");
 	if (Antimagic) dump(youwere, "magic-protected");
-	if (Acid_resistance) dump(youwere, "acid resistant");
-	if (Stone_resistance) dump(youwere, "petrification resistant");
+	if (Acid_resistance) dump(youwere, "immune to acid");
+	if (Stone_resistance) dump(youwere, "immune to petrification");
 	if (Invulnerable) dump(youwere, "invulnerable");
 	if (u.uedibility) dump(youcould, "recognize detrimental food");
 

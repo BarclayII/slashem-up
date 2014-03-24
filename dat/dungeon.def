@@ -123,33 +123,43 @@ BRANCH:			"The Elemental Planes" @ (1, 0) no_down up -2
 # also tried to organize it a little -- demons before the wizard, devils
 # after.
 
-DUNGEON:        "Gehennom" "G" (17, 0)
+DUNGEON:        "Gehennom" "G" (27, 0)
 DESCRIPTION:    mazelike
 DESCRIPTION:    hellish
 ALIGNMENT:      noalign
 LEVEL:          "valley" "V" @ (1, 0)
 LEVEL:          "sanctum" "none" @ (-1, 0)
 # Tower before wiz, please
-BRANCH:         "Vlad's Tower" @ (3, 10) up -1
+BRANCH:         "Vlad's Tower" @ (3, 8) up -1
 # Dr. Frankenstein's Lab
-BRANCH:         "Frankenstein's Lab" @ (3, 10) up
+BRANCH:         "Frankenstein's Lab" @ (3, 8) up
 # The demon levels
-LEVEL:          "juiblex" "J" @ (2, 14)
-LEVEL:          "yeenoghu" "E" @ (2, 14)
-LEVEL:          "orcus" "O" @ (2, 14)
-LEVEL:          "demogorg" "D" @ (2, 14)
+LEVEL:          "juiblex" "J" @ (2, 24)
+LEVEL:          "yeenoghu" "E" @ (2, 24)
+LEVEL:          "orcus" "O" @ (2, 24)
+LEVEL:          "demogorg" "D" @ (2, 24)
 # Half-way down
-LEVEL:          "wizard1" "none" @ (7, 0)
+LEVEL:          "wizard1" "none" @ (12, 0)
 CHAINLEVEL:     "wizard2" "X" "wizard1" + (1, 0)
 CHAINLEVEL:     "wizard3" "Y" "wizard1" + (2, 0)
 # The devil levels
-LEVEL:          "baalz" "B" @ (2, 14)
-LEVEL:          "geryon" "R" @ (2, 14)
-LEVEL:          "dispater" "S" @ (2, 14)
-LEVEL:          "asmodeus" "A" @ (2, 14)
-LEVEL:          "fakewiz1" "F" @ (10, 6)
-LEVEL:          "fakewiz2" "G" @ (10, 6)
-
+LEVEL:          "baalz" "B" @ (2, 24)
+LEVEL:          "geryon" "R" @ (2, 24)
+LEVEL:          "dispater" "S" @ (2, 24)
+LEVEL:          "asmodeus" "A" @ (2, 24)
+LEVEL:          "fakewiz1" "F" @ (15, 11)
+LEVEL:          "fakewiz2" "G" @ (15, 11)
+# Heck extra
+RNDLEVEL:	"heck-a" "H" @ (2, 24) 100 7
+RNDLEVEL:	"heck-a" "I" @ (2, 24) 100 7
+RNDLEVEL:	"heck-b" "K" @ (2, 24) 100 8
+RNDLEVEL:	"heck-b" "L" @ (2, 24) 100 8
+RNDLEVEL:	"heck-c" "M" @ (2, 24) 100 9
+RNDLEVEL:	"heck-c" "N" @ (2, 24) 100 9
+RNDLEVEL:	"heck-d" "P"@ (2, 24) 100 9
+RNDLEVEL:	"heck-d" "Q" @ (2, 24) 100 9
+RNDLEVEL:	"heck-e" "U" @ (2, 24) 100 9
+RNDLEVEL:	"heck-e" "W" @ (2, 24) 100 9
 
 ### Gnomish Mines ###
 # (The Mines of the Gnomes of Zurich.)

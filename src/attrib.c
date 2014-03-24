@@ -31,9 +31,9 @@ const struct innate {
 		     {  10, &(HSearching), "perceptive", "" },
 		     {	 0, 0, 0, 0 } },
 
-	bar_abil[] = { {	 1, &(HPoison_resistance), "", "" },
+	bar_abil[] = { {	 3, &(HPoison_resistance), "hardy", "" },
 		     {   7, &(HFast), "quick", "slow" },
-		     {  15, &(HStealth), "stealthy", "" },
+		     {  15, &(HStealth), "stealthy", "noisy" },
 		     {	 0, 0, 0, 0 } },
 
 	cav_abil[] = { {	 7, &(HFast), "quick", "slow" },
@@ -56,12 +56,12 @@ const struct innate {
 		     {	 0, 0, 0, 0 } },
 
 	mon_abil[] = { {   1, &(HFast), "", "" },
-		     {   1, &(HSleep_resistance), "", "" },
 		     {   1, &(HSee_invisible), "", "" },
-		     {   3, &(HPoison_resistance), "healthy", "" },
-		     {   5, &(HStealth), "stealthy", "" },
-		     {   7, &(HWarning), "sensitive", "" },
-		     {   9, &(HSearching), "perceptive", "unaware" },
+		     {   3, &(HSleep_resistance), "awake", "tired" },
+		     {   5, &(HPoison_resistance), "healthy", "" },
+		     {   7, &(HStealth), "stealthy", "" },
+		     {   9, &(HWarning), "sensitive", "" },
+		     {   11, &(HSearching), "perceptive", "unaware" },
 #if 0
 		     {  11, &(HFire_resistance), "cool", "warmer" },
 		     {  13, &(HCold_resistance), "warm", "cooler" },
@@ -132,7 +132,7 @@ const struct innate {
 			{   0, 0, 0, 0 } },
 #endif
 
-	elf_abil[] = { {	4, &(HSleep_resistance), "awake", "tired" },
+	elf_abil[] = { {	1, &(HSleep_resistance), "", "" },
 		     {	 0, 0, 0, 0 } },
 
 	gno_abil[] = { {   5, &(HStealth), "stealthy", "" },
@@ -157,13 +157,15 @@ const struct innate {
 /*		     {   7, &(HStealth), "stealthy", "" },*/
 		     {   0, 0, 0, 0 } },
 
-	orc_abil[] = { {	1, &(HPoison_resistance), "", "" },
+/* orcish monsters are not poison resistant, so player-orcs should not have
+ * poison resistance as starting intrinsic.
+ * actual value needs further testing */
+	orc_abil[] = { { 3, &(HPoison_resistance), "hardy", "less healthy" },
 		     {	 0, 0, 0, 0 } },
 /* undead creatures should be immune to sleep and poison... 
- * at least at a sufficiently high level.
- * actual values needs further testing to balance */
-	vam_abil[] = { {  7, &(HSleep_resistance), "awake", "tired"},
-		       {  7, &(HPoison_resistance), "hardy", "sick"},
+ * needs further testing to balance */
+	vam_abil[] = { {  1, &(HSleep_resistance), "", ""},
+		       {  1, &(HPoison_resistance), "", ""},
 		       {  0, 0, 0, 0} };
 
 static long next_check = 600L;	/* arbitrary first setting */
@@ -701,7 +703,7 @@ int oldlevel, newlevel;
 			 * FROMOUTSIDE to avoid such gains.
 			 */
 			if (abil->ulevel == 1)
-				*(abil->ability) |= (mask|FROMOUTSIDE);
+				*(abil->ability) |= (mask|FROMOUTSIDE|FROMSTART);
 			else
 				*(abil->ability) |= mask;
 			if(!(*(abil->ability) & INTRINSIC & ~mask)) {

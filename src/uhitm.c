@@ -3060,12 +3060,12 @@ uchar aatyp;
 		tmp = d(1, 10);
 		if (monnear(mon, u.ux, u.uy)) {
 			pline("Magic frost suddenly surrounds you!");
-			if (Cold_resistance) {
+			if (FCold_resistance) {
 				shieldeff(u.ux, u.uy);
 				pline_The("frost doesn't seem cold.");
 				ugolemeffects(AD_COLD, tmp);
 			}else
-				mdamageu(mon, tmp);
+				mdamageu(mon, tmp/(PCold_resistance+1));
 			destroy_item(POTION_CLASS, AD_COLD);
 		}
 	}
@@ -3074,12 +3074,12 @@ uchar aatyp;
 		tmp = d(1, 10);
 		if (monnear(mon, u.ux, u.uy)) {
 			pline("Magic fire suddenly surrounds you!");
-			if (Fire_resistance) {
+			if (FFire_resistance) {
 				shieldeff(u.ux, u.uy);
 				pline_The("fire doesn't feel hot.");
 				ugolemeffects(AD_FIRE, tmp);
 			}else
-				mdamageu(mon, tmp);
+				mdamageu(mon, tmp/(PFire_resistance+1));
 			destroy_item(SCROLL_CLASS, AD_FIRE);
 			destroy_item(POTION_CLASS, AD_FIRE);
 			destroy_item(SPBOOK_CLASS, AD_FIRE);
@@ -3251,11 +3251,14 @@ uchar aatyp;
 		break;
 	      case AD_COLD:		/* brown mold or blue jelly */
 		if(monnear(mon, u.ux, u.uy)) {
-		    if(Cold_resistance) {
+		    if(FCold_resistance) {
 			shieldeff(u.ux, u.uy);
 			You_feel("a mild chill.");
 			ugolemeffects(AD_COLD, tmp);
 			break;
+		    } else if (PCold_resistance) {
+			    shieldeff(u.ux, u.uy);
+			    tmp = (tmp + 1) / 2;
 		    }
 		    You("are suddenly very cold!");
 		    mdamageu(mon, tmp);
@@ -3273,22 +3276,28 @@ uchar aatyp;
 		break;
 	      case AD_FIRE:
 		if(monnear(mon, u.ux, u.uy)) {
-		    if(Fire_resistance) {
+		    if(FFire_resistance) {
 			shieldeff(u.ux, u.uy);
 			You_feel("mildly warm.");
 			ugolemeffects(AD_FIRE, tmp);
 			break;
+		    } else if (PFire_resistance) {
+			    shieldeff(u.ux, u.uy);
+			    tmp = (tmp + 1) / 2;
 		    }
 		    You("are suddenly very hot!");
 		    mdamageu(mon, tmp);
 		}
 		break;
 	      case AD_ELEC:
-		if(Shock_resistance) {
+		if(FShock_resistance) {
 		    shieldeff(u.ux, u.uy);
 		    You_feel("a mild tingle.");
 		    ugolemeffects(AD_ELEC, tmp);
 		    break;
+		} else if (PShock_resistance) {
+			shieldeff(u.ux, u.uy);
+			tmp = (tmp + 1) / 2;
 		}
 		You("are jolted with electricity!");
 		mdamageu(mon, tmp);

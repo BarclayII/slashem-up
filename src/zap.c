@@ -37,7 +37,7 @@ STATIC_DCL boolean FDECL(zap_steed, (struct obj *));
 STATIC_DCL int FDECL(zap_hit, (int,int));
 #endif
 #ifdef OVL0
-STATIC_DCL void FDECL(backfire, (struct obj *));
+/* STATIC_DCL void FDECL(backfire, (struct obj *)); */
 STATIC_DCL int FDECL(spell_hit_bonus, (int));
 #endif
 
@@ -1881,8 +1881,14 @@ struct obj *obj, *otmp;
 		/* target object has now been "seen (up close)" */
 		obj->dknown = 1;
 		if (Is_container(obj) || obj->otyp == STATUE) {
+		    boolean quantum_cat = FALSE;
+		    if ((obj->spe == 1) && (obj->otyp != STATUE)) {
+			observe_quantum_cat(obj);
+			quantum_cat = TRUE;
+		    }
 		    if (!obj->cobj)
-			pline("%s empty.", Tobjnam(obj, "are"));
+			pline("%s %sempty.", Tobjnam(obj, "are"),
+				quantum_cat ? "now " : "");
 		    else {
 			struct obj *o;
 			/* view contents (not recursively) */
@@ -2186,9 +2192,9 @@ register struct obj *obj;
 	}
 }
 #endif /*OVL1*/
-#ifdef OVL0
+/*#ifdef OVL0*/
 
-STATIC_OVL void
+/*STATIC_OVL */void
 backfire(otmp)
 struct obj *otmp;
 {
@@ -2200,6 +2206,8 @@ struct obj *otmp;
         useup(otmp);*/
 	wand_explode (otmp, FALSE);
 }
+
+#ifdef OVL0
 
 static NEARDATA const char zap_syms[] = { WAND_CLASS, 0 };
 
@@ -2413,9 +2421,11 @@ boolean ordinary;
 		    makeknown(WAN_LIGHTNING);
 		/*WAC Added Spell Lightning*/
 		case SPE_LIGHTNING:
-		    if (!Shock_resistance) {
+		    if (!FShock_resistance) {
 			You("shock yourself!");
 			damage = d(12,6);
+			if (PShock_resistance)
+				damage = (damage + 1) / 2;
 			exercise(A_CON, FALSE);
 		    } else {
 			shieldeff(u.ux, u.uy);
@@ -2441,13 +2451,15 @@ boolean ordinary;
 		case WAN_FIRE:
 		    makeknown(WAN_FIRE);
 		case FIRE_HORN:
-		    if (Fire_resistance) {
+		    if (FFire_resistance) {
 			shieldeff(u.ux, u.uy);
 			You_feel("rather warm.");
 			ugolemeffects(AD_FIRE, d(12,6));
 		    } else {
 			pline("You've set yourself afire!");
 			damage = d(12,6);
+			if (PFire_resistance)
+				damage = (damage + 1) / 2;
 		    }
 		    if (Slimed) {                    
 			pline("The slime is burned away!");
@@ -2465,13 +2477,15 @@ boolean ordinary;
 		    makeknown(WAN_COLD);
 		case SPE_CONE_OF_COLD:
 		case FROST_HORN:
-		    if (Cold_resistance) {
+		    if (FCold_resistance) {
 			shieldeff(u.ux, u.uy);
 			You_feel("a little chill.");
 			ugolemeffects(AD_COLD, d(12,6));
 		    } else {
 			You("imitate a popsicle!");
 			damage = d(12,6);
+			if (PCold_resistance)
+				damage = (damage + 1) / 2;
 		    }
 		    destroy_item(POTION_CLASS, AD_COLD);
 
@@ -2570,12 +2584,12 @@ boolean ordinary;
 		case WAN_SLEEP:
 		    makeknown(WAN_SLEEP);
 		case SPE_SLEEP:
-		    if(Sleep_resistance) {
+		    if(FSleep_resistance) {
 			shieldeff(u.ux, u.uy);
 			You("don't feel sleepy!");
 		    } else {
 			pline_The("sleep ray hits you!");
-			fall_asleep(-rnd(50), TRUE);
+			fall_asleep(-rnd(PSleep_resistance ? 25 : 50), TRUE);
 		    }
 		    break;
 
@@ -3753,12 +3767,14 @@ xchar sx, sy;
 	    }
 	    break;
 	case ZT_FIRE:
-	    if (Fire_resistance) {
+	    if (FFire_resistance) {
 		shieldeff(sx, sy);
 		You("don't feel hot!");
 		ugolemeffects(AD_FIRE, d(nd, 6));
 	    } else {
 		dam = d(nd, 6);
+		if (PFire_resistance)
+			dam = (dam + 1) / 2;
 	    }
 	    if (Slimed) {            
 		pline("The slime is burned away!");
@@ -3772,41 +3788,45 @@ xchar sx, sy;
 	    }
 	    break;
 	case ZT_COLD:
-	    if (Cold_resistance) {
+	    if (FCold_resistance) {
 		shieldeff(sx, sy);
 		You("don't feel cold.");
 		ugolemeffects(AD_COLD, d(nd, 6));
 	    } else {
 		dam = d(nd, 6);
+		if (PCold_resistance)
+			dam = (dam + 1) / 2;
 	    }
 	    if (!rn2(3)) destroy_item(POTION_CLASS, AD_COLD);
 	    break;
 	case ZT_SLEEP:
-	    if (Sleep_resistance) {
+	    if (FSleep_resistance) {
 		shieldeff(u.ux, u.uy);
 		You("don't feel sleepy.");
 	    } else {
-		fall_asleep(-d(nd,25), TRUE); /* sleep ray */
+		fall_asleep(-d(nd,PSleep_resistance ? 13 : 25), TRUE); /* sleep ray */
 	    }
 	    break;
 	case ZT_DEATH:
 	    if (abs(type) == ZT_BREATH(ZT_DEATH)) {
-		if (Disint_resistance) {
-		    You("are not disintegrated.");
-		    break;
-		} else if (uarms) {
+		if (uarms && !(EDisint_resistance & W_ARMS)) {
 		    /* destroy shield; other possessions are safe */
 		    (void) destroy_arm(uarms);
 		    break;
-		} else if (uarm) {
+		} else if (uarm && !(EDisint_resistance & W_ARM)) {
 		    /* destroy suit; if present, cloak goes too */
-		    if (uarmc) (void) destroy_arm(uarmc);
+                    if (uarmc && !(EDisint_resistance & W_ARMC))
+                        (void) destroy_arm(uarmc);
 		    (void) destroy_arm(uarm);
 		    break;
 		}
+		if (FDisint_resistance) {
+                    shieldeff(sx, sy);
+                    You("are not disintegrated.");
+                    break;
+		}
 		/* no shield or suit, you're dead; wipe out cloak
 		   and/or shirt in case of life-saving or bones */
-		if (uarmc) (void) destroy_arm(uarmc);
 #ifdef TOURIST
 		if (uarmu) (void) destroy_arm(uarmu);
 #endif
@@ -3814,9 +3834,16 @@ xchar sx, sy;
                         pline("You are unharmed!");
                         break;
                 }
+		if (PDisint_resistance) {
+                    shieldeff(sx, sy);
+                    pline_The("disintegrating blast rips through you!");
+                    dam = (((Upolyd ? u.mhmax : u.uhpmax)+1)/2);
+      		   exercise(A_STR,FALSE);
+                    break;
+		}
 	    } else if (nonliving(youmonst.data) || is_demon(youmonst.data)) {
 		shieldeff(sx, sy);
-		You("seem unaffected.");
+		You("seem no deader than before.");
 		break;
 	    } else if (Antimagic) {
 		shieldeff(sx, sy);
@@ -3834,12 +3861,14 @@ xchar sx, sy;
 	    done(DIED);
 	    return; /* lifesaved */
 	case ZT_LIGHTNING:
-	    if (Shock_resistance) {
+	    if (FShock_resistance) {
 		shieldeff(sx, sy);
 		You("aren't affected.");
 		ugolemeffects(AD_ELEC, d(nd, 6));
 	    } else {
 		dam = d(nd, 6);
+		if (PShock_resistance)
+			dam = (dam + 1) / 2;
 		exercise(A_CON, FALSE);
 	    }
 	    if (!rn2(3)) destroy_item(WAND_CLASS, AD_ELEC);
@@ -4707,9 +4736,10 @@ register int osym, dmgtyp;
 			dindx = 0;
 			dmg = rnd(4);
 		    } else skip++;
+                    if (PCold_resistance && !skip) dmg = (dmg + 1)/2;
 		    break;
 		case AD_FIRE:
-		    xresist = (Fire_resistance && obj->oclass != POTION_CLASS);
+		    xresist = (FFire_resistance && obj->oclass != POTION_CLASS);
 
 		    if (obj->otyp == SCR_FIRE || obj->otyp == SPE_FIREBALL)
 			skip++;
@@ -4737,9 +4767,10 @@ register int osym, dmgtyp;
 			    skip++;
 			    break;
 		    }
+                    if (PFire_resistance && !skip) dmg = (dmg + 1)/2;
 		    break;
 		case AD_ELEC:
-		    xresist = (Shock_resistance && obj->oclass != RING_CLASS);
+		    xresist = (FShock_resistance && obj->oclass != RING_CLASS);
 		    quan = obj->quan;
 		    switch(osym) {
 			case RING_CLASS:
@@ -4760,6 +4791,7 @@ register int osym, dmgtyp;
 			    skip++;
 			    break;
 		    }
+                    if (PShock_resistance && !skip) dmg = (dmg + 1)/2;
 		    break;
 		default:
 		    skip++;

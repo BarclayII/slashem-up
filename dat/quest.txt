@@ -896,9 +896,9 @@ Go forth, and return when you feel ready."
 %Cc Fla 00021
 "The world is in great need of your assistance, %p.
 
-"About six months ago, I learned that a mysterious sorcerer, known
-as %n, had begun to summon horrible elementals from the plane of 
-Water.
+"About six months ago, I learned that an elemental lord, known
+as %n, had begun to summon horrible elementals and nasties from
+the ocean.
 
 "%nC and his hordes of elementals swept down upon %H and stole
 %o, and seeks to bend it to his will.  
@@ -906,7 +906,7 @@ After many brave wizards were slain by his watery servants, I
 sent forth a summons for you!
 
 "If %n can bend %o to his will, he will become
-almost indestructible.  He will then be able to enslave our elementals,
+almost indestructible.  He will then be able to enslave the fires,
 and destroy us.  You are our only hope.  The gods smile upon you,
 and with %d behind you, you alone can defeat %n.
 
@@ -918,14 +918,14 @@ then will the world be safe."
 "%n is strong in the dark arts, but not immune to cold steel."
 %E
 %Cp Fla 00026
-"Remember that %n is a great sorcerer.  He lived in the time
-of Atlantis."
+"Remember that %n is a great sorcerer.  He lived in the throne of
+the tides."
 %E
 %Cp Fla 00027
 "If you fail, %p, I will not be able to protect these people long."
 %E
 %Cp Fla 00028
-"To enter %i, you must be very stealthy.  The elementals will be on
+"To enter %i, you must be very stealthy.  His servants will be on
 guard."
 %E
 %Cp Fla 00029
@@ -935,7 +935,8 @@ guard."
 "May %d protect you, and guide your steps."
 %E
 %Cp Fla 00031
-"If you can lay hands upon %o, carry it for good fortune."
+"If you can lay hands upon %o, carry it and turn the power against 
+him."
 %E
 %Cp Fla 00032
 "I cannot stand against %ns sorcery.  But %d will help you."
@@ -985,7 +986,7 @@ And your life as well."
 "You are a sorry excuse for %ra."
 %E
 %Cp Fla 00062
-"Run while you can, %c.  My next spell will be your last."
+"Run while you can, %c.  My next hit will be your last."
 %E
 %Cp Fla 00063
 "I shall use your very skin to bind my next grimoire."
@@ -1009,9 +1010,11 @@ And your life as well."
 "You have failed, %c.  Now, my victory is complete."
 %E
 %Cc Fla 00070
-As you pick up %o, you feel the power of it
-flowing through your hands.  It seems to be in two or more places
-at once, even though you are holding it.
+As you pick up %o, you feel yourself surrounded by 
+growing warmth and light. %oC becomes hotter and 
+hotter, and eventually an eternal flame covers you. 
+Anything tries to harm you cries out in pain after being burned and repulsed 
+by the bluish aura around you.
 %E
 %Cp Fla 00080
 %n falls to the ground, and utters a last curse at you.  Then his
@@ -1358,28 +1361,28 @@ Again, and you think possibly for the last time, you approach
 %H.
 %E
 %Cp Ice 00005
-"Our enemies come from beneath the earth itself!"
+"Our enemies come from the lava underneath!"
 %E
 %Cp Ice 00006
-"Remember to pack a pick-axe!"
+"Make sure you can fly or levitate!"
 %E
 %Cp Ice 00007
 "There has been little studying accomplished since the horde arrived."
 %E
 %Cp Ice 00008
-"The horde is mighty in numbers, but they have little courage."
+"Our frosty power can't hold much longer..."
 %E
 %Cp Ice 00009
 "%lC has helped defend us, but our strength is fading."
 %E
 %Cp Ice 00010
-"Remember to pack a pick-axe!"
+"Remember to reinforce your memory!"
 %E
 %Cp Ice 00011
 "Since the defeat of the hoarde, all can concentrate fully on our studies!"
 %E
 %Cp Ice 00012
-"The frozen lake looks beautiful today"
+"The frozen lake looks beautiful today."
 %E
 %Cp Ice 00013
 "I always knew %n was too warm blooded to defeat us!"
@@ -1421,7 +1424,7 @@ Go forth, and return when you are ready."
 %Cc Ice 00021
 "The world is in great need of your assistance, %p.
 
-"About six months ago, I learned that a mysterious sorcerer, known
+"About six months ago, I learned that the cruel firelord, known
 as %n, had begun to summon a large group of elementals and monsters.
 
 "%nC and his horde swept down upon %H and stole 
@@ -1429,16 +1432,16 @@ as %n, had begun to summon a large group of elementals and monsters.
 I sent forth a summons for you.
 
 "If %n can bend %o to his will, he will become
-almost indestructible.  He will then be able to summon our elementals
-to him.  You are the only hope.  The gods smile upon you,
-and with %d behind you, you alone can defeat %n.
+almost indestructible.  He will then be able to command the power
+of ice and water.  You are the only hope.  The gods smile 
+upon you, and with %d behind you, you alone can defeat %n.
 
 "You must go to %i.  From there, you can track down
 %n, defeat him, and return %o to us.  Only
 then will the world be safe."
 %E
 %Cp Ice 00025
-"%nC is strong in the dark arts, but not immune to cold steel."
+"%nC is incredibly strong, but you can defeat him by frost since he's fiery."
 %E
 %Cp Ice 00026
 "Remember that %n is a great sorcerer.  He has lived for a thousand years."
@@ -1460,7 +1463,7 @@ guard."
 "If you can lay hands upon %o, carry it for good fortune."
 %E
 %Cp Ice 00032
-"I cannot stand against %ns sorcery.  But %d will help you."
+"I'm too old to stand against %ns sorcery.  But %d will help you."
 %E
 %Cp Ice 00033
 "Do not fear %n.  I know you can defeat him."
@@ -1487,7 +1490,7 @@ Yet again you feel the air around you heavy with heat and smoke.
 "So.  This is what that second rate sorcerer %l sends to do his bidding.
 I have slain many before you.  You shall give me little sport.
 
-"Prepare to taste my great power of fire, %c."
+"Prepare to meet my great power of fire, %c."
 %E
 %Cp Ice 00051
 "I have wasted too much time on you already.  Now, you shall die."
@@ -1506,7 +1509,7 @@ And your life as well."
 "You are a sorry excuse for %ra."
 %E
 %Cp Ice 00062
-"Run while you can, %c.  My next spell will be your last."
+"Run while you can, %c, or you'll soon be a crisp."
 %E
 %Cp Ice 00063
 "I shall use your very skin to bind my next grimoire."
@@ -1530,9 +1533,10 @@ And your life as well."
 "You have failed, %c.  Now, my victory is complete."
 %E
 %Cc Ice 00070
-As you pick up %o, you feel the power of it
-flowing through your hands.  It seems to be in two or more places
-at once, even though you are holding it.
+As you pick up %o, the air around you seems to be cooled down. 
+Shortly afterward, a white aura emerges around you, freezing any creature who
+tried to reach you. You struggle briefly, and then, feeling yourself
+unstoppable, finally take control over %o.
 %E
 %Cp Ice 00080
 %nC falls to the ground, and utters a last curse at you.  Then his

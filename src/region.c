@@ -944,10 +944,10 @@ genericptr_t p2;
 	    return FALSE;
 	if (!Blind)
 	    make_blinded(1L, FALSE);
-	if (!Poison_resistance) {
+	if (!FPoison_resistance) {
 	    pline("%s is burning your %s!", Something, makeplural(body_part(LUNG)));
 	    You("cough and spit blood!");
-	    losehp(rnd(dam) + 5, "gas cloud", KILLED_BY_AN);
+	    losehp(rnd(dam/(PPoison_resistance+1)) + 5, "gas cloud", KILLED_BY_AN);
 	    return FALSE;
 	} else {
 	    You("cough!");

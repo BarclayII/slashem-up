@@ -523,6 +523,10 @@ E void FDECL(insert_branch, (branch *,BOOLEAN_P));
 E void NDECL(init_dungeons);
 E s_level *FDECL(find_level, (const char *));
 E s_level *FDECL(Is_special, (d_level *));
+#ifdef RANDOMIZED_PLANES
+E s_level *FDECL(get_next_elemental_plane, (d_level *));
+E d_level *NDECL(get_first_elemental_plane);
+#endif
 E branch *FDECL(Is_branchlev, (d_level *));
 E xchar FDECL(ledger_no, (d_level *));
 E xchar NDECL(maxledgerno);
@@ -1628,6 +1632,7 @@ E int FDECL(query_objlist, (const char *, struct obj *, int,
 E struct obj *FDECL(pick_obj, (struct obj *));
 E int NDECL(encumber_msg);
 E int NDECL(doloot);
+E void FDECL(observe_quantum_cat, (struct obj *));
 E boolean FDECL(container_gone, (int (*)(OBJ_P)));
 E int FDECL(use_container, (struct obj **,int));
 E int FDECL(loot_mon, (struct monst *,int *,boolean *));
@@ -1695,6 +1700,7 @@ E void FDECL(healup, (int,int,BOOLEAN_P,BOOLEAN_P));
 E void FDECL(strange_feeling, (struct obj *,const char *));
 E void FDECL(potionhit, (struct monst *,struct obj *,BOOLEAN_P));
 E void FDECL(potionbreathe, (struct obj *));
+E void NDECL(alchemy_init);
 E boolean FDECL(get_wet, (struct obj *, BOOLEAN_P));
 E int NDECL(dodip);
 E void FDECL(djinni_from_bottle, (struct obj *));
@@ -2580,6 +2586,7 @@ E int FDECL(bhitpile, (struct obj *,int (*)(OBJ_P,OBJ_P),int,int));
 E int FDECL(wrestable, (struct obj *));
 E int FDECL(zappable, (struct obj *));
 E void FDECL(zapnodir, (struct obj *));
+E void FDECL(backfire, (struct obj *));
 E int NDECL(dozap);
 E int FDECL(zapyourself, (struct obj *,BOOLEAN_P));
 E boolean FDECL(cancel_monst, (struct monst *,struct obj *,

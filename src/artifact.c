@@ -749,15 +749,15 @@ struct monst *mtmp;
 		return FALSE;
 	    switch(weap->attk.adtyp) {
 		case AD_FIRE:
-			if (yours ? Fire_resistance : resists_fire(mtmp))
+			if (yours ? FFire_resistance : resists_fire(mtmp))
 			    retval = FALSE;
 			break;
 		case AD_COLD:
-			if (yours ? Cold_resistance : resists_cold(mtmp))
+			if (yours ? FCold_resistance : resists_cold(mtmp))
 			    retval = FALSE;
 			break;
 		case AD_ELEC:
-			if (yours ? Shock_resistance : resists_elec(mtmp))
+			if (yours ? FShock_resistance : resists_elec(mtmp))
 			    retval = FALSE;
 			break;
 		case AD_ACID:
@@ -770,7 +770,7 @@ struct monst *mtmp;
 			    retval = FALSE;
 			break;
 		case AD_DRST:
-			if (yours ? Poison_resistance : resists_poison(mtmp))
+			if (yours ? FPoison_resistance : resists_poison(mtmp))
 			    retval = FALSE;
 			break;
 		case AD_DRLI:
@@ -1209,15 +1209,25 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 	    /* Magicbane's special attacks (possibly modifies hittee[]) */
 	    return Mb_hit(magr, mdef, otmp, dmgptr, dieroll, vis, hittee);
 	}
-	if (otmp->oartifact == ART_DEATHSWORD){
-		if (youdefend && dieroll < 10) {
-			make_stunned(HStun + d(1,10), FALSE);
+	if (otmp->oartifact == ART_DEATHSWORD && dieroll < 4){
+		if (youdefend && !mindless(youmonst.data)) {
+			pline_The((!multi) ? 
+			"heavy blade strikes you and you give in to pain!" :
+			"heavy blade hurts you even more!"
+			);
+			nomovemsg = "You regain consciousness.";
+			nomul(multi - d(1,5));
 			return TRUE;
-		}else if (dieroll < 3) {
-	    	    	mdef->mconf = 1;
-		    	pline_The("dark blade knocks %s hard!", 
+		}else if (!youdefend && !mindless(mdef->data)) {
+			int rnd_tmp = d(1,5);
+		    	pline_The(mdef->mcanmove ? 
+				"heavy blade knocks %s unconscious!" :
+				"heavy blade hurts %s even more!", 
 				    (canseemon(mdef)) ? mon_nam(mdef) :
 				    "it");
+			mdef->mcanmove = 0;
+			mdef->mfrozen = ((int)mdef->mfrozen + rnd_tmp > 127) ?
+				127 : mdef->mfrozen + rnd_tmp;
 			return TRUE;
 		}
 	}

@@ -23,7 +23,7 @@
  *		provide it (no need to change sec#1, vmsconf.h handles it).
  */
 
-/*#define UNIX*/		/* delete if no fork(), exec() available */
+#define UNIX		/* delete if no fork(), exec() available */
 
 /* #define MSDOS */	/* in case it's not auto-detected */
   
@@ -428,6 +428,8 @@ typedef unsigned char	uchar;
 /* Quest nemeses ignores Elbereth */
 #define NEMESES_IGNORE_SCARE
 
+#define RANDOMIZED_PLANES
+
 /*#define LYC_POLYCONTROL*/
 
 /* Toggle this on to make player-vampires gain intrinsic poison and sleep
@@ -505,9 +507,14 @@ typedef unsigned char	uchar;
  * bugs left here.
  */
 
+#define STATUS_COLORS
+
 /*#define GOLDOBJ */	/* Gold is kept on obj chains - Helge Hafting */
 /*#define AUTOPICKUP_EXCEPTIONS */ /* exceptions to autopickup */
 #define EPITAPH		/* 'write your own epitaph' patch */
+
+#define RANDOM_DRAGON_SCALES
+
 
 /* End of Section 5 */
 

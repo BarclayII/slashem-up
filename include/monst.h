@@ -81,6 +81,7 @@ struct monst {
 				 * but not mimic (that is, snake, spider,
 				 * trapper, piercer, eel)
 				 */
+	Bitfield(mwont_revive,1);	/* will not revive */
 
 	Bitfield(mcan,1);	/* has been cancelled */
 	Bitfield(mburied,1);	/* has been buried */

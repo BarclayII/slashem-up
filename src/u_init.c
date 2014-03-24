@@ -218,8 +218,8 @@ static struct trobj UndeadSlayer[] = {
 	{ SILVER_DAGGER, 0, WEAPON_CLASS, 5, UNDEF_BLESS },
 	{ HELMET, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ CHAIN_MAIL, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
-	{ CLOVE_OF_GARLIC, 0, FOOD_CLASS, 5, 1 },
-	{ SPRIG_OF_WOLFSBANE, 0, FOOD_CLASS, 5, 1 },
+	{ CLOVE_OF_GARLIC, 0, FOOD_CLASS, 5, 0 },
+	{ SPRIG_OF_WOLFSBANE, 0, FOOD_CLASS, 5, 0 },
 	{ HOLY_WAFER, 0, FOOD_CLASS, 4, 0 },
 	{ POT_WATER, 0, POTION_CLASS, 4, 1 },        /* holy water */
 	{ 0, 0, 0, 0, 0 }
@@ -348,6 +348,7 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_GNOME, BOW,			CROSSBOW	      },
     { PM_GNOME, ARROW,			CROSSBOW_BOLT	      },
     { PM_HUMAN_WEREWOLF,FOOD_RATION,		TRIPE_RATION	      },
+    { PM_HUMAN_WEREWOLF,SPRIG_OF_WOLFSBANE,	TRIPE_RATION	      },
     { PM_HUMAN_WEREWOLF,SILVER_SPEAR,		SPEAR		      },
     { PM_HUMAN_WEREWOLF,SILVER_DAGGER,		DAGGER		      },
 #ifdef FIREARMS

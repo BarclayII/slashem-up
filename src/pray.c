@@ -478,6 +478,8 @@ STATIC_OVL void
 god_zaps_you(resp_god)
 aligntyp resp_god;
 {
+        char buf[BUFSZ];
+        Sprintf(buf, "the wrath of %s", align_gname(resp_god));
 	if (u.uswallow) {
 	    pline("Suddenly a bolt of lightning comes down at you from the heavens!");
 	    pline("It strikes %s!", mon_nam(u.ustuck));
@@ -495,10 +497,22 @@ aligntyp resp_god;
 		if (Blind) pline("For some reason you're unaffected.");
 		else
 		    (void) ureflects("%s reflects from your %s.", "It");
-	    } else if (Shock_resistance) {
-		shieldeff(u.ux, u.uy);
-		pline("It seems not to affect you.");
-	    } else fry_by_god(resp_god);
+            } else {
+                destroy_item(WAND_CLASS, AD_ELEC);
+                destroy_item(RING_CLASS, AD_ELEC);
+                if (!Shock_resistance) fry_by_god(resp_god);
+                else {
+                    shieldeff(u.ux,u.uy);
+                    if (PShock_resistance)
+                        losehp((((Upolyd ? u.mhmax : u.uhpmax)+1)/2), buf, KILLED_BY);
+                    else You("are unaffected!");
+                    if (!resists_blnd(&youmonst)) {
+                        You("are blinded by the flash!");
+                        make_blinded((long)rnd(100),FALSE);
+                        if (!Blind) Your(vision_clears);
+                    }
+                }
+            }
 	}
 
 	pline("%s is not deterred...", align_gname(resp_god));
@@ -531,7 +545,10 @@ aligntyp resp_god;
 	    if (!Disint_resistance)
 		fry_by_god(resp_god);
 	    else {
-		You("bask in its %s glow for a minute...", NH_BLACK);
+                if (PDisint_resistance) {
+                    pline_The("disintegration beam rips through you!");
+                    losehp((((Upolyd ? u.mhmax : u.uhpmax)+1)/2), buf, KILLED_BY);
+                } else You("bask in its %s glow for a moment...", NH_BLACK);
 		godvoice(resp_god, "You have further angered me!");
 	    }
 	    if (Is_astralevel(&u.uz) || Is_sanctum(&u.uz)) {
@@ -1790,7 +1807,7 @@ dopray()
 	if (yn("Are you sure you want to pray?") == 'n')
 	    return 0;
 
-    u.uconduct.gnostic++;
+
     /* Praying implies that the hero is conscious and since we have
        no deafness attribute this implies that all verbalized messages
        can be heard.  So, in case the player has used the 'O' command
@@ -1809,6 +1826,9 @@ dopray()
 	if (HStun) make_stunned(0L, TRUE);
 	return(1);
     }
+
+    /* [BarclayII] praying to porcelain god should not break atheist conduct */
+    u.uconduct.gnostic++;
 
     /* set up p_type and p_alignment */
     if (!can_pray(TRUE)) return 0;

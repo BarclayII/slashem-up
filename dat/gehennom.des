@@ -1025,3 +1025,4587 @@ MONSTER:'V',random,random
 MONSTER:'V',random,random
 MONSTER:'V',random,random
 STAIR:(63,15),up
+
+#
+# Gehennom additional levels by Kelly Bailey
+# 1.0 2003/10/14
+ 
+# Technical notes:
+#
+# A repeated trick is to put some area in the MAPs that we
+# intend a MAZEWALK to burrow out. Sometimes this fodder area
+# will be large (such as in the maze of iron bars). However,
+# the large area will be devoid of the minotaurs, boulders,
+# and other goodies when the level is loaded. MAZEWALK won't
+# stock inside MAPs. Worse, giving a "random" location in
+# manual stocking doesn't work because the MAZEWALK-fodder
+# area is still stone when the level loader looks for random
+# locations (MAZEWALKS are done only after all MAPs have been
+# processed). How do we get items into our MAP area mazes?
+#
+# Workarounds used:
+# (1) Put some floor in the fodder area, pre-planning dead
+#     ends. Gotchas: if you make too many, MAZEWALK won't
+#     be able to find its way through; or you might wind
+#     up with intermittant incomplete MAZEWALKS due to the
+#     its inability to create 4-way interesections (grr).
+#     Also your maze might look a little bit off if it has
+#     loops or too many short dead ends (vertical ones
+#     especially are distinctive).
+# (2) Do two MAPs that overlay. The first has ROOM in all
+#     the places that will be ROOM after the MAZEWALK. The
+#     level loader reads this MAP first (we assume)
+#     and happily places items randomly. Then in your second
+#     MAP that is MAZEWALK fodder, the items are covered up
+#     with stone--but are are soon dug out again by the
+#     MAZEWALK. Gotchas: You can only have nine MAPs (grr).
+#     Also, you cannot place STAIRs this way because the
+#     second map will truly overwrite them. It also makes
+#     level entries longer.
+#
+#     [BarclayII] adapted Heck patch to make it more SLASH'EM
+#     like
+
+#
+# (Fake) Demogorgon Level
+# Monsters: P, j, F, hezrou, vrock
+#
+
+MAZE:"heck-a-1",random
+FLAGS:nommap,noteleport,lethe
+GEOMETRY:center,center
+MAP
+ -.........................- 
+--.........................--
+ -..IIIIIIIIIIIIIIIIIIIII..- 
+--..I                   I..--
+ -..I ...H..            I..- 
+--..I ...               I..--
+ -..I ... P             I..- 
+--..I ... H             I..--
+ -..IH...    H...       I..- 
+--..I           .       I..--
+ -..I           . ..... I..- 
+--..I             H ... I..--
+ -..I             . ... I..- 
+--..I                   I..--
+ -..IIIIIIIIIIIIIIIIIIIII..- 
+--.........................--
+ -.........................- 
+ENDMAP
+TELEPORT_REGION:levregion(1,0,60,20),(0,0,28,16)
+BRANCH:levregion(1,0,60,20),(0,0,28,16)
+NON_DIGGABLE:(1,0,27,16)
+STAIR:levregion(1,0,79,20),(0,0,26,16),down
+STAIR:levregion(1,0,79,20),(0,0,26,16),up
+REGION:(5,3,23,13),lit,"ordinary"
+MAZEWALK:(2,8),west
+MAZEWALK:(26,8),east
+MAZEWALK:(18,12),west
+MONSTER:'P',random,random
+MONSTER:'P',random,random
+MONSTER:'P',random,random
+MONSTER:'j',random,random
+MONSTER:'j',random,random
+MONSTER:'j',random,random
+MONSTER:'F',random,random
+MONSTER:'F',random,random
+MONSTER:'F',random,random
+MONSTER:'&',"hezrou",random
+MONSTER:'&',"hezrou",random
+MONSTER:'&',"hezrou",random
+MONSTER:'&',"vrock",random
+MONSTER:'&',"vrock",random
+MONSTER:'&',"vrock",random
+TRAP:"land mine",random
+ENGRAVING:random,scrawl,"Orcus and Ades, and the dreaded name of Demogorgon"
+OBJECT:'`',"statue",(16,10)
+
+#
+# (Fake) Dispater Level
+# Monsters: lemure, imp, nupperibo, horned devil, barbed devil, bone devil
+#
+
+MAZE:"heck-a-2",random
+GEOMETRY:center,center
+MAP
+.- - - - - - - - - - - - - -
+-----------------------------
+ - - - -.............- - - -
+----S---...-------...--------
+ - -.....--| ... |S-.....- -
+----.....|.-------.|.....----
+ -....----.........----....-
+--....| .|.........|. |....--
+ -....| .|.........|. |....-
+--....| .|.........|. |....--
+ -....----.........----....-
+----.....S.-------.|.....----
+ - -.....--| ... |--.....- -
+--------...-------...---S----
+ - - - -.............- - - -
+-----------------------------
+ - - - - - - - - - - - - - -
+ENDMAP
+RANDOM_PLACES:(8,7),(8,9),(13,12),(15,12),(13,4),(15,4),(20,7),(20,9)
+MAZEWALK:(0,0),west
+NON_DIGGABLE:(1,5,27,11)
+NON_DIGGABLE:(3,3,25,13)
+NON_DIGGABLE:(7,1,21,15)
+NON_PASSWALL:(1,5,8,11)
+NON_PASSWALL:(3,3,13,7)
+NON_PASSWALL:(7,1,21,4)
+NON_PASSWALL:(15,3,25,7)
+NON_PASSWALL:(20,5,27,11)
+NON_PASSWALL:(15,9,25,13)
+NON_PASSWALL:(7,12,21,15)
+NON_PASSWALL:(3,11,13,13)
+NON_PASSWALL:(1,9,13,11)
+TELEPORT_REGION:levregion(1,0,79,20),(1,1,27,15)
+BRANCH:levregion(1,0,79,20),(1,1,27,15)
+STAIR:levregion(1,0,79,20),(1,1,27,15),up
+STAIR:levregion(1,0,79,20),(1,1,27,15),down
+DOOR:locked,(24,13)
+DOOR:locked,(4,3)
+DOOR:locked,(18,4)
+DOOR:locked,(9,11)
+TRAP:"board",(8,11)
+TRAP:"board",(19,3)
+OBJECT:'+',random,place[0]
+OBJECT:'+',random,place[0]
+OBJECT:'+',random,place[0]
+OBJECT:'+',random,place[0]
+OBJECT:'?',random,place[1]
+OBJECT:'?',random,place[1]
+OBJECT:'?',random,place[1]
+OBJECT:'?',random,place[1]
+OBJECT[75%]:'(',"magic marker",place[2]
+OBJECT:'!',random,place[3]
+OBJECT:'!',random,place[3]
+OBJECT:'!',random,place[3]
+OBJECT:'!',random,place[3]
+MONSTER:'P',"green slime",place[4]
+MONSTER:'P',"green slime",place[5]
+MONSTER:'P',"green slime",place[6]
+MONSTER:'P',"green slime",place[7]
+MONSTER:'&',random,(13,8),asleep,hostile
+MONSTER:'&',random,(14,7),asleep,hostile
+MONSTER:'&',random,(14,8),asleep,hostile
+MONSTER:'&',random,(14,9),asleep,hostile
+MONSTER:'&',random,(15,8),asleep,hostile
+MONSTER:'R',"disenchanter",(10,8),asleep
+MONSTER:'R',"disenchanter",(18,8),asleep
+MONSTER:'R',"disenchanter",(14,6),asleep
+MONSTER:'R',"disenchanter",(14,10),asleep
+MONSTER:'i',random,(14,14)
+MONSTER:'i',random,(10,14)
+MONSTER:'i',random,(18,14)
+MONSTER:'i',random,(14,2)
+MONSTER:'i',random,(10,2)
+MONSTER:'i',random,(18,2)
+MONSTER:'i',random,(4,6),hostile
+MONSTER:'&',random,(4,8),hostile
+MONSTER:'i',random,(4,10),hostile
+MONSTER:'i',random,(24,6),hostile
+MONSTER:'&',random,(24,8),hostile
+MONSTER:'i',random,(24,10),hostile
+
+#
+# Flayers
+# (added some migo)
+#
+
+MAZE:"heck-a-3",random
+FLAGS:nommap
+GEOMETRY:right,bottom
+MAP
+-----------
+-----------
+ ----------
+-----------
+ - - - ----
+-----------
+ - - - ----
+--.---.----
+ -.- -.- --
+-----------
+ - - - ..--
+-----------
+ - - - - --
+--.--------
+ -.- - ----
+------.----
+ - - -.----
+-----------
+ ----------
+-----------
+ENDMAP
+
+GEOMETRY:left,bottom
+MAP
+-----------
+-----------
+----------.
+----------.
+----.- - - 
+----.------
+---- - - - 
+-----------
+--.. - - ..
+-----------
+--.- - - -
+--.---.----
+-- - -.- -
+-----------
+---- - - - 
+----.------
+----.- ..- 
+-----------
+----------
+ENDMAP
+
+GEOMETRY:center,center
+MAP
+.-............ - -.......- 
+--.---------------.-----.--
+ -.-......-.-......B...-.. 
+--.-...............B...----
+ -.................B...B.- 
+----...............B...-.--
+ ..-...........-.-.B...-.- 
+--.-----.---------------.--
+ -.......- - ............- 
+ENDMAP
+NON_DIGGABLE:(3,1,23,7)
+REGION:(20,2,22,6),unlit,"migohive"
+BRANCH:levregion(1,0,79,20),(0,0,26,8)
+MAZEWALK:(0,0),south
+MONSTER[50%]:'h',"mind flayer",random
+MONSTER[50%]:'h',"mind flayer",random
+MONSTER[50%]:'h',"mind flayer",random
+MONSTER[50%]:'h',"master mind flayer",random
+MONSTER[50%]:'h',"master mind flayer",random
+MONSTER:'V',"star vampire",random
+MONSTER[50%]:'V',"star vampire",random
+MONSTER[50%]:'V',"star vampire",random
+MONSTER:'a',random,random
+MONSTER:'a',random,random
+MONSTER:'a',random,random
+MONSTER:'a',random,random
+MONSTER:'a',random,random
+MONSTER:'a',random,random
+MONSTER:'a',random,random
+MONSTER:'a',random,random
+MONSTER:'a',random,random
+MONSTER:'a',random,random
+MONSTER:'a',random,random
+MONSTER:'a',random,random
+# mindless thralls
+MONSTER:'@',"barbarian",random,hostile
+MONSTER:'@',"caveman",random,hostile
+MONSTER:'O',random,random,hostile
+MONSTER:'T',random,random,hostile
+# future snack
+MONSTER[50%]:'@',"wizard",random,hostile
+OBJECT:'(',"chest",(11,2)
+OBJECT:'(',"chest",(16,6)
+TRAP:"rust",(3,4)
+TRAP:"rust",(8,7)
+TRAP:"rust",(18,1)
+STAIR:levregion(1,0,79,20),(0,0,0,0),up
+STAIR:levregion(1,0,79,20),(0,0,0,0),down
+
+#
+# (Fake) Geryon
+# The shapeshifter-thing is interesting so I kept it and added some shape
+# shifters
+# Geryon-related monsters are still added, "hinting" that this is a fake Geryon
+# level
+#
+
+MAZE:"heck-a-4",random
+GEOMETRY:left,center
+MAP
+-....................................|
+.------------------------------------|
+.|...... ............................|
+.|.----S---------S------------------.|
+.|.|..................... .........|.|
+.|.|.---------------------------S-.|.|
+.|.|.|....B...............B....|.|.|.|
+.|.|.|....B...............B....|.|.|.|
+.|.|.|....B...............B....|.|.|.|
+.|.|---S--------------------S---.|.|.|
+.|................. .............|.|.|
+.---------------------------------.|.|
+...................................|.|
+------------------------------------.|
+.....................................|
+.-------------------------------------
+......................................
+ENDMAP
+REGION:(11,6,25,8),unlit,"zoo"
+BRANCH:levregion(1,0,79,20),(0,0,37,16)
+MAZEWALK:(37,16),east
+NON_DIGGABLE:(0,0,37,16)
+TELEPORT_REGION:levregion(41,0,79,20),(0,0,37,16)
+STAIR:levregion(40,0,79,20),(0,0,0,0),up
+# Stairs might or might not be in the lair
+STAIR:levregion(30,0,50,20),(0,0,0,0),down
+MONSTER:'@',"doppelganger",random
+MONSTER:'@',"doppelganger",random
+MONSTER:'@',"doppelganger",random
+MONSTER:'@',"doppelganger",random
+MONSTER:':',"chameleon",random
+MONSTER:':',"chameleon",random
+MONSTER:':',"chameleon",random
+MONSTER:':',"chameleon",random
+MONSTER:'&',"sandestin",random
+MONSTER:'&',"sandestin",random
+MONSTER:'&',"sandestin",random
+MONSTER:'&',"sandestin",random
+MONSTER:'@',"werewolf",random
+MONSTER:'@',"werewolf",random
+MONSTER:'@',"werewolf",random
+MONSTER:'@',"werepanther",random
+MONSTER:'@',"werepanther",random
+MONSTER:'@',"werepanther",random
+MONSTER:'@',"weretiger",random
+MONSTER:'@',"weretiger",random
+MONSTER:'@',"weretiger",random
+MONSTER:'&',"nalfeshnee",(36,0),asleep
+MONSTER:'&',"horned devil",random
+MONSTER:'&',"horned devil",random
+MONSTER:'&',"barbed devil",random
+MONSTER:'&',"barbed devil",random
+MONSTER:'H',"minotaur",random
+MONSTER:'H',"minotaur",random
+OBJECT:'(',"chest",(36,0)
+TRAP:"polymorph",(9,6)
+TRAP:"polymorph",(9,8)
+TRAP:random,(1,0)
+TRAP:random,(0,1)
+TRAP:"spiked pit",random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+OBJECT:'%',"egg",random,"scorpion",0
+OBJECT:'%',"egg",random,"scorpion",0
+OBJECT:'%',"egg",random,"scorpion",0
+OBJECT:'%',"egg",random,"scorpion",0
+OBJECT:'%',"egg",random,"scorpion",0
+OBJECT:'%',"egg",random,"scorpion",0
+OBJECT:'%',"egg",random,"scorpion",0
+OBJECT:'%',"egg",random,"scorpion",0
+OBJECT:'%',"egg",random,"scorpion",0
+OBJECT:'%',"egg",random,"scorpion",0
+OBJECT:'%',"egg",random,"scorpion",0
+OBJECT:'%',"egg",random,"scorpion",0
+OBJECT:'%',"egg",random,"scorpion",0
+OBJECT:'%',"egg",random,"scorpion",0
+
+#
+# Iron
+# Added some (much more dangerous) golems and electricity-related monsters...
+#
+
+MAZE:"heck-a-5",' '
+GEOMETRY:center,center
+MAP
+
+ FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+ F.....F.F.F.F.F.F.F.F.F.F.F.F.F.............F.F.F.F.F.F.F.F.F.F.F.F.F.....F
+ F...FFFFFFFFFFFFFFFFFFFFFFFFFFF.F.........F.FFFFFFFFFFFFFFFFFFFFFFFFFFF...F
+ F...F.F.F.F.F.F.F.F.F.F.F.F.F.F.F.........F.F.F.F.F.F.F.F.F.F.F.F.F.F.F...F
+ FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF.....FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+ F.F.F.F.F.F.F.F...F.F.F.F.F.F.F.F.F.....F.F.F.F.F.F.F.F.F...F.F.F.F.F.F.F.F
+ F.FFFFFFFFFFFFF...FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF...FFFFFFFFFFFFFFF
+ F.F.F.F.F.F.F.........F.F.F.F.F.F.F.F.F.F.F.F.F.F.F.F.........F.F.F.F.F.F.F
+ F.FFFFFFFFFFF.........FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF.........FFFFFFFFFFFFF
+ F.F.F.F.F.F.....................................................F.F.F.F.F.F
+ F.FFFFFFFFFFF.........FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF.........FFFFFFFFFFFFF
+ F...F.F.F.F.F.........F.F.F.F.F.F.F.F.F.F.F.F.F.F.F.F.........F.F.F.F.F.F.F
+ F.FFFFFFFFFFFFF...FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF...FFFFFFFFFFFFFFF
+ F.F.F.F.F.F.F.F...F.F.F.F.F.F.F.F.F.....F.F.F.F.F.F.F.F.F...F.F.F.F.F.F.F.F
+ FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF.....FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+ F...F.F.F.F.F.F.F.F.F.F.F.F.F.F.F.........F.F.F.F.F.F.F.F.F.F.F.F.F.F.F...F
+ F...FFFFFFFFFFFFFFFFFFFFFFFFFFF.F.........F.FFFFFFFFFFFFFFFFFFFFFFFFFFF...F
+ F.....F.F.F.F.F.F.F.F.F.F.F.F.F.............F.F.F.F.F.F.F.F.F.F.F.F.F.....F
+ FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+ENDMAP
+RANDOM_MONSTERS:''','x'
+BRANCH:(0,0,75,18),(0,0,0,0)
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:''',"iron golem",random
+MONSTER:''',"iron golem",random
+MONSTER:''',"iron golem",random
+MONSTER:''',"iron golem",random
+MONSTER:''',"iron golem",random
+MONSTER:''',"iron golem",random
+MONSTER:''',"iron golem",random
+MONSTER:''',"iron golem",random
+MONSTER:''',"ruby golem",random
+MONSTER[50%]:''',"ruby golem",random
+MONSTER:''',"sapphire golem",random
+MONSTER[50%]:''',"sapphire golem",random
+MONSTER:''',"diamond golem",random
+MONSTER[50%]:''',"diamond golem",random
+MONSTER:''',"steel golem",random
+MONSTER[50%]:''',"steel golem",random
+MONSTER:''',"crystal golem",random
+MONSTER[50%]:''',"crystal golem",random
+MONSTER:'e',"shocking sphere",random
+MONSTER:'e',"shocking sphere",random
+MONSTER:'e',"shocking sphere",random
+MONSTER:'v',"energy vortex",random
+MONSTER:'v',"energy vortex",random
+MONSTER:'v',"energy vortex",random
+MONSTER:'b',"static blob",random
+MONSTER:'b',"static blob",random
+MONSTER:'b',"static blob",random
+MONSTER:'x',"spark bug",random
+MONSTER:'x',"spark bug",random
+MONSTER:'x',"spark bug",random
+MONSTER:'x',"spark bug",random
+MONSTER:'x',"spark bug",random
+MONSTER:'x',"lightning bug",random
+MONSTER:'x',"lightning bug",random
+MONSTER:'x',"lightning bug",random
+MONSTER:'x',"lightning bug",random
+MONSTER:'x',"lightning bug",random
+MONSTER:'x',"arc bug",random
+MONSTER:'x',"arc bug",random
+MONSTER:'x',"arc bug",random
+MONSTER:'x',"arc bug",random
+MONSTER:'x',"arc bug",random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+
+GEOMETRY:center,center
+MAP
+
+ FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+ F.... F F F F F F F F F F F F F.............F F F F F F F F F F F F F ....F
+ F...FFFFFFFFFFFFFFFFFFFFFFFFFFF.F.........F.FFFFFFFFFFFFFFFFFFFFFFFFFFF...F
+ F...F F F F F F F F F F F F F F F.........F F F F F F F F F F F F F F F...F
+ FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF.....FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+ F.F F F F F F F...F F F F F F F F F.....F F F F F F F F F...F F F F F F F F
+ F.FFFFFFFFFFFFF...FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF...FFFFFFFFFFFFFFF
+ F.F F F F F F.........F F F F F F F F F F F F F F F F.........F F F F F F F
+ F.FFFFFFFFFFF.........FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF.........FFFFFFFFFFFFF
+ F.F F F F F ................................................... F F F F F F
+ F.FFFFFFFFFFF.........FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF.........FFFFFFFFFFFFF
+ F.. F F F F F.........F F F F F F F F F F F F F F F F.........F F F F F F F
+ F.FFFFFFFFFFFFF...FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF...FFFFFFFFFFFFFFF
+ F.F F F F F F F...F F F F F F F F F.....F F F F F F F F F...F F F F F F F F
+ FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF.....FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+ F...F F F F F F F F F F F F F F F.........F F F F F F F F F F F F F F F...F
+ F...FFFFFFFFFFFFFFFFFFFFFFFFFFF.F.........F.FFFFFFFFFFFFFFFFFFFFFFFFFFF...F
+ F.... F F F F F F F F F F F F F.............F F F F F F F F F F F F F ....F
+ FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+ENDMAP
+MAZEWALK:(2,2),east
+STAIR:random,up
+STAIR:random,down
+OBJECT:')',"silver spear",random
+
+#
+# Liches
+# Added some undead to make things more annoying :)
+# (Perhaps a fake Orcus Level?)
+#
+
+MAZE:"heck-a-6",random
+GEOMETRY:center,center
+MAP
+.- - - - - -...- 
+------.....-...--
+ -.........-...- 
+--.....-...-S----
+ -.....-........
+---.--S-...------
+ ..........-...- 
+------.....-...--
+ -...-.....S...S 
+--...--S--.-...--
+ -.......-.-...- 
+--.......-.------
+ -.......- - - - 
+ENDMAP
+REGION:(12,6,14,10),unlit,"morgue"
+MAZEWALK:(0,0),west
+OBJECT:'`',"boulder",(6,1)
+OBJECT:'`',"boulder",(7,1)
+OBJECT:'`',"boulder",(7,2)
+OBJECT:'`',"boulder",(3,5)
+OBJECT:'+',random,(12,0)
+OBJECT:'?',random,(13,0)
+OBJECT:'+',random,(14,0)
+OBJECT:'?',random,(12,1)
+OBJECT:'+',random,(13,1)
+OBJECT:'?',random,(14,1)
+OBJECT:'+',random,(12,2)
+OBJECT:'?',random,(13,2)
+OBJECT:'+',random,(14,2)
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+DOOR:locked,(6,5)
+DOOR:locked,(7,9)
+DOOR:locked,(11,8)
+DOOR:locked,(15,8)
+DOOR:locked,(12,3)
+MONSTER:'L',random,random
+MONSTER:'L',random,random
+MONSTER:'L',random,random
+MONSTER:'V',"vampire mage",random
+MONSTER:'V',random,random
+MONSTER:'V',random,random
+MONSTER:'Z',"ghoul queen",random
+MONSTER:'Z',"ghoul mage",random
+MONSTER:'Z',"gug",random
+MONSTER:'Z',"gug",random
+MONSTER:'M',"troll mummy",random
+MONSTER:'M',"troll mummy",random
+MONSTER:'M',"troll mummy",random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'Z',random,random
+MONSTER:'W',random,random
+MONSTER:'W',random,random
+MONSTER:'W',random,random
+MONSTER:'&',random,random
+STAIR:random,down
+STAIR:levregion(1,0,79,20),(0,0,16,12),up
+
+#
+# (Fake) Yeenoghu's Hangout
+#
+
+MAZE:"heck-a-7",random
+GEOMETRY:right,center
+MAP
+.......................................
+.................................---...
+...........................---...---...
+.....................---...---.........
+...............---...---...............
+.........---...---.....................
+...---...---...........................
+...---.................................
+.......................................
+...---.................................
+...---...---...........................
+.........---...---.....................
+...............---...---...............
+.....................---...---.........
+...........................---...---...
+.................................---...
+.......................................
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,0,0)
+STAIR:random,down
+STAIR:levregion(1,0,39,20),(0,0,0,0),up
+# Not his lair, but he does hang out here sometimes,
+# Possibly wondering where his gnoll minions are.
+MONSTER[50%]:'&',random,random
+MAZEWALK:(0,8),west
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:'`',"boulder",random
+OBJECT:'`',"boulder",random
+OBJECT:'`',"boulder",random
+OBJECT:'`',"boulder",random
+MONSTER[50%]:'H',"minotaur",random
+MONSTER[50%]:'H',"minotaur",random
+MONSTER[50%]:'H',"minotaur",random
+MONSTER[50%]:'H',"minotaur",random
+MONSTER[50%]:'H',"minotaur",random
+MONSTER:'G',"gnoll",random
+MONSTER:'G',"gnoll",random
+MONSTER:'G',"gnoll",random
+MONSTER:'G',"gnoll",random
+MONSTER:'G',"gnoll",random
+MONSTER:'G',"gnoll",random
+MONSTER:'G',"gnoll",random
+MONSTER:'G',"gnoll",random
+MONSTER:'G',"gnoll warrior",random
+MONSTER:'G',"gnoll warrior",random
+MONSTER:'G',"gnoll warrior",random
+MONSTER:'G',"gnoll warrior",random
+MONSTER:'G',"gnoll chieftain",random
+MONSTER:'G',"gnoll chieftain",random
+MONSTER:'G',"gnoll shaman",random
+MONSTER:'G',"gnoll shaman",random
+MONSTER:'Z',"ghoul",random
+MONSTER:'Z',"ghoul",random
+MONSTER:'Z',"ghoul",random
+MONSTER:'Z',"ghoul",random
+MONSTER:'Z',"ghast",random
+MONSTER:'Z',"ghast",random
+MONSTER:'Z',"ghast",random
+MONSTER:'Z',"ghast",random
+MONSTER:'G',random,random
+MONSTER:'G',random,random
+MONSTER:'G',random,random
+MONSTER:'G',random,random
+MONSTER:'G',random,random
+MONSTER:'G',random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+
+#
+# Cross
+#
+
+MAZE:"heck-b-1",random
+GEOMETRY:center,center
+MAP
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+------------------------------------------------------------------.--------
+...........................................................................
+--------.------------------------------------------------------------------
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,0,0)
+NON_DIGGABLE:(0,1,74,3)
+TRAP:random,random
+GEOMETRY:center,center
+MAP
+...-.
+--.--
+ -.- 
+--.--
+ -.- 
+--.--
+ -.- 
+--.--
+.....
+--.--
+ -.- 
+--.--
+ -.- 
+--.--
+ -.- 
+--.--
+.-...
+ENDMAP
+NON_DIGGABLE:(1,0,3,16)
+NON_DIGGABLE:(0,7,4,9)
+MAZEWALK:(0,0),west
+MAZEWALK:(4,0),east
+MAZEWALK:(0,16),west
+MAZEWALK:(4,16),east
+TRAP:random,random
+STAIR:levregion(1,0,79,10),(0,0,0,0),up
+STAIR:levregion(1,14,79,20),(0,0,0,0),down
+
+#
+# Hall
+#
+
+MAZE:"heck-b-2",random
+GEOMETRY:center,center
+MAP
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+------------------+-----------------+------------------
+|.---...---...---...---...---...---...---...---...---.|
+|.....................................................|
++...........L.............................L...........+
+|.....................................................|
+|.---...---...---...---...---...---...---...---...---.|
+------------------+-----------------+------------------
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,54,8)
+MAZEWALK:(0,4),west
+MAZEWALK:(54,4),east
+NON_DIGGABLE:(0,1,54,7)
+DOOR:locked,(18,1)
+DOOR:locked,(36,1)
+DOOR:locked,(18,7)
+DOOR:locked,(36,7)
+DOOR:locked,(0,4)
+DOOR:locked,(54,4)
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random
+MONSTER:'T',random,random
+MONSTER:'T',random,random
+MONSTER:'T',random,random
+MONSTER:'T',random,random
+MONSTER:'T',random,random
+MONSTER:'T',random,random
+MONSTER:'T',random,random
+MONSTER:'T',random,random
+MONSTER:'T',random,random
+MONSTER:'T',random,random
+MONSTER:'T',random,random
+OBJECT:'[',"cloak of invisibility",random
+STAIR:levregion(1,0,79,20),(0,1,54,7),up
+STAIR:levregion(1,0,79,20),(0,0,0,0),down
+
+#
+# Lava
+#
+
+MAZE:"heck-b-3",random
+GEOMETRY:center,center
+MAP
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-
+---------------------------------------------------------------------------
+.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L
+LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
+.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L
+LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
+.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L.L
+---------------------------------------------------------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,74,8)
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+MONSTER:'D',"red dragon",random,asleep
+MONSTER:'D',"red dragon",random,asleep
+MONSTER:'D',"red dragon",random,asleep
+MONSTER:'D',"red dragon",random,asleep
+MONSTER:'D',"red dragon",random,asleep
+MONSTER:'D',"red dragon",random,asleep
+MONSTER:'D',"red dragon",random,asleep
+MONSTER:'D',"red dragon",random,asleep
+MONSTER:'D',"red dragon",random,asleep
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+
+GEOMETRY:center,center
+MAP
+.- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+---------------------------------------------------------------------------
+ L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L
+LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
+.L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L
+LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
+ L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L
+---------------------------------------------------------------------------
+.- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ENDMAP
+REGION:(0,2,74,6),lit,"ordinary"
+MAZEWALK:(0,4),east
+MAZEWALK:(0,0),east
+MAZEWALK:(0,8),east
+STAIR:levregion(1,0,79,20),(0,0,0,0),up
+STAIR:levregion(1,0,79,20),(0,0,0,0),down
+
+#
+# Lava2
+#
+
+MAZE:"heck-b-4",'L'
+INIT_MAP:'.','L',false,false,unlit,false
+GEOMETRY:left,center
+MAP
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,0,0)
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+
+GEOMETRY:right,center
+MAP
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+ENDMAP
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+
+GEOMETRY:right,center
+MAP
+.. - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+ENDMAP
+MAZEWALK:(0,0),east
+GEOMETRY:left,center
+MAP
+.. - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+ENDMAP
+MAZEWALK:(0,0),east
+STAIR:levregion(3,5,13,15),levregion(1,0,1,0),up
+STAIR:levregion(67,5,77,15),levregion(1,0,1,0),down
+
+# These increase the chances of a joining up
+GEOMETRY:left,top
+MAP
+.................LLL............L...L
+........LL................LLL........
+ENDMAP
+GEOMETRY:right,bottom
+MAP
+.LLLLLLLLLL......LLLLLLLLLL..LLLLLLLL.
+..............L....LLL...............
+LL.........LLL.............LLL.....LLL
+ENDMAP
+GEOMETRY:left,top
+MAP
+..
+..
+..
+ENDMAP
+GEOMETRY:right,bottom
+MAP
+
+.
+.
+.
+L
+ENDMAP
+NOMAP
+OBJECT:'/',"cold",random
+
+#
+# Night
+#
+
+MAZE:"heck-b-5",' '
+GEOMETRY:center,center
+MAP
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,0,0)
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT:'`',"boulder",random
+OBJECT:'`',"boulder",random
+OBJECT[50%]:'`',"boulder",random
+OBJECT[50%]:'`',"boulder",random
+OBJECT[50%]:'`',"boulder",random
+OBJECT[50%]:'`',"boulder",random
+OBJECT[50%]:'`',"boulder",random
+OBJECT[50%]:'`',"boulder",random
+OBJECT[50%]:'`',"boulder",random
+OBJECT[50%]:'`',"boulder",random
+OBJECT[50%]:'`',"boulder",random
+MONSTER:'B',random,random
+MONSTER:'B',random,random
+MONSTER:'B',random,random
+MONSTER:'B',random,random
+MONSTER:'B',random,random
+MONSTER:'B',random,random
+MONSTER:'B',random,random
+MONSTER:'B',random,random
+MONSTER:'B',random,random
+MONSTER:'B',random,random
+MONSTER[50%]:'H',"minotaur",random
+MONSTER[50%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+STAIR:random,up
+STAIR:random,down
+
+GEOMETRY:center,center
+MAP
+                        .........................                           
+                        .........................
+                        .........................
+                        .........................
+                        .........................
+                        .........................
+                        .........................
+                        .........................
+                       ...........................
+                        .........................
+                        .........................
+                        .........................
+                        .........................
+                        .........................
+                        .........................
+                        .........................
+                        .........................
+ENDMAP
+
+MAZEWALK:(23,8),west
+MAZEWALK:(49,8),east
+REGION:(0,0,75,16),lit,"ordinary"
+REGION:(24,0,48,16),unlit,"ordinary"
+REGION:(31,5,41,11),unlit,"morgue"
+STAIR:levregion(1,0,79,20),(0,0,0,0),up
+STAIR:levregion(1,0,79,20),(0,0,0,0),down
+
+#
+# Pool
+# Made into Lethe water
+#
+
+MAZE:"heck-b-6",random
+FLAGS:lethe
+GEOMETRY:half-left,center
+MAP
+.............
+.....}}}.....
+....}}}}}....
+.....}}}.....
+.............
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,12,4)
+MAZEWALK:(6,4),south
+MONSTER:';',"kraken",(6,1)
+MONSTER:';',"kraken",(6,3)
+OBJECT:'`',"statue",random
+OBJECT:'`',"statue",random
+OBJECT:'`',"statue",random
+OBJECT:'`',"statue",random
+OBJECT:'`',"statue",random
+OBJECT:'`',"statue",random
+STAIR:levregion(1,0,79,20),(0,0,12,4),up
+STAIR:levregion(1,0,79,20),(0,0,12,4),down
+
+#
+# Teeth
+#
+
+MAZE:"heck-b-7",random
+GEOMETRY:center,center
+MAP
+ - - - - - - - - - - - - - - 
+--.-.-.-.-.-.-.-.-.-.-.-.-.--
+.-.-.- -.- -.- -.- -.- -.-.-
+--.-.-.-.-.-.-.-.-.-.-.-.-.--
+ -.-.- -.- -.- -.- -.- -.-.-
+--.-.-.-.-.-.-.-.-.-.-.-.-.--
+ - - - - - - - - - - - - - -
+--.-.-.-.-.-.-.-.-.-.-.-.-.--
+ -.- -.- -.- -.- -.- -.-.-.-
+--.-.-.-.-.-.-.-.-.-.-.-.-.--
+ -.- -.- -.- -.- -.- -.-.-.-
+--.-.-.-.-.-.-.-.-.-.-.-.-.--
+ - - - - - - - - - - - - - - 
+ENDMAP
+MAZEWALK:(0,2),south
+STAIR:levregion(1,0,79,20),(0,0,0,0),up
+STAIR:levregion(1,0,79,20),(0,0,0,0),down
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'`',"boulder",random
+OBJECT:'`',"boulder",random
+OBJECT:'`',"boulder",random
+MONSTER[50%]:'H',"minotaur",random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+
+#
+# Voids
+#
+
+MAZE:"heck-b-8",random
+GEOMETRY:center,center
+MAP
+ - - - -
+---------
+.-------
+--    ---
+ S.   --
+--    ---
+ -------
+---------
+ - - - -
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,0,0)
+MAZEWALK:(0,2),north
+OBJECT:random,random,(2,4)
+GEOMETRY:half-left,bottom
+MAP
+ - - - -
+---------
+ -------
+--   ----
+ --  ---
+--   ----
+ -------
+---------
+ - - - -
+ENDMAP
+GEOMETRY:half-left,top
+MAP
+ - - - -
+---------
+ -------
+--     --
+ --   .S
+--     --
+ -------
+---------
+ - - - -
+ENDMAP
+OBJECT:random,random,(6,4)
+GEOMETRY:half-right,bottom
+MAP
+ - - - -
+---------
+ -------
+--   ----
+ --  ---
+--   ----
+ -------
+---------
+ - - - -
+ENDMAP
+GEOMETRY:half-right,top
+MAP
+ - - - -
+--S------
+ -. ----
+--     --
+ --   --
+--     --
+ -- - .S
+---------
+ - - - -
+ENDMAP
+OBJECT:random,random,(2,2)
+OBJECT:random,random,(6,6)
+STAIR:levregion(1,0,79,20),(0,0,0,0),up
+STAIR:levregion(1,0,79,20),(0,0,0,0),down
+
+#
+# Chambers
+#
+
+MAZE:"heck-c-1",random
+GEOMETRY:center,center
+MAP
+ -.............................- 
+--.............................--
+ ............................... 
+--.............................--
+ -.............................- 
+----------------.----------------
+ - - - - - - ..-.-.. - - - - - -
+----------------.----------------
+ - - - - - - ....... - - - - - - 
+----------------.----------------
+ - - - - - - ..-.-.. - - - - - - 
+----------------.----------------
+ -.............................- 
+--.............................--
+ ............................... 
+--.............................--
+ -.............................- 
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,32,16)
+MAZEWALK:(16,8),west
+MAZEWALK:(16,8),east
+STAIR:levregion(1,0,79,20),(0,0,0,0),up
+STAIR:levregion(1,0,79,20),(0,0,0,0),down
+NON_DIGGABLE:(1,0,31,5)
+NON_DIGGABLE:(1,11,31,16)
+# roughly half a maze of stuff
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:'`',"boulder",random
+OBJECT:'`',"boulder",random
+OBJECT:'`',"boulder",random
+MONSTER[50%]:'H',"minotaur",random
+MONSTER:'f',"displacer beast",random
+MONSTER:'f',"displacer beast",random
+MONSTER:'f',"displacer beast",random
+MONSTER:'f',"displacer beast",random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+# more traps than usual
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+
+#
+# Hsplit
+#
+
+MAZE:"heck-c-2",random
+GEOMETRY:left,center
+MAP
+.........- - - - - - -.........- - - - - - -...........- - - - - - - -.....
+.........-------------.-------.-------------...........---------------.....
+.............- - - -...- - - -.........- -...............- -.S.............
+...-S---.....-------...-------------...---.-----...---...-----.-----.......
+...-.- -...............- - - - - - -.......- - -...- -.........- - -.......
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,74,4)
+MAZEWALK:(4,4),east
+MAZEWALK:(60,2),west
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+STAIR:levregion(1,0,79,20),(0,0,0,0),up
+STAIR:levregion(1,0,79,20),(0,0,0,0),down
+
+#
+# Night2
+#
+
+MAZE:"heck-c-3",' '
+INIT_MAP:'.',' ',true,true,lit,false
+# this are not guaranteed to link up; that's okay
+GEOMETRY:left,top
+MAP
+..
+..
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,0,0)
+MAZEWALK:(0,0),east
+GEOMETRY:left,bottom
+MAP
+..
+..
+ENDMAP
+MAZEWALK:(0,0),east
+GEOMETRY:right,top
+MAP
+..
+..
+ENDMAP
+MAZEWALK:(0,0),west
+GEOMETRY:right,bottom
+MAP
+..
+..
+ENDMAP
+MAZEWALK:(0,0),west
+
+NOMAP
+STAIR:levregion(1,0,79,20),(0,0,0,0),up
+STAIR:levregion(1,0,79,20),(0,0,0,0),down
+
+#
+# Pillars2
+#
+
+MAZE:"heck-c-4",random
+FLAGS:lethe
+GEOMETRY:center,center
+MAP
+.-}}}}}}}}}}}}}}}}}}}}}}}}}-
+--}..........}}}}}........}--
+ +...........}---}........}- 
+--}...}}}}}..}---}........}--
+ -}...}---}..}}}}}........}}}
+--}...}---}.................}
+}}}...}}}}}.................}
+}..............}}}}}........}
+}..............}---}......}}}
+}..............}---}......}--
+}...}}}}}......}}}}}......}- 
+}...}---}.................}--
+}}}.}---}...........}}}}}.}-.
+--}.}}}}}...........}---}.}--
+ -}}}}}.............}---}..+ 
+------}.......}}}}}.}}}}}.}--
+ - - -}}}}}}}}}---}}}}}}}}}}}
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,28,16)
+DOOR:locked,(1,2)
+DOOR:locked,(27,14)
+STAIR:levregion(1,0,20,20),(0,0,0,0),down
+STAIR:levregion(60,0,79,20),(0,0,0,0),up
+MAZEWALK:(0,0),west
+MAZEWALK:(28,12),east
+MONSTER:';',"kraken",random
+MONSTER:';',"kraken",random
+MONSTER:';',"electric eel",random
+MONSTER:';',"electric eel",random
+MONSTER:';',random,random
+MONSTER:';',random,random
+MONSTER:';',random,random
+MONSTER:';',random,random
+MONSTER:'n',random,random
+MONSTER:'n',random,random
+MONSTER:'n',random,random
+MONSTER:'n',random,random
+MONSTER:'n',random,random
+MONSTER:'n',random,random
+MONSTER:'@',"mugger",random
+MONSTER:'@',"mugger",random
+MONSTER:'@',"mugger",random
+MONSTER:'&',"incubus",random
+MONSTER:'&',"succubus",random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+
+#
+# Pits
+#
+
+MAZE:"heck-c-5",random
+GEOMETRY:left,top
+MAP
+.....
+.....
+ ....
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,0,0)
+REGION:(1,0,4,2),unlit,"lemurepit"
+GEOMETRY:half-left,top
+MAP
+ - - 
+-----
+ ....
+.....
+.....
+ENDMAP
+MONSTER:'&',random,random
+TRAP:random,random
+GEOMETRY:half-right,top
+MAP
+ - - 
+-----
+.... 
+.....
+.....
+ENDMAP
+MONSTER:'&',random,random
+TRAP:random,random
+GEOMETRY:right,top
+MAP
+.....
+.....
+.... 
+ENDMAP
+REGION:(0,0,3,2),unlit,"lemurepit"
+GEOMETRY:left,bottom
+MAP
+ ....
+.....
+.....
+ENDMAP
+REGION:(1,0,4,2),unlit,"lemurepit"
+GEOMETRY:half-left,bottom
+MAP
+.....
+.....
+ ....
+-----
+ - - 
+ENDMAP
+MONSTER:'&',random,random
+TRAP:random,random
+GEOMETRY:half-right,bottom
+MAP
+.....
+.....
+.... 
+-----
+ - - 
+ENDMAP
+MONSTER:'&',random,random
+TRAP:random,random
+GEOMETRY:right,bottom
+MAP
+.... 
+.....
+.....
+ENDMAP
+REGION:(0,0,3,2),unlit,"lemurepit"
+GEOMETRY:center,center
+MAP
+ - - 
+-----
+ - - 
+-----
+.. ..
+.....
+.....
+-----
+ - - 
+-----
+.....
+.....
+.. ..
+-----
+ - - 
+-----
+ - - 
+ENDMAP
+MONSTER:'&',"pit fiend",(2,5)
+MONSTER:'&',"pit fiend",(2,11)
+TRAP:random,random
+TRAP:random,random
+MAZEWALK:(0,8),west
+STAIR:levregion(1,0,79,10),(0,0,0,0),up
+STAIR:levregion(1,11,79,20),(0,0,0,0),down
+
+#
+# Pods
+#
+
+MAZE:"heck-c-6",random
+GEOMETRY:half-right,center
+MAP
+ - - - - - - - - 
+--------.--------
+ - -.........- - 
+----.........----
+ -.............-
+--.............--
+ -.............- 
+--.............--
+ -.............-
+----.........----
+ - -.........- - 
+--------.--------
+ - - - - - - - - 
+ENDMAP
+RANDOM_MONSTERS:'P','E','R','X','&'
+BRANCH:levregion(1,0,79,20),(0,0,0,0)
+MAZEWALK:(0,0),east
+MONSTER:monster[0],random,random
+MONSTER:monster[0],random,random
+MONSTER:monster[0],random,random
+MONSTER:monster[0],random,random
+MONSTER:monster[0],random,random
+MONSTER:monster[0],random,random
+MONSTER:monster[0],random,random
+MONSTER:monster[0],random,random
+MONSTER:monster[0],random,random
+MONSTER:monster[0],random,random
+MONSTER:monster[0],random,random
+MONSTER:monster[0],random,random
+MONSTER:monster[0],random,random
+
+GEOMETRY:half-left,center
+MAP
+ - - - - - - - - 
+--------.--------
+ - -.........- - 
+----.........----
+ -.............-
+--.............--
+ -.............- 
+--.............--
+ -.............-
+----.........----
+ - -.........- - 
+--------.--------
+ - - - - - - - - 
+ENDMAP
+RANDOM_MONSTERS:'P','E','R','X','&'
+MONSTER:monster[0],random,random
+MONSTER:monster[0],random,random
+MONSTER:monster[0],random,random
+MONSTER:monster[0],random,random
+MONSTER:monster[0],random,random
+MONSTER:monster[0],random,random
+MONSTER:monster[0],random,random
+MONSTER:monster[0],random,random
+MONSTER:monster[0],random,random
+MONSTER:monster[0],random,random
+MONSTER:monster[0],random,random
+MONSTER:monster[0],random,random
+MONSTER:monster[0],random,random
+
+STAIR:levregion(1,0,39,20),(0,0,0,0),up
+STAIR:levregion(40,0,79,20),(0,0,0,0),down
+
+#
+# Rooms
+#
+
+MAZE:"heck-c-7",random
+GEOMETRY:right,center
+MAP
+ - - - - - - - 
+---------------
+.- - - - - - - 
+----S----------
+ - -.......- - 
+----.......----
+ - -.......- - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,0,0)
+MAZEWALK:(0,2),east
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+MONSTER:'t',random,random
+MONSTER:'t',random,random
+MONSTER:'P',"giant shoggoth",random
+
+GEOMETRY:left,center
+MAP
+ - - - - - - - 
+---------------
+ - - - - - - - 
+----------+----
+ - - - -.....- 
+--------.....--
+ - - - -.....- 
+--------.....--
+ - - - -.....- 
+----------+----
+ - - - - - - - 
+ENDMAP
+DOOR:locked,(10,3)
+DOOR:locked,(10,9)
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+
+GEOMETRY:center,center
+MAP
+ - - -...- - -
+------...------
+ - - -...- - - 
+------...------
+ - - S...- - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - -.....- - 
+------.....----
+ - - -.....S - 
+ENDMAP
+TRAP:"trap door",random
+TRAP:"trap door",random
+TRAP:"trap door",random
+TRAP:"trap door",random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+MONSTER:'w',"rot worm",random
+MONSTER:'w',"rot worm",random
+MONSTER:'w',"rot worm",random
+MONSTER:'w',random,random
+MONSTER:'w',random,random
+MONSTER:'w',random,random
+MONSTER:'w',random,random
+STAIR:levregion(1,0,79,20),(0,0,0,0),up
+STAIR:levregion(1,0,79,20),(0,0,0,0),down
+
+#
+# Rooms2
+#
+
+MAZE:"heck-c-8",random
+GEOMETRY:center,center
+MAP
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+---------------------------------------------------------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+---------------------------------------------------------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+---------------------------------------------------------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+---------------------------------------------------------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+---------------------------------------------------------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+---------------------------------------------------------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+---------------------------------------------------------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+---------------------------------------------------------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,0,0)
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT:'`',"boulder",random
+OBJECT:'`',"boulder",random
+OBJECT[50%]:'`',"boulder",random
+OBJECT[50%]:'`',"boulder",random
+OBJECT[50%]:'`',"boulder",random
+OBJECT[50%]:'`',"boulder",random
+OBJECT[50%]:'`',"boulder",random
+OBJECT[50%]:'`',"boulder",random
+OBJECT[50%]:'`',"boulder",random
+OBJECT[50%]:'`',"boulder",random
+OBJECT[50%]:'`',"boulder",random
+MONSTER:'h',"deeper one",random
+MONSTER:'h',"deeper one",random
+MONSTER:'h',"deeper one",random
+MONSTER:'h',"deeper one",random
+MONSTER:'h',"deeper one",random
+MONSTER:'h',"deeper one",random
+MONSTER[50%]:'h',"deepest one",random
+MONSTER[50%]:'h',"deepest one",random
+MONSTER:'h',random,random
+MONSTER:'h',random,random
+MONSTER:'h',random,random
+MONSTER:'h',random,random
+MONSTER:'h',random,random
+MONSTER:'h',random,random
+MONSTER[50%]:'H',"minotaur",random
+MONSTER[50%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+
+GEOMETRY:center,center
+MAP
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+---------------------------------------------------------------------------
+ - - - - - - - - - -.......- - - - - - - -.......- - - - - - - - - - - - - 
+--------------------.......---------------.......--------------------------
+ - - - - - - - - - +.......+ - - - - - - +.......-.......- - - - - - - - - 
+--------------------.......---------------.......+.......------------------
+ -.....+ - - - - - -.......- - - - - - - -.......-.......- - - - - - - - - 
+--.....----------------------------------------------+---------------------
+ -.....- - - - - - - - - - - - - - - - - - - - - - -...- - - - - - - - - - 
+--+-...-----------------+---------------------------...--------------------
+ - -...- - - - - - - - -...-.......- - - - . - - - -...- - - - - - - - - - 
+------------------------...+.......-------...-------...-------------.------
+ - - - - - -.....- - - -...-.......- - - - . - - - -...- - - - - -...- - - 
+------------.....-------...---------------------------------------...------
+ - - - - - -.....- - - -...- - - - - - - - - - - - - - - - - - - -...- - - 
+--------------+---------------------------------------------------.--------
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+ENDMAP
+DOOR:random,(2,9)
+DOOR:random,(7,6)
+DOOR:random,(14,15)
+DOOR:random,(19,4)
+DOOR:random,(24,9)
+DOOR:random,(27,11)
+DOOR:random,(41,4)
+DOOR:random,(49,5)
+DOOR:random,(53,7)
+MAZEWALK:(2,2),south
+STAIR:(0,0,35,16),(0,0,0,0),up
+STAIR:(36,0,74,16),(0,0,0,0),down
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
+#
+# Vsplit
+#
+
+MAZE:"heck-c-9",random
+GEOMETRY:half-left,center
+MAP
+.|...
++-...
+.....
+.....
+.....
+----.
+ | |.
+----.
+ |...
+--...
+.....
+...-+
+...| 
+--.--
+ |...
+--...
+.....
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,4,16)
+MAZEWALK:(0,0),west
+DOOR:locked,(0,1)
+DOOR:locked,(4,11)
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+
+GEOMETRY:half-right,center
+MAP
+.+...
+--.--
+ |.| 
+--.--
+ |...
+--.--
+...| 
+.----
+.|.| 
+.----
+.....
+--...
+ |...
+--...
+.....
+...--
+...+ 
+ENDMAP
+STAIR:levregion(1,0,79,20),(0,0,0,0),up
+STAIR:levregion(1,0,79,20),(0,0,0,0),down
+MAZEWALK:(2,8),east
+MAZEWALK:(0,0),west
+DOOR:locked,(3,16)
+DOOR:locked,(1,0)
+TRAP:random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+
+#
+# Basic
+#
+
+MAZE:"heck-d-1",random
+GEOMETRY:center,center
+MAP
+ - - - - 
+----.----
+ -.....- 
+--.....--
+ ....... 
+--.....--
+ -.....- 
+----.----
+ - - - - 
+ENDMAP
+RANDOM_MONSTERS:'H','O','D','A','n','E','h','a','B','&'
+BRANCH:levregion(1,0,79,20),(0,0,0,0)
+MAZEWALK:(2,4),west
+MONSTER:monster[0],random,(2,2)
+MONSTER:monster[0],random,(4,2)
+MONSTER:monster[0],random,(6,2)
+MONSTER:monster[0],random,(2,4)
+MONSTER:monster[0],random,(4,4)
+MONSTER:monster[0],random,(6,4)
+MONSTER:monster[0],random,(2,6)
+MONSTER:monster[0],random,(4,6)
+MONSTER:monster[0],random,(6,6)
+MONSTER:monster[0],random,(3,3)
+MONSTER:monster[0],random,(5,3)
+MONSTER:monster[0],random,(3,5)
+MONSTER:monster[0],random,(5,5)
+STAIR:levregion(1,0,39,20),(0,0,0,0),up
+STAIR:levregion(40,0,79,20),(0,0,0,0),down
+
+#
+# Basic2
+#
+
+MAZE:"heck-d-2",random
+GEOMETRY:center,center
+MAP
+ - - - - - - - - - - - - - 
+---------------------------
+ - - - - -.......- - - - - 
+----------.......----------
+ - - -...............- - - 
+------...............------
+ - -...................- - 
+----...................----
+ ......................... 
+----...................----
+ - -...................- - 
+------...............------
+ - - -...............- - - 
+----------.......----------
+ - - - - -.......- - - - - 
+---------------------------
+ - - - - - - - - - - - - - 
+ENDMAP
+BRANCH:levregion(1,0,79,20),(4,2,23,14)
+MAZEWALK:(0,0),west
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+STAIR:levregion(1,0,79,20),(0,0,0,0),up
+STAIR:levregion(1,0,79,20),(0,0,0,0),down
+
+#
+# Chambers2
+#
+
+MAZE:"heck-d-3",random
+GEOMETRY:half-left,top
+MAP
+ - - - - - - - - 
+--------.--------
+.-....--.--....- 
+--.............--
+ --...........-- 
+---...........---
+ ............... 
+---...........---
+ --...........-- 
+--.............--
+ -....--.--....- 
+--------.--------
+ - - - - - - - - 
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,0,0)
+MAZEWALK:(0,2),west
+MONSTER:'&',random,random
+MONSTER:'&',random,random
+MONSTER:'&',random,random
+MONSTER:'&',random,random
+MONSTER:'&',random,random
+MONSTER:'&',random,random
+MONSTER:'&',random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
+GEOMETRY:half-right,bottom
+MAP
+ - - - - - - - - 
+--------.--------
+ -....--.--....- 
+--.............--
+ --...........-- 
+---...........---
+ ............... 
+---...........---
+ --...........-- 
+--.............--
+ -....--.--....- 
+--------.--------
+ - - - - - - - - 
+ENDMAP
+MONSTER:'&',random,random
+MONSTER:'&',random,random
+MONSTER:'&',random,random
+MONSTER:'&',random,random
+MONSTER:'&',random,random
+MONSTER:'&',random,random
+MONSTER:'&',random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+STAIR:levregion(1,0,79,20),(0,0,0,0),up
+STAIR:levregion(1,0,79,20),(0,0,0,0),down
+
+#
+# Checkers
+#
+
+MAZE:"heck-d-4",random
+INIT_MAP:'.','-',true,true,unlit,false
+GEOMETRY:half-right,center
+MAP
+.- - - -.. - - 
+---------------
+ - - - - - - - 
+---------------
+ - - -.... - - 
+------...------
+ - - -...- - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,0,0)
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+GEOMETRY:half-left,center
+MAP
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - -...- - - 
+------...------
+ - - ....- - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+ENDMAP
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+
+GEOMETRY:right,top
+MAP
+ - - - -.- - -
+--------.------
+ -.. - - - - ..
+------.--------
+ - - -.- - - - 
+ENDMAP
+MONSTER:random,random,random
+OBJECT:random,random,random
+
+GEOMETRY:right,bottom
+MAP
+ -.. - - -.. -
+---------------
+ - - - - - - - 
+--------.------
+ - - - -.- - -
+ENDMAP
+MONSTER:random,random,random
+OBJECT:random,random,random
+
+GEOMETRY:left,top
+MAP
+ - - - - -.-
+----------.--
+ - - -.. - -
+--.----------
+ -.- - - - -
+ENDMAP
+MONSTER:random,random,random
+OBJECT:random,random,random
+
+GEOMETRY:left,bottom
+MAP
+ - -.. - - -
+-------------
+ - - - - - -
+--.-----.----
+ -.- - -.- -
+ENDMAP
+MONSTER:random,random,random
+OBJECT:random,random,random
+
+GEOMETRY:center,bottom
+MAP
+ - - -.- - -
+--.---.------
+ -.- - - ..-
+-------------
+ - - ..- - -
+ENDMAP
+MONSTER:random,random,random
+OBJECT:random,random,random
+
+GEOMETRY:center,top
+MAP
+.- -.. - -..
+-------------
+ - - - - - -
+--------.----
+ -.. - -.- -
+ENDMAP
+MAZEWALK:(0,0),east
+MONSTER:random,random,random
+OBJECT:random,random,random
+
+NOMAP
+STAIR:levregion(1,0,79,20),(0,0,0,0),up
+STAIR:levregion(1,0,79,20),(0,0,0,0),down
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:'`',"boulder",random
+OBJECT:'`',"boulder",random
+OBJECT:'`',"boulder",random
+MONSTER[50%]:'H',"minotaur",random
+MONSTER:''',random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+
+#
+# Frame
+#
+
+MAZE:"heck-d-5",random
+INIT_MAP:'.','-',true,true,unlit,false
+GEOMETRY:center,top
+MAP
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+---------------------------------------------------------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+---------------------------------------------------------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+ENDMAP
+BRANCH:(0,0,74,4),(0,0,0,0)
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+GOLD:random,random
+GEOMETRY:center,bottom
+MAP
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+---------------------------------------------------------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+---------------------------------------------------------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+ENDMAP
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+GOLD:random,random
+GEOMETRY:left,top
+MAP
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+ENDMAP
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+GOLD:random,random
+GEOMETRY:right,bottom
+MAP
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+ENDMAP
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+GOLD:random,random
+
+GEOMETRY:center,top
+MAP
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+---------------------------------------------------------------------------
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+---------------------------------------------------------------------------
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ENDMAP
+
+GEOMETRY:center,bottom
+MAP
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+---------------------------------------------------------------------------
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+---------------------------------------------------------------------------
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+ENDMAP
+
+GEOMETRY:left,top
+MAP
+ - - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+ENDMAP
+
+GEOMETRY:right,bottom
+MAP
+ - - - - - 
+-----------
+.- - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+ENDMAP
+MAZEWALK:(0,2),east
+STAIR:levregion(1,0,79,20),(0,0,0,0),up
+STAIR:levregion(1,0,79,20),(0,0,0,0),down
+
+#
+# Frame3
+#
+
+MAZE:"heck-d-6",random
+INIT_MAP:'.','-',false,true,unlit,false
+GEOMETRY:center,top
+MAP
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-
+----------------------------------------------------------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-
+----------------------------------------------------------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,0,0)
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[20%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+GOLD:random,random
+GOLD:random,random
+
+GEOMETRY:center,bottom
+MAP
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-
+----------------------------------------------------------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-
+----------------------------------------------------------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-
+ENDMAP
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[20%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+GOLD:random,random
+GOLD:random,random
+
+GEOMETRY:center,top
+MAP
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+----------------------------------------------------------------------------
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+----------------------------------------------------------------------------
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ENDMAP
+MAZEWALK:(2,2),east
+
+GEOMETRY:center,bottom
+MAP
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+----------------------------------------------------------------------------
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+----------------------------------------------------------------------------
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ENDMAP
+MAZEWALK:(2,2),east
+STAIR:levregion(1,0,79,20),(0,0,0,0),up
+STAIR:levregion(1,0,79,20),(0,0,0,0),down
+
+#
+# Hbar
+#
+
+MAZE:"heck-d-7",random
+INIT_MAP:'.','-',false,true,unlit,false
+GEOMETRY:half-left,center
+MAP
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+---------------------------------------------------------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+---------------------------------------------------------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+---------------------------------------------------------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+---------------------------------------------------------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+---------------------------------------------------------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,0,0)
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:'`',"boulder",random
+OBJECT:'`',"boulder",random
+OBJECT:'`',"boulder",random
+OBJECT:'`',"boulder",random
+MONSTER[50%]:'H',"minotaur",random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+
+GEOMETRY:half-left,center
+MAP
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+---------------------------------------------------------------------------
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+---------------------------------------------------------------------------
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+---------------------------------------------------------------------------
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+---------------------------------------------------------------------------
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+---------------------------------------------------------------------------
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ENDMAP
+MAZEWALK:(0,2),east
+STAIR:levregion(1,0,79,20),(0,0,0,0),up
+STAIR:levregion(1,0,79,20),(0,0,0,0),down
+
+#
+# Pillars
+#
+
+MAZE:"heck-d-8",random
+FLAGS:lethe
+GEOMETRY:center,center
+MAP
+}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}---}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+}}}}.............}---}.............}---}.........}---}...............}---}}
+---}........}}}}}}---}.............}}}}}.}}}}}...}---}..........}}}}}}---}}
+---}........}---}}}}}}...................}---}...}}}}}......}}}}}---}}}}}}}
+}}}}........}---}.....}}}}}..............}---}..............}---}---}.....}
+}.....}}}}}.}}}}}.....}---}..............}}}}}....}}}}}.....}---}}}}}.....}
+}.....}---}...........}---}.........}}}}}.........}---}.....}}}}}......}}}}
+}.....}---}...........}}}}}.........}---}.........}---}................}---
+}.....}}}}}.................}}}}}...}---}.........}}}}}}}}}............}---
+}.............}}}}}.........}---}...}}}}}.............}---}............}}}}
+}.............}---}.........}---}.............}}}}}...}---}...............}
+}.}}}}}.......}---}.......}}}}}}}.............}---}...}}}}}......}}}}}....}
+}.}---}.......}}}}}.......}---}...............}---}..............}---}....}
+}.}---}.}}}}}.............}---}..}}}}}........}}}}}..}}}}}.......}---}....}
+}.}}}}}.}---}.............}}}}}..}---}}}}}}..........}---}.......}}}}}....}
+}.......}---}....................}---}}---}..........}---}................}
+}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}---}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,0,0)
+STAIR:random,up
+STAIR:random,down
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+MONSTER[50%]:'H',"minotaur",random
+MONSTER[50%]:'H',"minotaur",random
+MONSTER:';',random,random
+MONSTER:';',random,random
+MONSTER:';',random,random
+MONSTER:';',random,random
+MONSTER:';',random,random
+MONSTER:';',random,random
+MONSTER:';',random,random
+MONSTER:';',random,random
+MONSTER:';',random,random
+MONSTER:';',random,random
+MONSTER:';',random,random
+MONSTER:';',random,random
+MONSTER:';',random,random
+MONSTER:'D',random,random
+MONSTER:'D',random,random
+MONSTER:'D',random,random
+MONSTER:'D',random,random
+MONSTER:'D',random,random
+MONSTER:'D',random,random
+MONSTER:'f',"displacer beast",random
+MONSTER:'f',"displacer beast",random
+MONSTER:'f',"displacer beast",random
+MONSTER:'f',"displacer beast",random
+MONSTER:'f',"displacer beast",random
+MONSTER:'f',"displacer beast",random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+
+#
+# Vbars4
+#
+
+MAZE:"heck-d-9",random
+INIT_MAP:'.','-',true,true,unlit,false
+GEOMETRY:left,top
+MAP
+.-.-.-.-.-.-.-.-.-.-.
+---------------------
+.-.-.-.-.-.-.-.-.-.-.
+---------------------
+.-.-.-.-.-.-.-.-.-.-.
+---------------------
+.-.-.-.-.-.-.-.-.-.-.
+---------------------
+.-.-.-.-.-.-.-.-.-.-.
+---------------------
+.-.-.-.-.-.-.-.-.-.-.
+---------------------
+.-.-.-.-.-.-.-.-.-.-.
+---------------------
+.-.-.-.-.-.-.-.-.-.-.
+---------------------
+.-.-.-.-.-.-.-.-.-.-.
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,0,0)
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+GOLD:random,random
+GOLD:random,random
+
+
+GEOMETRY:center,top
+MAP
+.-.-.-.-.-.-.-.-.-.-.
+---------------------
+.-.-.-.-.-.-.-.-.-.-.
+---------------------
+.-.-.-.-.-.-.-.-.-.-.
+---------------------
+.-.-.-.-.-.-.-.-.-.-.
+---------------------
+.-.-.-.-.-.-.-.-.-.-.
+---------------------
+.-.-.-.-.-.-.-.-.-.-.
+---------------------
+.-.-.-.-.-.-.-.-.-.-.
+---------------------
+.-.-.-.-.-.-.-.-.-.-.
+---------------------
+.-.-.-.-.-.-.-.-.-.-.
+ENDMAP
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+GOLD:random,random
+GOLD:random,random
+
+
+GEOMETRY:right,bottom
+MAP
+.-.-.-.-.-.-.-.-.-.-.
+---------------------
+.-.-.-.-.-.-.-.-.-.-.
+---------------------
+.-.-.-.-.-.-.-.-.-.-.
+---------------------
+.-.-.-.-.-.-.-.-.-.-.
+---------------------
+.-.-.-.-.-.-.-.-.-.-.
+---------------------
+.-.-.-.-.-.-.-.-.-.-.
+---------------------
+.-.-.-.-.-.-.-.-.-.-.
+---------------------
+.-.-.-.-.-.-.-.-.-.-.
+---------------------
+.-.-.-.-.-.-.-.-.-.-.
+ENDMAP
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+GOLD:random,random
+GOLD:random,random
+
+GEOMETRY:left,top
+MAP
+ - - - - - - - - - - 
+---------------------
+ - - - - - - - - - - 
+---------------------
+.- - - - - - - - - - 
+---------------------
+ - - - - - - - - - - 
+---------------------
+ - - - - - - - - - - 
+---------------------
+ - - - - - - - - - - 
+---------------------
+ - - - - - - - - - - 
+---------------------
+ - - - - - - - - - - 
+---------------------
+ - - - - - - - - - - 
+ENDMAP
+MAZEWALK:(0,4),east
+
+GEOMETRY:center,top
+MAP
+ - - - - - - - - - - 
+---------------------
+ - - - - - - - - - - 
+---------------------
+.- - - - - - - - - - 
+---------------------
+ - - - - - - - - - - 
+---------------------
+ - - - - - - - - - - 
+---------------------
+ - - - - - - - - - - 
+---------------------
+ - - - - - - - - - - 
+---------------------
+ - - - - - - - - - - 
+---------------------
+ - - - - - - - - - - 
+ENDMAP
+MAZEWALK:(0,4),east
+
+GEOMETRY:right,bottom
+MAP
+ - - - - - - - - - - 
+---------------------
+ - - - - - - - - - - 
+---------------------
+.- - - - - - - - - - 
+---------------------
+ - - - - - - - - - - 
+---------------------
+ - - - - - - - - - - 
+---------------------
+ - - - - - - - - - - 
+---------------------
+ - - - - - - - - - - 
+---------------------
+ - - - - - - - - - - 
+---------------------
+ - - - - - - - - - - 
+ENDMAP
+MAZEWALK:(0,4),east
+STAIR:levregion(1,0,79,20),(0,0,0,0),up
+STAIR:levregion(1,0,79,20),(0,0,0,0),down
+
+#
+# M
+#
+
+MAZE:"heck-e-1",random
+INIT_MAP:'.','-',true,true,unlit,false
+GEOMETRY:right,bottom
+MAP
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,0,0)
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+GOLD:random,random
+
+GEOMETRY:left,bottom
+MAP
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+ENDMAP
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+GOLD:random,random
+
+GEOMETRY:half-right,top
+MAP
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+ENDMAP
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+GOLD:random,random
+
+GEOMETRY:half-left,top
+MAP
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+ENDMAP
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+GOLD:random,random
+
+GEOMETRY:right,bottom
+MAP
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+ENDMAP
+GEOMETRY:left,bottom
+MAP
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+ENDMAP
+GEOMETRY:center,bottom
+MAP
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+ENDMAP
+GEOMETRY:half-right,top
+MAP
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+ENDMAP
+GEOMETRY:half-left,top
+MAP
+ - - - - - - - 
+---------------
+.. - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+ENDMAP
+MAZEWALK:(0,2),east
+STAIR:levregion(1,0,79,20),(0,0,0,0),up
+STAIR:levregion(1,0,79,20),(0,0,0,0),down
+
+#
+# N
+#
+
+MAZE:"heck-e-2",random
+INIT_MAP:'.','-',true,true,unlit,false
+
+GEOMETRY:right,bottom
+MAP
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,0,0)
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+GOLD:random,random
+
+GEOMETRY:half-right,top
+MAP
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+ENDMAP
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER:random,random,random
+TRAP[50%]:random,random
+GOLD:random,random
+
+GEOMETRY:half-left,bottom
+MAP
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+ENDMAP
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+GOLD:random,random
+
+GEOMETRY:left,top
+MAP
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+-----------
+.-.-.-.-.-.
+ENDMAP
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+GOLD:random,random
+
+GEOMETRY:right,bottom
+MAP
+ - - - - - 
+-----------
+.- - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+ENDMAP
+MAZEWALK:(0,2),east
+
+GEOMETRY:half-right,top
+MAP
+ - - - - - 
+-----------
+.- - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+ENDMAP
+MAZEWALK:(0,2),east
+
+GEOMETRY:center,center
+MAP
+ - - - - - 
+-----------
+.- - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+ENDMAP
+MAZEWALK:(0,2),east
+
+GEOMETRY:half-left,bottom
+MAP
+ - - - - - 
+-----------
+.- - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+ENDMAP
+MAZEWALK:(0,2),east
+
+GEOMETRY:left,top
+MAP
+ - - - - - 
+-----------
+.- - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+-----------
+ - - - - - 
+ENDMAP
+MAZEWALK:(0,2),east
+STAIR:levregion(1,0,79,20),(0,0,0,0),up
+STAIR:levregion(1,0,79,20),(0,0,0,0),down
+
+#
+# W
+#
+
+MAZE:"heck-e-3",random
+INIT_MAP:'.','-',true,true,unlit,false
+GEOMETRY:right,top
+MAP
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,0,0)
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+GOLD:random,random
+
+GEOMETRY:left,top
+MAP
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+ENDMAP
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+GOLD:random,random
+
+GEOMETRY:half-right,bottom
+MAP
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+ENDMAP
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+GOLD:random,random
+
+GEOMETRY:half-left,bottom
+MAP
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+ENDMAP
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+GOLD:random,random
+
+
+GEOMETRY:right,top
+MAP
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+ENDMAP
+GEOMETRY:left,top
+MAP
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+ENDMAP
+GEOMETRY:center,top
+MAP
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+ENDMAP
+GEOMETRY:half-right,bottom
+MAP
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+ENDMAP
+GEOMETRY:half-left,bottom
+MAP
+ - - - - - - - 
+---------------
+.. - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+ENDMAP
+MAZEWALK:(0,2),east
+STAIR:levregion(1,0,79,20),(0,0,0,0),up
+STAIR:levregion(1,0,79,20),(0,0,0,0),down
+
+#
+# Frame2
+#
+
+MAZE:"heck-e-4",random
+INIT_MAP:'.','-',false,true,unlit,false
+GEOMETRY:center,top
+MAP
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-
+----------------------------------------------------------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-
+----------------------------------------------------------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,0,0)
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+GOLD:random,random
+
+GEOMETRY:center,bottom
+MAP
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-
+----------------------------------------------------------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-
+----------------------------------------------------------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-
+ENDMAP
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+GOLD:random,random
+
+GEOMETRY:center,top
+MAP
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+----------------------------------------------------------------------------
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+----------------------------------------------------------------------------
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ENDMAP
+MAZEWALK:(2,2),east
+
+GEOMETRY:center,bottom
+MAP
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+----------------------------------------------------------------------------
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+----------------------------------------------------------------------------
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ENDMAP
+MAZEWALK:(2,2),east
+STAIR:levregion(1,0,79,20),(0,0,0,0),up
+STAIR:levregion(1,0,79,20),(0,0,0,0),down
+
+#
+# Lattice
+#
+
+MAZE:"heck-e-5",random
+INIT_MAP:'.','-',true,true,unlit,false
+GEOMETRY:center,center
+MAP
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+---------------------------------------------------------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+---------------------------------------------------------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+---------------------------------------------------------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,0,0)
+STAIR:levregion(1,0,79,20),(0,0,0,0),up
+STAIR:levregion(1,0,79,20),(0,0,0,0),down
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:'*',random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:'`',"boulder",random
+OBJECT:'`',"boulder",random
+OBJECT:'`',"boulder",random
+OBJECT:'`',"boulder",random
+MONSTER[50%]:'H',"minotaur",random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+MONSTER:random,random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+GOLD:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+
+GEOMETRY:center,center
+MAP
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+---------------------------------------------------------------------------
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+---------------------------------------------------------------------------
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+---------------------------------------------------------------------------
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+ENDMAP
+GEOMETRY:right,center
+MAP
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+ENDMAP
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+GOLD:random,random
+
+GEOMETRY:left,center
+MAP
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+ENDMAP
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+GOLD:random,random
+
+GEOMETRY:right,center
+MAP
+ - - - - 
+---------
+ - - - - 
+---------
+ - - - - 
+---------
+ - - - - 
+---------
+ - - - - 
+---------
+ - - - - 
+---------
+ - - - - 
+---------
+ - - - - 
+---------
+ - - - - 
+ENDMAP
+GEOMETRY:half-right,center
+MAP
+ - - - - 
+---------
+ -.- - - 
+--.------
+ - - - - 
+------.--
+ - - -.- 
+--.------
+ -.- - - 
+---------
+ - - -.- 
+------.--
+ ..- - - 
+---------
+ - - - ..
+----.----
+ - -.- - 
+ENDMAP
+GEOMETRY:center,center
+MAP
+ - - - - 
+---------
+ -.- - - 
+--.------
+ - - - - 
+------.--
+ - - -.- 
+--.------
+ -.- - - 
+---------
+ - - -.- 
+------.--
+ ..- - - 
+---------
+ - - - ..
+---------
+ - ..- - 
+ENDMAP
+GEOMETRY:half-left,center
+MAP
+ - - - - 
+---------
+ -.- - - 
+--.------
+ - - - - 
+------.--
+ - - -.- 
+--.------
+ -.- - - 
+---------
+ - - -.- 
+------.--
+ ..- - - 
+---------
+ - - - ..
+----.----
+ - -.- - 
+ENDMAP
+GEOMETRY:left,center
+MAP
+ - - - - 
+---------
+ - - - - 
+---------
+ - - - - 
+---------
+ - - - - 
+---------
+ - - - - 
+---------
+ - - - - 
+---------
+ - - - - 
+---------
+ - - - - 
+---------
+ - - - - 
+ENDMAP
+MAZEWALK:(2,2),south
+
+#
+# Lattice2
+#
+
+MAZE:"heck-e-6",random
+INIT_MAP:'.','-',true,true,unlit,false
+GEOMETRY:center,top
+MAP
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+---------------------------------------------------------------------------
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,0,0)
+STAIR:levregion(1,0,79,20),(0,0,0,0),up
+STAIR:levregion(1,0,79,20),(0,0,0,0),down
+
+GEOMETRY:center,bottom
+MAP
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+---------------------------------------------------------------------------
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+ENDMAP
+
+GEOMETRY:left,center
+MAP
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+ENDMAP
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+GOLD:random,random
+GOLD:random,random
+
+GEOMETRY:center,center
+MAP
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+ENDMAP
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+GOLD:random,random
+GOLD:random,random
+
+GEOMETRY:right,center
+MAP
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+ENDMAP
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+GOLD:random,random
+GOLD:random,random
+
+GEOMETRY:left,center
+MAP
+ - - - - 
+---------
+ -.- - - 
+---------
+ - - - - 
+---------
+ - - - - 
+---------
+ - - - - 
+---------
+ - - - - 
+---------
+ - - - - 
+---------
+ - - - - 
+---------
+ - - - - 
+ENDMAP
+MAZEWALK:(2,2),east
+
+GEOMETRY:center,center
+MAP
+ - - - - 
+---------
+ -.- - - 
+---------
+ - - - - 
+---------
+ - - - - 
+---------
+ - - - - 
+---------
+ - - - - 
+---------
+ - - - - 
+---------
+ - - - - 
+---------
+ - - - - 
+ENDMAP
+MAZEWALK:(2,2),east
+
+GEOMETRY:right,center
+MAP
+ - - - - 
+---------
+ -.- - - 
+---------
+ - - - - 
+---------
+ - - - - 
+---------
+ - - - - 
+---------
+ - - - - 
+---------
+ - - - - 
+---------
+ - - - - 
+---------
+ - - - - 
+ENDMAP
+MAZEWALK:(2,2),east
+
+
+#
+# Vbars
+#
+
+MAZE:"heck-e-7",random
+INIT_MAP:'.','-',false,true,unlit,false
+GEOMETRY:right,center
+MAP
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,0,0)
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+GOLD:random,random
+GOLD:random,random
+
+GEOMETRY:right,center
+MAP
+ - - - - 
+---------
+ -.- - - 
+---------
+ - - - -
+---------
+ - - - -
+---------
+ - - - -
+---------
+ - - - -
+---------
+ - - - -
+---------
+ - - - -
+---------
+ - - - -
+ENDMAP
+MAZEWALK:(2,2),east
+GEOMETRY:half-right,center
+MAP
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+ENDMAP
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+GOLD:random,random
+
+GEOMETRY:half-right,center
+MAP
+ - - - - 
+---------
+ -.- - - 
+---------
+ - - - -
+---------
+ - - - -
+---------
+ - - - -
+---------
+ - - - -
+---------
+ - - - -
+---------
+ - - - -
+---------
+ - - - -
+ENDMAP
+MAZEWALK:(2,2),east
+
+GEOMETRY:half-left,center
+MAP
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+ENDMAP
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+GOLD:random,random
+GEOMETRY:half-left,center
+MAP
+ - - - - 
+---------
+ -.- - - 
+---------
+ - - - -
+---------
+ - - - -
+---------
+ - - - -
+---------
+ - - - -
+---------
+ - - - -
+---------
+ - - - -
+---------
+ - - - -
+ENDMAP
+MAZEWALK:(2,2),east
+
+GEOMETRY:left,center
+MAP
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+---------
+.-.-.-.-.
+ENDMAP
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+GOLD:random,random
+GOLD:random,random
+
+GEOMETRY:left,center
+MAP
+ - - - - 
+---------
+ -.- - - 
+---------
+ - - - -
+---------
+ - - - -
+---------
+ - - - -
+---------
+ - - - -
+---------
+ - - - -
+---------
+ - - - -
+---------
+ - - - -
+ENDMAP
+MAZEWALK:(2,2),east
+
+GEOMETRY:center,center
+MAP
+ - - - - 
+---------
+ -.- - - 
+---------
+ - - - -
+---------
+ - - - -
+---------
+ - - - -
+---------
+ - - - -
+---------
+ - - - -
+---------
+ - - - -
+---------
+ - - - -
+ENDMAP
+MAZEWALK:(2,2),east
+STAIR:levregion(1,0,79,20),(0,0,0,0),up
+STAIR:levregion(1,0,79,20),(0,0,0,0),down
+
+#
+# Vbars2
+#
+
+MAZE:"heck-e-8",random
+INIT_MAP:'.','-',true,true,unlit,false
+GEOMETRY:center,center
+MAP
+.-.-.-.-.-.-.-.-.-.-.-.-.
+-------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.
+-------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.
+-------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.
+-------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.
+-------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.
+-------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.
+-------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.
+-------------------------
+.-.-.-.-.-.-.-.-.-.-.-.-.
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,0,0)
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+GOLD:random,random
+GOLD:random,random
+
+GEOMETRY:right,center
+MAP
+.-.-.-.-.-.-.-.-.
+-----------------
+.-.-.-.-.-.-.-.-.
+-----------------
+.-.-.-.-.-.-.-.-.
+-----------------
+.-.-.-.-.-.-.-.-.
+-----------------
+.-.-.-.-.-.-.-.-.
+-----------------
+.-.-.-.-.-.-.-.-.
+-----------------
+.-.-.-.-.-.-.-.-.
+-----------------
+.-.-.-.-.-.-.-.-.
+-----------------
+.-.-.-.-.-.-.-.-.
+ENDMAP
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+GOLD:random,random
+GOLD:random,random
+
+GEOMETRY:left,center
+MAP
+.-.-.-.-.-.-.-.-.
+-----------------
+.-.-.-.-.-.-.-.-.
+-----------------
+.-.-.-.-.-.-.-.-.
+-----------------
+.-.-.-.-.-.-.-.-.
+-----------------
+.-.-.-.-.-.-.-.-.
+-----------------
+.-.-.-.-.-.-.-.-.
+-----------------
+.-.-.-.-.-.-.-.-.
+-----------------
+.-.-.-.-.-.-.-.-.
+-----------------
+.-.-.-.-.-.-.-.-.
+ENDMAP
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+GOLD:random,random
+GOLD:random,random
+
+GEOMETRY:center,center
+MAP
+.- - - - - - - - - - - - 
+-------------------------
+ - - - - - - - - - - - - 
+-------------------------
+ - - - - - - - - - - - - 
+-------------------------
+ - - - - - - - - - - - - 
+-------------------------
+ - - - - - - - - - - - - 
+-------------------------
+ - - - - - - - - - - - - 
+-------------------------
+ - - - - - - - - - - - - 
+-------------------------
+ - - - - - - - - - - - - 
+-------------------------
+ - - - - - - - - - - - - 
+ENDMAP
+MAZEWALK:(0,0),east
+
+GEOMETRY:right,center
+MAP
+.- - - - - - - -
+-----------------
+ - - - - - - - -
+-----------------
+ - - - - - - - -
+-----------------
+ - - - - - - - -
+-----------------
+ - - - - - - - -
+-----------------
+ - - - - - - - -
+-----------------
+ - - - - - - - -
+-----------------
+ - - - - - - - -
+-----------------
+ - - - - - - - -
+ENDMAP
+MAZEWALK:(0,0),east
+
+GEOMETRY:left,center
+MAP
+.- - - - - - - -
+-----------------
+ - - - - - - - -
+-----------------
+ - - - - - - - -
+-----------------
+ - - - - - - - -
+-----------------
+ - - - - - - - -
+-----------------
+ - - - - - - - -
+-----------------
+ - - - - - - - -
+-----------------
+ - - - - - - - -
+-----------------
+ - - - - - - - -
+ENDMAP
+MAZEWALK:(0,0),east
+STAIR:levregion(1,0,79,20),(0,0,0,0),up
+STAIR:levregion(1,0,79,20),(0,0,0,0),down
+
+#
+# Vbars3
+#
+
+MAZE:"heck-e-9",random
+INIT_MAP:'.','-',false,true,unlit,false
+GEOMETRY:left,top
+MAP
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+ENDMAP
+BRANCH:levregion(1,0,79,20),(0,0,0,0)
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+GOLD:random,random
+GOLD:random,random
+
+GEOMETRY:center,top
+MAP
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+ENDMAP
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+GOLD:random,random
+GOLD:random,random
+
+GEOMETRY:right,center
+MAP
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+---------------
+.-.-.-.-.-.-.-.
+ENDMAP
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:'*',random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:random,random,random
+OBJECT[50%]:'`',"boulder",random
+OBJECT[50%]:'`',"boulder",random
+MONSTER[10%]:'H',"minotaur",random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+MONSTER[50%]:random,random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+TRAP[50%]:random,random
+GOLD:random,random
+GOLD:random,random
+
+GEOMETRY:left,top
+MAP
+ - - - - - - - 
+---------------
+ -.- - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+ENDMAP
+MAZEWALK:(2,2),east
+
+GEOMETRY:center,top
+MAP
+ - - - - - - - 
+---------------
+ -.- - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+ENDMAP
+MAZEWALK:(2,2),east
+
+GEOMETRY:right,center
+MAP
+ - - - - - - - 
+---------------
+ -.- - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+---------------
+ - - - - - - - 
+ENDMAP
+MAZEWALK:(2,2),east
+STAIR:levregion(1,0,79,20),(0,0,0,0),up
+STAIR:levregion(1,0,79,20),(0,0,0,0),down

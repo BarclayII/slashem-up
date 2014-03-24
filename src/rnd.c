@@ -24,7 +24,12 @@ register int x;
 {
 #ifdef DEBUG
 	if (x <= 0) {
-		impossible("rn2(%d) attempted", x);
+#ifdef LEV_COMP
+		panic(
+#else
+		impossible(
+#endif
+			"rn2(%d) attempted", x);
 		return(0);
 	}
 	x = RND(x);
@@ -45,7 +50,12 @@ register int x;	/* good luck approaches 0, bad luck approaches (x-1) */
 
 #ifdef DEBUG
 	if (x <= 0) {
-		impossible("rnl(%d) attempted", x);
+#ifdef LEV_COMP
+		panic(
+#else
+		impossible(
+#endif
+			"rnl(%d) attempted", x);
 		return(0);
 	}
 #endif
@@ -69,7 +79,12 @@ register int x;
 {
 #ifdef DEBUG
 	if (x <= 0) {
-		impossible("rnd(%d) attempted", x);
+#ifdef LEV_COMP
+		panic(
+#else
+		impossible(
+#endif
+			"rnd(%d) attempted", x);
 		return(1);
 	}
 	x = RND(x)+1;
@@ -90,7 +105,12 @@ register int n, x;
 
 #ifdef DEBUG
 	if (x < 0 || n < 0 || (x == 0 && n != 0)) {
-		impossible("d(%d,%d) attempted", n, x);
+#ifdef LEV_COMP
+		panic(
+#else
+		impossible(
+#endif
+				"d(%d,%d) attempted", n, x);
 		return(1);
 	}
 #endif

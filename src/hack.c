@@ -2671,6 +2671,146 @@ int k_format; /* WAC k_format is an int */
 	}
 }
 
+void
+elec_damageu(n, mtmp, knam, k_format, destroy, flash)
+int n;
+register struct monst *mtmp;
+register const char *knam;
+boolean k_format;
+register int destroy; /* odds of destroying items */
+boolean flash;
+{
+       if (Invulnerable) {
+           n = 0;
+           You("are unharmed!");
+           goto shock;
+       } 
+       if (Shock_resistance) {
+           shieldeff(u.ux, u.uy);
+           if (FShock_resistance) {
+               You("are unharmed!");
+               ugolemeffects(AD_ELEC, n);
+               n = 0;
+           } else if (PShock_resistance)
+               n = (n + 1)/2;
+       } else
+           exercise(A_CON,FALSE);
+shock:
+       if (destroy > rn2(20))
+           destroy_item(WAND_CLASS, AD_ELEC);
+       if (destroy > rn2(20))
+           destroy_item(RING_CLASS, AD_ELEC);
+       if (mtmp)
+           mdamageu(mtmp, n);
+       else if (n)
+           losehp(n, knam, k_format);
+       if (flash && !resists_blnd(&youmonst)) {
+           You("are blinded by the flash!");
+           make_blinded((long)rnd(100),FALSE);
+           if (!Blind) Your(vision_clears);
+       }
+}
+
+void
+fire_damageu(n, mtmp, knam, k_format, destroy, fire)
+int n;
+register struct monst *mtmp;
+register const char *knam;
+boolean k_format;
+register int destroy; /* odds of destroying items */
+{
+       int alt = 0;
+
+       if (Invulnerable) {
+           n = 0;
+           You("are unharmed!");
+           goto burn;
+       } 
+       if (fire) switch (u.umonnum) {
+           /* paper burns very fast, assume straw is tightly
+            * packed and burns a bit slower */
+           case PM_PAPER_GOLEM:   alt = u.mhmax; break;
+           case PM_STRAW_GOLEM:   alt = u.mhmax / 2; break;
+           case PM_WOOD_GOLEM:    alt = u.mhmax / 4; break;
+           case PM_LEATHER_GOLEM: alt = u.mhmax / 8; break;
+           default: alt = 0; break;
+       }
+       if (alt) {
+           You("roast!");
+           if (alt > n)
+               n = alt;
+       }
+       if (Fire_resistance) {
+           shieldeff(u.ux, u.uy);
+           if (FFire_resistance) {
+               if (fire) pline_The("fire doesn't feel hot!");
+               else You_feel("mildly hot.");
+               ugolemeffects(AD_FIRE, n);
+               n = 0;
+           } else if (PFire_resistance)
+               n = (n + 1)/2;
+       }
+       if (Upolyd) {
+           if (u.mhmax > mons[u.umonnum].mlevel) {
+               u.mhmax -= rn2(min(u.mhmax,n + 1));
+               if (u.mh > u.mhmax) u.mh = u.mhmax;
+               flags.botl = 1;
+           }
+       } else if (u.uhpmax > u.ulevel) {
+           u.uhpmax -= rn2(min(u.uhpmax,n + 1));
+           if (u.uhp > u.uhpmax) u.uhp = u.uhpmax;
+           flags.botl = 1;
+       }
+burn:
+       burn_away_slime();
+       if (destroy > rn2(20))
+           destroy_item(SCROLL_CLASS, AD_FIRE);
+       if (destroy > rn2(20))
+           destroy_item(POTION_CLASS, AD_FIRE);
+       if (destroy > rn2(25))
+           destroy_item(SPBOOK_CLASS, AD_FIRE);
+       if (destroy > rn2(20))
+           burnarmor(&youmonst);
+       if (fire && is_ice(u.ux, u.uy))
+           melt_ice(u.ux, u.uy);
+       if (mtmp)
+           mdamageu(mtmp, n);
+       else if (n)
+           losehp(n, knam, k_format);
+}
+
+void
+cold_damageu(n, mtmp, knam, k_format, destroy)
+int n;
+register struct monst *mtmp;
+register const char *knam;
+boolean k_format;
+register int destroy; /* odds of destroying items */
+{
+       if (Invulnerable) {
+           n = 0;
+           You("are unharmed!");
+           goto cold;
+       }
+       if (Cold_resistance) {
+           shieldeff(u.ux, u.uy);
+           if (FCold_resistance) {
+               pline_The("frost doesn't feel cold!");
+               ugolemeffects(AD_COLD, n);
+               n = 0;
+           } else if (PCold_resistance)
+               n = (n + 1)/2;
+       }
+cold:
+       if (destroy > rn2(20))
+           destroy_item(POTION_CLASS, AD_COLD);
+       if (mtmp)
+           mdamageu(mtmp, n);
+       else if (n)
+           losehp(n, knam, k_format);
+
+}
+
 int
 weight_cap()
 {

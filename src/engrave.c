@@ -632,6 +632,15 @@ doengrave()
 	     */
 	    case WAND_CLASS:
 		if (zappable(otmp)) {
+		    /*
+		     * [BarclayII] cursed wands can explode with a chance
+		     * less than zapping :)
+		     */
+		    if (otmp->cursed && !rn2(10)) {
+			backfire(otmp);
+			exercise(A_STR, FALSE);
+			return(0);
+		    }
 		    check_unpaid(otmp);
 		    zapwand = TRUE;
 		    if (Levitation) ptext = FALSE;

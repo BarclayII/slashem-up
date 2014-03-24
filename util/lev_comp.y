@@ -937,8 +937,15 @@ object_desc	: chance ':' object_c ',' o_name
 			if ($5) {
 			    int token = get_object_id($5, $<i>3);
 			    if (token == ERR)
-				yywarning(
-				"Illegal object name!  Making random object.");
+#ifdef RANDOM_DRAGON_SCALES
+			    	if (!strcmp($5, "dragon scales"))
+					tmpobj[nobj]->id = RND_DRAGON_SCALES;
+				else if(!strcmp($5, "dragon scale mail"))
+					tmpobj[nobj]->id = RND_DRAGON_SCALE_MAIL;
+				else
+#endif
+					yywarning(
+					"Illegal object name!  Making random object.");
 			     else
 				tmpobj[nobj]->id = token;
 			    Free($5);

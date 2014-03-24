@@ -7,6 +7,7 @@
 #ifdef OVLB
 
 STATIC_DCL void FDECL(do_oname, (struct obj *));
+STATIC_DCL const char * NDECL(rndvladnam);
 static void FDECL(getpos_help, (BOOLEAN_P,const char *));
 
 extern const char what_is_an_unknown_object[];		/* from pager.c */
@@ -679,8 +680,15 @@ boolean called;
 	/* Put the actual monster name or type into the buffer now */
 	/* Be sure to remember whether the buffer starts with a name */
 	if (do_hallu) {
-	    Strcat(buf, rndmonnam());
-	    name_at_start = FALSE;
+	    if (mtmp->data == &mons[PM_VLAD_THE_IMPALER]) {
+		/* [BarclayII] added funny Vlad names.
+		 * Thanks to Nameless and many others at Dudley's Dungeon! */
+		Strcat(buf, rndvladnam());
+		name_at_start = TRUE;
+	    } else {
+		Strcat(buf, rndmonnam());
+		name_at_start = FALSE;
+	    }
 	} else if (mtmp->mnamelth) {
 	    char *name = NAME(mtmp);
 
@@ -968,6 +976,47 @@ rndmonnam()
 
 	if (name >= SPECIAL_PM) return bogusmons[name - SPECIAL_PM];
 	return mons[name].mname;
+}
+
+/*
+ * funny Vlad names
+ */
+static const char * const bogusvlads[] = {
+    /* Nameless */
+    "Vlad the Impervious",
+    "Vlad the Impala",
+    "Vlad the Impartial",
+    "Vlad the Impassioned",
+    "Vlad the Impossible",
+    "Vlad the Imperceptible",
+    "Vlad the Impersonator",
+    "Vlad the Imploring",
+    "Vlad the Imploder",
+    "Vlad the Impediment",
+    "Vlad the Impolite",
+    "Vlad the Impregnator",
+    /* and many others... */
+    "Vlad the Impotent",
+    "Vlad the Imperial",
+    "Vlad the Impractical",
+    "Vlad the Impassable",
+    "Vlad the Impecunious",
+    "Vlad the Imperfect",
+    "Vlad the Impatient",
+    "Vlad the Impeachable",
+    "Vlad the Impoverishing",
+    "Vlad the Imprinted",
+    "Vlad the Imp",
+    "Vlad the Impaired",
+    "Vlad the Impact",
+    "Vlad the Impeccable",
+    "Vlad the Impedance"
+};
+
+STATIC_DCL const char *
+rndvladnam()
+{
+    return bogusvlads[rn2(SIZE(bogusvlads))];
 }
 
 #ifdef REINCARNATION

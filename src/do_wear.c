@@ -1801,8 +1801,9 @@ find_ac()
 		uarm->otyp==ROBE_OF_WEAKNESS ||
 		uarm->otyp==ROBE_OF_PROTECTION) && !uarms) {
 /*WAC cap off the Monk's ac bonus to -11 */
-            if (u.ulevel > 18) uac -= 11;
-            else uac -= (u.ulevel / 2) + 2;
+            /*if (u.ulevel > 18) uac -= 11;
+            else */
+		    uac -= (u.ulevel / 3) + 1;
 	}
 	if (Race_if(PM_DOPPELGANGER) && !uarm) uac -= (u.ulevel / 4) + 1;
 	if (Race_if(PM_HUMAN_WEREWOLF) && !uarm) uac -= (u.ulevel / 4) + 1;

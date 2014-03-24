@@ -790,7 +790,7 @@ TOOL("wax candle", "candle",    0, 1, 0, 0,  40,  2,   2, WAX, CLR_WHITE),
 TOOL("magic candle",  "candle", 0, 1, 1, 0,   5,  2, 500, WAX, CLR_WHITE),
 TOOL("oil lamp", "lamp",        0, 0, 0, 0,  25, 20,  10, COPPER, CLR_YELLOW),
 TOOL("brass lantern", (char *)0,1, 0, 0, 0,  15, 30,  12, COPPER, CLR_YELLOW),
-TOOL("magic lamp", "lamp",      0, 0, 1, 0,  10, 20,1000, COPPER, CLR_YELLOW),
+TOOL("magic lamp", "lamp",      0, 0, 1, 0,  10, 20,2000, COPPER, CLR_YELLOW),
 
 /* Instruments */
 /* KMH -- made less common */
@@ -798,18 +798,18 @@ TOOL("tin whistle", "whistle",  0, 0, 0, 0,  63,  3,  10, METAL, HI_METAL),
 TOOL("magic whistle", "whistle",0, 0, 1, 0,  25,  3,  10, METAL, HI_METAL),
 /* "If tin whistles are made out of tin, what do they make foghorns out of?" */
 TOOL("wooden flute", "flute",   0, 0, 0, 0,   2,  5,  12, WOOD, HI_WOOD),
-TOOL("magic flute", "flute",    0, 0, 1, 1,   1,  5,  36, WOOD, HI_WOOD),
+TOOL("magic flute", "flute",    0, 0, 1, 1,   1,  5,  250, WOOD, HI_WOOD),
 TOOL("tooled horn", "horn",     0, 0, 0, 0,   2, 18,  15, BONE, CLR_WHITE),
-TOOL("frost horn", "horn",      0, 0, 1, 1,   1, 18,  50, BONE, CLR_WHITE),
-TOOL("fire horn", "horn",       0, 0, 1, 1,   1, 18,  50, BONE, CLR_WHITE),
-TOOL("horn of plenty", "horn",  0, 0, 1, 1,   1, 18,  50, BONE, CLR_WHITE),
+TOOL("frost horn", "horn",      0, 0, 1, 1,   1, 18,  300, BONE, CLR_WHITE),
+TOOL("fire horn", "horn",       0, 0, 1, 1,   1, 18,  300, BONE, CLR_WHITE),
+TOOL("horn of plenty", "horn",  0, 0, 1, 1,   1, 18,  300, BONE, CLR_WHITE),
 TOOL("wooden harp", "harp",     0, 0, 0, 0,   2, 30,  50, WOOD, HI_WOOD),
-TOOL("magic harp", "harp",      0, 0, 1, 1,   1, 30,  50, WOOD, HI_WOOD),
+TOOL("magic harp", "harp",      0, 0, 1, 1,   1, 30,  400, WOOD, HI_WOOD),
 TOOL("bell", (char *)0,         1, 0, 0, 0,   1, 30,  50, COPPER, HI_COPPER),
 TOOL("bugle", (char *)0,        1, 0, 0, 0,   2, 10,  15, COPPER, HI_COPPER),
 TOOL("leather drum", "drum",    0, 0, 0, 0,   2, 25,  25, LEATHER, HI_LEATHER),
 TOOL("drum of earthquake", "drum",
-                                0, 0, 1, 1,   1, 25,  25, LEATHER, HI_LEATHER),
+                                0, 0, 1, 1,   1, 25,  400, LEATHER, HI_LEATHER),
 
 /* Traps */
 TOOL("land mine",(char *)0,     1, 0, 0, 0,   0,300, 180, IRON, CLR_RED),

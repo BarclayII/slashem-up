@@ -1579,9 +1579,10 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 	} else if (poisonous(&mons[mnum]) && rn2(5)) {
 		tp++;
 		pline("Ecch - that must have been poisonous!");
-		if(!Poison_resistance) {
+		if(!FPoison_resistance) {
 			losestr(rnd(4));
-			losehp(rnd(15), "poisonous corpse", KILLED_BY_AN);
+			losehp(rnd(PPoison_resistance ?
+				7 : 15), "poisonous corpse", KILLED_BY_AN);
 		} else	You("seem unaffected by the poison.");
 	/* now any corpse left too long will make you mildly ill */
 	} else if ((rotted > 5L || (rotted > 3L && rn2(5)))
@@ -1615,7 +1616,11 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 	    if (retcode<2 && otmp->odrained && otmp->oeaten < drainlevel(otmp))
 	        otmp->oeaten = drainlevel(otmp);
 	} else if (!is_vampire(youmonst.data)) {
-	    pline("%s%s %s!",
+		if (mons[mnum].mlet == S_COCKATRICE)
+			pline("Hmm... tastes like %s.",
+				Hallucination ?
+				"cockatrice" : "chicken");
+		else pline("%s%s %s!",
 		  !uniq ? "This " : !type_is_pname(&mons[mnum]) ? "The " : "",
 		  food_xname(otmp, FALSE),
 		  (vegan(&mons[mnum]) ?
@@ -2258,7 +2263,7 @@ struct obj *otmp;
 		if (yn_function(buf,ynchars,'n')=='n') return 1;
 		else return 2;
 	}
-	if (cadaver && poisonous(&mons[mnum]) && !Poison_resistance) {
+	if (cadaver && poisonous(&mons[mnum]) && !FPoison_resistance) {
 		/* poisonous */
 		Sprintf(buf, "%s like %s might be poisonous! %s",
 			foodsmell, it_or_they, eat_it_anyway);
@@ -2436,9 +2441,10 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 
 	    if (otmp->oclass == WEAPON_CLASS && otmp->opoisoned) {
 		pline("Ecch - that must have been poisonous!");
-		if(!Poison_resistance) {
-		    losestr(rnd(4));
-		    losehp(rnd(15), xname(otmp), KILLED_BY_AN);
+		if(!FPoison_resistance) {
+		    losestr(rnd(PPoison_resistance ? 2 : 4));
+		    losehp(rnd(PPoison_resistance ? 7 : 15), 
+				    xname(otmp), KILLED_BY_AN);
 		} else
 		    You("seem unaffected by the poison.");
 	    } else if (!otmp->cursed)

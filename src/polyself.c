@@ -374,7 +374,7 @@ boolean forcecontrol;
 			else if (!mvitals[mntmp].eaten) {
 				You("attempt an unfamiliar polymorph.");
 				/* [BarclayII] always have 1/3 chance of failing */
-				if (((rn2(5) + u.ulevel) < mons[mntmp].mlevel) && !rn2(2))
+				if (((rn2(5) + u.ulevel) < mons[mntmp].mlevel) && !rn2(3))
 				    mntmp = LOW_PM - 1; /* Didn't work for sure */
 				/* Either way, give it a shot */
 				break;
@@ -1431,7 +1431,7 @@ int part;
 		"light headed", "neck", "spine", "toe",
 		"feathers", "blood", "lung", "bill", "stomach" },
 	*horse_parts[] = { "foreleg", "eye", "face", "forehoof", "hoof tip",
-		"rear hoof", "foreclaw", "hooved", "head", "rear leg",
+		"rear hoof", "forehoof", "hooved", "head", "rear leg",
 		"light headed", "neck", "backbone", "rear hoof tip",
 		"mane", "blood", "lung", "nose", "stomach"},
 	*sphere_parts[] = { "appendage", "optic nerve", "body", "tentacle",

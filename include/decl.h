@@ -161,6 +161,9 @@ E NEARDATA struct fruit *ffruit;
 
 E NEARDATA char tune[6];
 
+/* quite ugly, but i can't think of a better way yet */
+E NEARDATA short alchemy_table[28][28];	/* POT_WATER - POT_BOOZE */
+
 #define MAXLINFO (MAXDUNGEON * MAXLEVEL)
 E struct linfo level_info[MAXLINFO];
 
@@ -495,6 +498,12 @@ struct autopickup_exception {
 	struct autopickup_exception *next;
 };
 #endif /* AUTOPICKUP_EXCEPTIONS */
+
+
+#ifdef RANDOM_DRAGON_SCALES
+#define RND_DRAGON_SCALES (-2)
+#define RND_DRAGON_SCALE_MAIL (-3)
+#endif
 
 #undef E
 

@@ -73,7 +73,8 @@
 #define INFRAVISION		64
 #define WARN_OF_MON		65
 #define DETECT_MONSTERS		66
-#define LAST_PROP		(DETECT_MONSTERS)
+#define BLEEDING		67		/* to be implemented */
+#define LAST_PROP		(BLEEDING)
 
 /*** Where the properties come from ***/
 /* Definitions were moved here from obj.h and you.h */
@@ -122,7 +123,8 @@ struct prop {
 #	define FROMEXPER    0x01000000L /* Gain/lose with experience, for role */
 #	define FROMRACE     0x02000000L /* Gain/lose with experience, for race */
 #	define FROMOUTSIDE  0x04000000L /* By corpses, prayer, thrones, etc. */
-#	define INTRINSIC    (FROMOUTSIDE|FROMRACE|FROMEXPER)
+#	define FROMSTART    0x08000000L /* Starting attribute */
+#	define INTRINSIC    (FROMOUTSIDE|FROMRACE|FROMEXPER|FROMSTART)
 	/* Control flags */
 #	define I_SPECIAL    0x10000000L /* Property is controllable */
 };

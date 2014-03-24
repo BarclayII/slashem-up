@@ -1297,6 +1297,15 @@ struct mkroom	*croom;
 	else
 	    c = 0;
 
+#ifdef RANDOM_DRAGON_SCALES
+	if (o->id == RND_DRAGON_SCALES)
+		o->id = rn1(YELLOW_DRAGON_SCALES - GRAY_DRAGON_SCALES
+				       	+ 1, GRAY_DRAGON_SCALES);
+	if (o->id == RND_DRAGON_SCALE_MAIL)
+		o->id = rn1(YELLOW_DRAGON_SCALE_MAIL - GRAY_DRAGON_SCALE_MAIL 
+				+ 1, GRAY_DRAGON_SCALE_MAIL);
+#endif
+
 	if (!c)
 	    otmp = mkobj_at(RANDOM_CLASS, x, y, !named);
 	else if (o->id != -1)
@@ -1306,7 +1315,9 @@ struct mkroom	*croom;
 	     * The special levels are compiled with the default "text" object
 	     * class characters.  We must convert them to the internal format.
 	     */
-	    char oclass = (char) def_char_to_objclass(c);
+	    char oclass;
+random_object:
+	    oclass = (char) def_char_to_objclass(c);
 
 	    if (oclass == MAXOCLASSES)
 		panic("create_object:  unexpected object class '%c'",c);

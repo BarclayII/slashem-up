@@ -103,6 +103,27 @@ MENUCOLOR="* cursed * (being worn)"=orange&underline
 MENUCOLOR="* cursed * (weapon in hand)"=orange&underline
 MENUCOLOR="* cursed * (weapon in hands)"=orange&underline
 
+# Statuscolors patch
+OPTIONS=statuscolors
+# HP
+STATUSCOLOR=hp%100:green,hp%66:yellow,hp%50:orange
+STATUSCOLOR=hp%33:red,hp%15:red&bold,hp%0:red&blink
+# Pw
+STATUSCOLOR=pw%100:green,pw%66:yellow,pw%50:orange,pw%33:red,pw%33:red&bold
+# Carry
+STATUSCOLOR=burdened:yellow,stressed:orange,strained:red
+STATUSCOLOR=overtaxed:red&bold,overloaded:red&blink
+# Hunger
+STATUSCOLOR=satiated:yellow,hungry:orange,weak:red
+STATUSCOLOR=fainting:red&bold,fainted:red&blink
+# Mental
+STATUSCOLOR=hallu:magenta,conf:green,stun:yellow
+# Health
+STATUSCOLOR=ill:red,foodpois:red,slime:lightgreen
+# Other
+STATUSCOLOR=held:magenta,blind:cyan
+
+
 # Status/message window colors
 # Possible color options include:
 # six digit hexadecimal RGB color value ("#8F8F8F"), black, red, green, brown,

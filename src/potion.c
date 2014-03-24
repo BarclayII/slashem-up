@@ -21,7 +21,6 @@ static NEARDATA const char beverages[] = { POTION_CLASS, 0 };
 STATIC_DCL long FDECL(itimeout, (long));
 STATIC_DCL long FDECL(itimeout_incr, (long,int));
 STATIC_DCL void NDECL(ghost_from_bottle);
-STATIC_DCL void NDECL(alchemy_init);
 STATIC_DCL short FDECL(mixtype, (struct obj *,struct obj *));
 
 STATIC_DCL void FDECL(healup_mon, (struct monst *, int,int,BOOLEAN_P,BOOLEAN_P));
@@ -676,11 +675,11 @@ peffects(otmp)
 		}
 		break;
 	case POT_SLEEPING:
-		if(Sleep_resistance || Free_action)
+		if(FSleep_resistance || Free_action)
 		    You("yawn.");
 		else {
 		    You("suddenly fall asleep!");
-		    fall_asleep(-rn1(10, 25 - 12*bcsign(otmp)), TRUE);
+		    fall_asleep(-rn1(10, 25 - 12*bcsign(otmp))/(PSleep_resistance + 1), TRUE);
 		}
 		break;
 	case POT_MONSTER_DETECTION:
@@ -729,7 +728,7 @@ peffects(otmp)
 			losehp(1, "mildly contaminated potion", KILLED_BY_AN);
 		    }
 		} else {
-		    if(Poison_resistance)
+		    if(FPoison_resistance)
 			pline(
 			  "(But in fact it was biologically contaminated %s.)",
 			      fruitname(TRUE));
@@ -741,15 +740,16 @@ peffects(otmp)
 			if (!Fixed_abil) {
 			    poisontell(typ);
 			    (void) adjattrib(typ,
-			    		Poison_resistance ? -1 : -rn1(4,3),
+			    		FPoison_resistance ? -1 : 
+					-rn1(4,3)/(PPoison_resistance+1),
 			    		TRUE);
 			}
-			if(!Poison_resistance) {
+			if(!FPoison_resistance) {
 			    if (otmp->fromsink)
-				losehp(rnd(10)+5*!!(otmp->cursed),
+				losehp(rnd(PPoison_resistance?5:10)+5*!!(otmp->cursed),
 				       "contaminated tap water", KILLED_BY);
 			    else
-				losehp(rnd(10)+5*!!(otmp->cursed),
+				losehp(rnd(PPoison_resistance?5:10)+5*!!(otmp->cursed),
 				       "contaminated potion", KILLED_BY_AN);
 			}
 			exercise(A_CON, FALSE);
@@ -907,7 +907,11 @@ peffects(otmp)
 			    }
 			    if(ledger_no(&u.uz) == 1) {
 			        You(riseup, ceiling(u.ux,u.uy));
+#ifdef RANDOMIZED_PLANES
+				goto_level(get_first_elemental_plane(), FALSE, FALSE, FALSE);
+#else
 				goto_level(&earth_level, FALSE, FALSE, FALSE);
+#endif
 			    } else {
 			        register int newlev = depth(&u.uz)-1;
 				d_level newlevel;
@@ -1019,7 +1023,8 @@ peffects(otmp)
 				good_for_you = TRUE;
 			    } else {
 				You("burn your %s.", body_part(FACE));
-				losehp(d(Fire_resistance ? 1 : 3, 4),
+				losehp(d(FFire_resistance ? 1 : 3, 
+					 PFire_resistance ? 2 : 4),
 				       "burning potion of oil", KILLED_BY_AN);
 			    }
 			} else if(otmp->cursed)
@@ -1606,7 +1611,7 @@ register struct obj *obj;
 		kn++;
 		if (!Free_action && !Sleep_resistance) {
 		    You_feel("rather tired.");
-		    nomul(-rnd(5));
+		    nomul(-rnd(PSleep_resistance ? 2 : 5));
 		    nomovemsg = You_can_move_again;
 		    exercise(A_DEX, FALSE);
 		} else You("yawn.");
@@ -1682,24 +1687,28 @@ register struct obj *obj;
 	}
 }
 
-/* assumes booze comes first in potions... */
-short alchemy_table[POT_WATER-POT_BOOZE][POT_WATER-POT_BOOZE];
-
-STATIC_OVL void
+void
 alchemy_init()
 {
 	int p1, p2, i, j;
-	static boolean initialized = FALSE;
-	if (initialized) return;
 	for(p1 = POT_BOOZE, i = 0; p1 < POT_WATER; ++p1, ++i)
 		for(p2 = POT_BOOZE, j = 0; p2 < POT_WATER; ++p2, ++j)
-			if (p1 > p2)
-				alchemy_table[i][j] = alchemy_table[j][i];
-			else if (p1 == p2)
-				alchemy_table[i][j] = p1;
-			else
-				alchemy_table[i][j] = rn1(POT_WATER-POT_BOOZE, POT_BOOZE);
-	initialized = TRUE;
+		    if (p1 > p2)
+			alchemy_table[i][j] = alchemy_table[j][i];
+		    else if (p1 == p2)
+			alchemy_table[i][j] = p1;
+		    else {
+			/* smoky and milky potions are not allowed to prevent 
+			 * potential abuse */
+			int objtyp;
+			do {
+			    objtyp = rn1(
+				POT_WATER-POT_BOOZE, POT_BOOZE);
+			}while(!strcmp("smoky", OBJ_DESCR(objects[objtyp]))
+				|| !strcmp("milky", OBJ_DESCR(objects[objtyp]))
+				);
+			alchemy_table[i][j] = objtyp;
+		    }
 }
 
 STATIC_OVL short
@@ -1707,7 +1716,6 @@ mixtype(o1, o2)
 register struct obj *o1, *o2;
 /* returns the potion type when o1 is dipped in o2 */
 {
-	alchemy_init();
 	/* cut down on the number of cases below */
 	if (o1->oclass == POTION_CLASS &&
 	    (o2->otyp == POT_GAIN_LEVEL ||
@@ -1805,7 +1813,11 @@ register struct obj *o1, *o2;
 			}
 			break;
 	}
-	if (o1->oclass == POTION_CLASS && o2->oclass == POTION_CLASS)
+	if (o1->oclass == POTION_CLASS && o2->oclass == POTION_CLASS
+			&& ((uarmc && uarmc->otyp == LAB_COAT) ||
+				/* let's assume healers understand alchemy 
+				 * quite well */
+				Role_if(PM_HEALER)))
 		return alchemy_table[o1->otyp - POT_BOOZE][o2->otyp - POT_BOOZE];
 	/* MRKR: Extra alchemical effects. */
 
@@ -2932,9 +2944,7 @@ dodip()
 		 * potion of amnesia always produces potion of amnesia */
 		if (obj->otyp == POT_AMNESIA || potion->otyp == POT_AMNESIA)
 			obj->otyp = POT_AMNESIA;
-		else if ((mixture = mixtype(obj, potion)) != 0 &&
-				uarmc &&
-				uarmc->otyp == LAB_COAT) {
+		else if ((mixture = mixtype(obj, potion)) != 0) {
 			obj->otyp = mixture;
 		} else {
 		    switch (obj->odiluted ? 1 : 

@@ -287,6 +287,11 @@ moveloop()
 #endif
 			    }
 			}
+			long ch = (80 - (40 * night())) / 2 * 
+					 (Race_if(PM_HUMAN_WEREWOLF) ? 
+					  u.ulevel * u.ulevel :
+					  2);
+			ch = (ch > LARGEST_INT) ? LARGEST_INT : ch;
 			/* delayed change may not be valid anymore */
 			if ((change == 1 && !Polymorph) ||
 			    (change == 2 && u.ulycn == NON_PM))
@@ -294,10 +299,7 @@ moveloop()
 			if(Polymorph && !rn2(100))
 			    change = 1;
 			else if (u.ulycn >= LOW_PM && !Upolyd &&
-				 !rn2((80 - (40 * night())) / 2 * 
-					 (Race_if(PM_HUMAN_WEREWOLF) ? 
-					  u.ulevel * u.ulevel :
-					  2)))
+				 !rn2((int)ch))
 			    change = 2;
 			if (change && !Unchanging) {
 			    if (multi >= 0) {
@@ -563,6 +565,8 @@ newgame()
 				 * any artifacts */
 	u_init();
 	init_artifacts1();	/* must be after u_init() */
+
+	alchemy_init();
 
 #ifndef NO_SIGNAL
 	(void) signal(SIGINT, (SIG_RET_TYPE) done1);

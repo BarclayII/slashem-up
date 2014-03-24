@@ -83,7 +83,8 @@ MONSTER: 'v',"fire vortex",random,hostile
 MONSTER: 'v',"fire vortex",random,hostile
 MONSTER: 'c',"pyrolisk",random,hostile
 MONSTER: 'c',"pyrolisk",random,hostile
-
+MONSTER:'d',"hell hound pup",random,hostile
+MONSTER:'d',"hell hound pup",random,hostile
  
 #
 #       The "locate" level for the quest.
@@ -154,9 +155,10 @@ MONSTER:'N',"red naga",random,hostile
 MONSTER:'N',"red naga",random,hostile
 MONSTER:'d',"hell hound",random,hostile
 MONSTER:'d',"hell hound",random,hostile
-MONSTER:'f',"hellcat",random,hostile
-MONSTER:'f',"hellcat",random,hostile
-
+MONSTER:'o',"demon orc",random,hostile
+MONSTER:'o',"demon orc",random,hostile
+MONSTER:'H',"fire giant",random,hostile
+MONSTER:'H',"fire giant",random,hostile
 
 #
 #       The "goal" level for the quest.
@@ -218,7 +220,7 @@ TRAP:random,random
 ALTAR:(17,08),noalign,altar
 # Random monsters.
 MONSTER:'E',"Ragnaros",(17,08)
-MONSTER:'D',"red dragon",(17,09),hostile
+MONSTER:'D',"red dragon",(17,09),asleep,hostile
 MONSTER:'E',"fire elemental",random,hostile
 MONSTER:'E',"fire elemental",random,hostile
 MONSTER:'E',"fire elemental",random,hostile
@@ -231,6 +233,8 @@ MONSTER:'v',"steam vortex",random,hostile
 MONSTER:'v',"fire vortex",random,hostile
 MONSTER:'v',"fire vortex",random,hostile
 MONSTER:'v',"fire vortex",random,hostile
+MONSTER:':',"salamander",random,hostile
+MONSTER:':',"salamander",random,hostile
 MONSTER:':',"salamander",random,hostile
 MONSTER:':',"salamander",random,hostile
 MONSTER:'N',"red naga",random,hostile
@@ -284,6 +288,8 @@ MONSTER:'d',"hell hound",random,hostile
 MONSTER:'d',"hell hound",random,hostile
 MONSTER:'d',"hell hound pup",random,hostile
 MONSTER:'d',"hell hound pup",random,hostile
+MONSTER:'H',"fire giant",random,hostile
+MONSTER:'H',"fire giant",random,hostile
 #
 TRAP: random, random
 TRAP: random, random
@@ -312,7 +318,6 @@ MONSTER: 'E', "fire elemental", random
 MONSTER: 'E', "fire elemental", random
 MONSTER: 'E', "fire elemental", random
 MONSTER: 'E', "fire elemental", random
-MONSTER: 'E', "fire elemental", random
 MONSTER:'v',"steam vortex",random,hostile
 MONSTER:'v',"steam vortex",random,hostile
 MONSTER:'v',"steam vortex",random,hostile
@@ -323,10 +328,11 @@ MONSTER:'N',"red naga",random,hostile
 MONSTER:'N',"red naga",random,hostile
 MONSTER:'d',"hell hound",random,hostile
 MONSTER:'d',"hell hound",random,hostile
-MONSTER:'f',"hellcat",random,hostile
-MONSTER:'f',"hellcat",random,hostile
 MONSTER:'&',random,random,hostile
 MONSTER:'&',random,random,hostile
+MONSTER:'o',"demon orc",random,hostile
+MONSTER:'o',"demon orc",random,hostile
+MONSTER:'o',"demon orc",random,hostile
 #
 TRAP: "fire", random
 TRAP: "fire", random

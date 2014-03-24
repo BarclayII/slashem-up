@@ -1404,6 +1404,7 @@ int spell;
 	 * to cast a spell.  The penalty is not quite so bad for the
 	 * player's class-specific spell.
 	 */
+	/* [BarclayII] made Mirrorbright not hinder spell-casting */
 	if (uarms && weight(uarms) > (int) objects[SMALL_SHIELD].oc_weight &&
 			uarms->oartifact != ART_MIRRORBRIGHT) {
 		if (spellid(spell) == urole.spelspec) {

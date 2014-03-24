@@ -28,7 +28,7 @@
  *	the beginning of function srandom
  *	- moving sccsid after hack.h to allow precompiled headers, which
  *	means the defined()s would be ok again...
- *	- change fprintf(stderr, "x(%d)y\n", z) to impossible("x(%d)y", z)
+ *	- change fprintf(stderr, "x(%d)y\n", z) to panic("x(%d)y", z)
  *	- remove useless variable `j' from srandom()
  */
 
@@ -253,7 +253,11 @@ initstate( seed, arg_state, n )
 	else  state[ -1 ] = MAX_TYPES*(rptr - state) + rand_type;
 	if(  n  <  BREAK_1  )  {
 	    if(  n  <  BREAK_0  )  {
+#ifdef LEV_COMP
+		panic(
+#else
 		impossible(
+#endif
  "initstate: not enough state (%d bytes) with which to do jack; ignored.", n);
 		return (char *)0;
 	    }
@@ -333,7 +337,12 @@ setstate( arg_state )
 		break;
 
 	    default:
-  impossible("setstate: state info has been munged (%d); not changed.", type);
+#ifdef LEV_COMP
+		panic(
+#else
+		impossible(
+#endif
+		  "setstate: state info has been munged (%d); not changed.", type);
 		break;
 	}
 	state = &new_state[ 1 ];

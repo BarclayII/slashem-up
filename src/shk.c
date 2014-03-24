@@ -3408,6 +3408,56 @@ boolean shk_buying;
 			tmp = shk_buying ? 50 : 300;
 		break;
 	case ARMOR_CLASS:
+		if (!otype_known(obj->otyp)) {
+		    switch (obj->otyp) {
+			/* cloaks */
+			case CLOAK_OF_PROTECTION:
+			case POISONOUS_CLOAK:
+			case CLOAK_OF_INVISIBILITY:
+			case CLOAK_OF_MAGIC_RESISTANCE:
+			case CLOAK_OF_DISPLACEMENT:
+			    tmp = shk_buying ? 40 : 60;
+			    break;
+			/* robes */
+			case ROBE:
+			case ROBE_OF_PROTECTION:
+			case ROBE_OF_POWER:
+			case ROBE_OF_WEAKNESS:
+			    tmp = shk_buying ? 25 : 50;
+			    break;
+			/* conical hats */
+			case CORNUTHAUM:
+			case DUNCE_CAP:
+			    tmp = shk_buying ? 5 : 80;
+			    break;
+			/* random helmets */
+			case HELMET:
+			case HELM_OF_BRILLIANCE:
+			case HELM_OF_OPPOSITE_ALIGNMENT:
+			case HELM_OF_TELEPATHY:
+			    tmp = shk_buying ? 10 : 50;
+			    break;
+			/* gauntlets */
+			case LEATHER_GLOVES:
+			case GAUNTLETS_OF_FUMBLING:
+			case GAUNTLETS_OF_POWER:
+			case GAUNTLETS_OF_SWIMMING:
+			case GAUNTLETS_OF_DEXTERITY:
+			    tmp = shk_buying ? 10 : 50;
+			    break;
+			/* random boots */
+			case SPEED_BOOTS:
+			case WATER_WALKING_BOOTS:
+			case JUMPING_BOOTS:
+			case ELVEN_BOOTS:
+			case KICKING_BOOTS:
+			case FUMBLE_BOOTS:
+			case LEVITATION_BOOTS:
+			    tmp = shk_buying ? 8 : 50;
+			    break;
+		    }
+		}
+		/* fall thru */
 	case WEAPON_CLASS:
 		if (obj->spe > 0) tmp += 10L * (long) obj->spe;
 #ifdef FIREARMS
@@ -3416,6 +3466,35 @@ boolean shk_buying;
 #endif
 		break;
 	case TOOL_CLASS:
+		if (!otype_known(obj->otyp)) {
+		    switch (obj->otyp) {
+			/* bags */
+			case SACK:
+			case OILSKIN_SACK:
+			case BAG_OF_HOLDING:
+			case BAG_OF_TRICKS:
+			    tmp = shk_buying ? 2 : 100;
+			    break;
+			case WOODEN_FLUTE:
+			case MAGIC_FLUTE:
+			    tmp = shk_buying ? 12 : 250;
+			    break;
+			case TOOLED_HORN:
+			case FROST_HORN:
+			case FIRE_HORN:
+			case HORN_OF_PLENTY:
+			    tmp = shk_buying ? 15 : 300;
+			    break;
+			case WOODEN_HARP:
+			case MAGIC_HARP:
+			    tmp = shk_buying ? 50 : 400;
+			    break;
+			case LEATHER_DRUM:
+			case DRUM_OF_EARTHQUAKE:
+			    tmp = shk_buying ? 25 : 400;
+			    break;
+		    }
+		}
 		if (Is_candle(obj) &&
 			obj->age < 20L * (long)objects[obj->otyp].oc_cost)
 		    tmp /= 2L;
@@ -3429,7 +3508,7 @@ boolean shk_buying;
 		  else if (obj->age < 50) {
 		    tmp /= 2L;
 		  }
-		}
+		} 
 		break;
 	case SPBOOK_CLASS:
 		if (!otype_known(obj->otyp))
@@ -3442,6 +3521,19 @@ boolean shk_buying;
 	case RING_CLASS:
 		if (!otype_known(obj->otyp))
 			tmp = shk_buying ? 100 : 300;
+		break;
+	case GEM_CLASS:
+		if (!otype_known(obj->otyp))
+		    switch(obj->otyp) {
+			case FLINT:
+			case HEALTHSTONE:
+			case LUCKSTONE:
+			case LOADSTONE:
+			case TOUCHSTONE:
+			case WHETSTONE:
+			    tmp = shk_buying ? 5 : 60;
+			    break;
+		    }
 	}
 	return tmp;
 }

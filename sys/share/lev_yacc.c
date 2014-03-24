@@ -1848,6 +1848,13 @@ case 141:
 			if (yyvsp[0].map) {
 			    int token = get_object_id(yyvsp[0].map, yyvsp[-2].i);
 			    if (token == ERR)
+#ifdef RANDOM_DRAGON_SCALES
+				    if (!strcmp(yyvsp[0].map, "dragon scales"))
+					    tmpobj[nobj]->id = RND_DRAGON_SCALES;
+				    else if(!strcmp(yyvsp[0].map, "dragon scale mail"))
+					    tmpobj[nobj]->id = RND_DRAGON_SCALE_MAIL;
+				    else
+#endif
 				yywarning(
 				"Illegal object name!  Making random object.");
 			     else

@@ -1859,7 +1859,8 @@ struct obj *obj;
 	    /* don't recover strength lost from hunger */
 	    if (idx == A_STR && u.uhs >= WEAK) val_limit--;
 	    /* don't recover more than 3 points worth of any attribute */
-	    if (val_limit > ABASE(idx) + obj->spe) val_limit = ABASE(idx) + obj->spe;
+	    /* [BarclayII] removed this, since unicorn may fail anyway */
+	    /* if (val_limit > ABASE(idx) + 3) val_limit = ABASE(idx) + 3; */
 
 	    for (val = ABASE(idx); val < val_limit; val++)
 		attr_trouble(idx);
@@ -1897,13 +1898,10 @@ struct obj *obj;
 	 * ENCHANT  +0 or less  +1   +2   +3   +4   +5   +6 or more
 	 * CHANCE       30%     40%  50%  60%  70%  80%     90%
 	 */
-	/* [BarclayII] slightly modified the chance table:
-	 * ENCHANT  +0 or less  +1   +2   +3 or more
-	 * CHANCE       20%     30%  40%     50%
-	 */
+	/* [BarclayII] reduced the chances by 10% */
 	val_limit = (obj && obj->blessed) ? trouble_count : 1;
 	if (obj && obj->spe > 0)
-		chance = (obj->spe < 3) ? obj->spe+2 : 5;
+		chance = (obj->spe < 6) ? obj->spe+2 : 8;
 	else
 		chance = 2;
 #endif
@@ -1940,24 +1938,29 @@ struct obj *obj;
 		break;
 	    default:
 		if (idx >= 0 && idx < A_MAX) {
-		    ABASE(idx) += 1;
-		    did_attr++;
+    		/* [BarclayII] a chance to permanently not fix an attribute
+		 * problem, like SLASH'EM Extended. Higher enchantment has
+		 * higher chance.
+		 * ENCHANT  +0 or less	+1  +2	+3  +4	+5  +6  +7 or more 
+		 * CHANCE       30%     33% 36% 39% 42% 45% 48%    50%*/
+		    int ch = 30 + 3 * obj->spe;
+		    if (ch < 30) ch = 30;
+		    else if (ch > 50) ch = 50;
+		    if (rn2(100) > ch) {
+			ABASE(idx) += 1;
+			did_attr++;
+		    } else {
+			AMAX(idx) -= 1;
+			neg_attr++;
+		    }
 		} else
 		    panic("use_unicorn_horn: bad trouble? (%d)", idx);
 		break;
-	    } else {
-		/* [BarclayII] a chance to permanently not fix an attribute
-		 * problem. (like SLASH'EM Extended)*/
-		if (idx >= 0 && idx < A_MAX) {
-		    AMAX(idx) = ABASE(idx);
-		    neg_attr++;
-		}
 	    }
 	}
 
 	if (neg_attr)
-	    You("have a %s feeling for a moment, then it passes.",
-		    Hallucination ? "normal" : "strange");
+	    pline("This somehow makes you feel bad.");
 	else if (did_attr)
 	    pline("This makes you feel %s!",
 		  (did_prop + did_attr) == (trouble_count + unfixable_trbl) ?

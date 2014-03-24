@@ -339,10 +339,13 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 
 	    case AD_FIRE:
 		pline("You're enveloped in flames.");
-		if(Fire_resistance) {
+		if(FFire_resistance) {
 			shieldeff(u.ux, u.uy);
 			pline("But you resist the effects.");
 			dmg = 0;
+		}else if(PFire_resistance) {
+			shieldeff(u.ux, u.uy);
+			dmg = (dmg + 1) / 2;
 		}
 		if (Slimed) {
 			pline("The slime is burned away!");
@@ -352,10 +355,13 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 		break;
 	    case AD_COLD:
 		pline("You're covered in frost.");
-		if(Cold_resistance) {
+		if(FCold_resistance) {
 			shieldeff(u.ux, u.uy);
 			pline("But you resist the effects.");
 			dmg = 0;
+		}else if(PCold_resistance) {
+			shieldeff(u.ux, u.uy);
+			dmg = (dmg + 1) / 2;
 		}
 		break;
 	    case AD_MAGM:
@@ -423,13 +429,17 @@ int spellnum;
 	break;
     case MGC_CREATE_POOL:
 	if (Invisible && !perceives(mtmp->data) &&
-			(mtmp->mux != u.ux || mtmp->muy != u.uy)){
+			(mtmp->mux != u.ux || mtmp->muy != u.uy)
+			&& (levl[mtmp->mux][mtmp->muy].typ == ROOM || 
+			    levl[mtmp->mux][mtmp->muy].typ == CORR)){
 	    pline("A pool appears beneath a spot near you!");
 	    levl[mtmp->mux][mtmp->muy].typ = POOL;
 	    del_engr_at(mtmp->mux, mtmp->muy);
 	    water_damage(level.objects[mtmp->mux][mtmp->muy], FALSE, TRUE);
 	    spoteffects(FALSE);
-	} else if (Displaced && (mtmp->mux != u.ux || mtmp->muy != u.uy)) {
+	} else if (Displaced && (mtmp->mux != u.ux || mtmp->muy != u.uy)
+			&& (levl[mtmp->mux][mtmp->muy].typ == ROOM || 
+			    levl[mtmp->mux][mtmp->muy].typ == CORR)) {
 	    pline("A pool appears beneath your displaced image!");
 	    levl[mtmp->mux][mtmp->muy].typ = POOL;
 	    del_engr_at(mtmp->mux, mtmp->muy);
@@ -606,12 +616,16 @@ int spellnum;
 	break;
     case CLC_FIRE_PILLAR:
 	pline("A pillar of fire strikes all around you!");
-	if (Fire_resistance) {
+	if (FFire_resistance) {
 	    shieldeff(u.ux, u.uy);
 	    dmg = 0;
 	} else
 	    dmg = d(8, 6);
 	if (Half_spell_damage) dmg = (dmg + 1) / 2;
+	if (PFire_resistance) {
+		shieldeff(u.ux, u.uy);
+		dmg = (dmg + 1) / 2;
+	}
 	burn_away_slime();
 	(void) burnarmor(&youmonst);
 	destroy_item(SCROLL_CLASS, AD_FIRE);
@@ -639,6 +653,7 @@ int spellnum;
 	} else
 	    dmg = d(8, 6);
 	if (Half_spell_damage) dmg = (dmg + 1) / 2;
+	if (PShock_resistance) dmg = (dmg + 1) / 2;
 	destroy_item(WAND_CLASS, AD_ELEC);
 	destroy_item(RING_CLASS, AD_ELEC);
 	break;
