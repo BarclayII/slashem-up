@@ -458,16 +458,19 @@ static uchar dec_graphics[MAXPCHARS] = {
 	g_FILLER(S_sink),
 /*30*/	g_FILLER(S_toilet),
 	g_FILLER(S_fountain),	/* 0xdb, \E)3: meta-[, integral top half */
-	0xe0,	/* S_pool:	meta-\, diamond */
+	/* [BarclayII] made pool, lava, water solid block to made DECgraphics
+         * in GNOME/KDE tty prettier (imo)
+	 */
+	0xe1,	/* S_pool:	meta-a, solid block */
 	0xfe,	/* S_ice:	meta-~, centered dot */
-	0xe0,	/* S_lava:	meta-\, diamond */
+	0xe1,	/* S_lava:	meta-a, solid block */
 	0xfe,	/* S_vodbridge:	meta-~, centered dot */
 	0xfe,	/* S_hodbridge:	meta-~, centered dot */
 	g_FILLER(S_vcdbridge),
 	g_FILLER(S_hcdbridge),
 	g_FILLER(S_air),
 /*40*/	g_FILLER(S_cloud),
-	0xe0,	/* S_water:	meta-\, diamond */
+	0xe1,	/* S_water:	meta-a, solid block */
 	g_FILLER(S_arrow_trap),
 	g_FILLER(S_dart_trap),
 	g_FILLER(S_falling_rock_trap),
