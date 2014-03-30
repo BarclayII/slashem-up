@@ -1602,7 +1602,7 @@ DOOR:locked,(12,3)
 MONSTER:'L',random,random
 MONSTER:'L',random,random
 MONSTER:'L',random,random
-MONSTER:'V',"vampire mage",random
+MONSTER:'V',random,random
 MONSTER:'V',random,random
 MONSTER:'V',random,random
 MONSTER:'Z',"ghoul queen",random

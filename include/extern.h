@@ -2519,6 +2519,7 @@ E int NDECL(pick_nasty);
 E int FDECL(nasty, (struct monst*));
 E void NDECL(resurrect);
 E void NDECL(intervene);
+E int NDECL(demigod_delay);
 E void NDECL(wizdead);
 E void FDECL(cuss, (struct monst *));
 

@@ -528,6 +528,9 @@ intervene()
 {
 	int which = Is_astralevel(&u.uz) ? rnd(4) : rn2(6);
 	/* cases 0 and 5 don't apply on the Astral level */
+	/* Wizard won't annoy you on sanctum level, so you have to kill Cthulhu
+	 * or high priest of Moloch at least once. */
+	if (Is_sanctum(&u.uz)) return;
 	switch (which) {
 	    case 0:
 	    case 1:	You_feel("vaguely nervous.");
@@ -544,6 +547,12 @@ intervene()
 	    case 5:	resurrect();
 			break;
 	}
+}
+
+int
+demigod_delay()
+{
+	return (In_endgame(&u.uz) ? 0 : depth(&u.uz) * 2);
 }
 
 void

@@ -1299,11 +1299,9 @@ struct mkroom	*croom;
 
 #ifdef RANDOM_DRAGON_SCALES
 	if (o->id == RND_DRAGON_SCALES)
-		o->id = rn1(YELLOW_DRAGON_SCALES - GRAY_DRAGON_SCALES
-				       	+ 1, GRAY_DRAGON_SCALES);
+		o->id = rnd_class(GRAY_DRAGON_SCALES, YELLOW_DRAGON_SCALES);
 	if (o->id == RND_DRAGON_SCALE_MAIL)
-		o->id = rn1(YELLOW_DRAGON_SCALE_MAIL - GRAY_DRAGON_SCALE_MAIL 
-				+ 1, GRAY_DRAGON_SCALE_MAIL);
+		o->id = rnd_class(GRAY_DRAGON_SCALE_MAIL, YELLOW_DRAGON_SCALE_MAIL);
 #endif
 
 	if (!c)

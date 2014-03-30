@@ -80,15 +80,17 @@ BRANCH: 	"The Temple of Moloch" @ (32, 4)
 BRANCH: 	"The Giant Caverns" @ (32, 4)
 #   And the levels...
 LEVEL:		"nymph" "N" @ (23, 2) 45
-RNDLEVEL:	"bigrm" "B" @ (20, 7) 50 5
-RNDLEVEL:	"bigrm" "C" @ (20, 7) 50 5
-RNDLEVEL:	"bigrm" "D" @ (20, 7) 50 5
-RNDLEVEL:	"bigrm" "E" @ (20, 7) 50 5
 #   Storage room (treasure) on levels 19-26, 66% of the time
 #   "Unused 'cause they suck"?
 RNDLEVEL:	"stor" "S" @ (19, 8) 66 3
 #   Rounding out the bottom levels
 LEVEL:		"guild" "G" @ (26, 6) 50
+
+# Big rooms...
+RNDLEVEL:	"bigrm" "none" @ (20, 15) 10 5
+RNDLEVEL:	"bigrm" "none" @ (20, 15) 10 5
+RNDLEVEL:	"bigrm" "none" @ (20, 15) 10 5
+RNDLEVEL:	"bigrm" "none" @ (20, 15) 10 5
 
 
 # The famous Fort Ludios...
