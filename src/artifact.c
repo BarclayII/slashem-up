@@ -266,11 +266,14 @@ make_artif: if (by_align) otmp = mksobj((int)a->otyp, TRUE, FALSE);
 	     * at least I didn't find any problems with it currently... */
 make_artif: if (by_align) {
 		    otmp = mksobj((int)a->otyp, TRUE, FALSE);
+	    }
 		    place_object(otmp, u.ux, u.uy);
 		    otmp = oname(otmp, a->name);
 		    obj_extract_self(otmp);
+		    /*
 	    }else
 		    otmp = oname(otmp, a->name);
+		    */
 	    otmp->oartifact = m;
 	    artiexist[m] = TRUE;
 	} else {

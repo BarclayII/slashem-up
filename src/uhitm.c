@@ -717,6 +717,7 @@ int thrown;
 	boolean get_dmg_bonus = TRUE;
 	boolean ispoisoned = FALSE, needpoismsg = FALSE, poiskilled = FALSE;
 	boolean silvermsg = FALSE, silverobj = FALSE;
+	boolean pick_hit_stone = (made_of_rock(mon->data) && (obj && is_pick(obj)));
 	boolean valid_weapon_attack = FALSE;
 	boolean unarmed = !uwep && !uarm && !uarms;
 #ifdef STEED
@@ -768,6 +769,8 @@ int thrown;
 
 	wakeup(mon);
 	if(!thrown && no_obj) {      /* attack with bare hands */
+	    /* gloves will do */
+	    objenchant = (uarmg && uarmg->spe >= 0) ? uarmg->spe : 0;
 	    if (Role_if(PM_MONK) && !Upolyd && u.ulevel/4 > objenchant)
 		objenchant = u.ulevel/4;
 	    noeffect = objenchant < canhitmon;
@@ -894,7 +897,8 @@ int thrown;
 	    if (is_poisonable(obj) && obj->opoisoned)
 		ispoisoned = TRUE;
 
-	    noeffect = objenchant < canhitmon && !ispoisoned;
+	    /* unenchanted picks still harm statue gargoyles */
+	    noeffect = objenchant < canhitmon && !ispoisoned && !pick_hit_stone;
 
 	    Strcpy(saved_oname, cxname(obj));
 	    if(obj->oclass == WEAPON_CLASS || is_weptool(obj) ||

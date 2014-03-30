@@ -488,7 +488,8 @@ moverock()
 		    if (!Blind) viz_array[ry][rx] |= IN_SIGHT;
 		    if (!flooreffects(otmp, rx, ry, "fall")) {
 			place_object(otmp, rx, ry);
-		    }
+		    } else if (Blind)
+			You("no longer feel %s.", the(xname(otmp)));
 		    if (mtmp && !Blind) newsym(rx, ry);
 		    continue;
 		case HOLE:
@@ -2368,8 +2369,11 @@ dopickup()
 		 * not pits, because there is an elevation discrepancy with stuff
 		 * in pits.
 		 */
+		/* [BarclayII] phasing or flying players can phase/fly into
+		 * the pit */
 		if ((traphere->ttyp == PIT || traphere->ttyp == SPIKED_PIT) &&
-		     (!u.utrap || (u.utrap && u.utraptype != TT_PIT))) {
+		     (!u.utrap || (u.utrap && u.utraptype != TT_PIT)) &&
+		     !Passes_walls && !Flying) {
 			You("cannot reach the bottom of the pit.");
 			return(0);
 		}

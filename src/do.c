@@ -176,17 +176,19 @@ const char *verb;
 		    }
 		}
 		if (*verb) {
-			if (Blind) {
+			if (Blind && couldsee(x, y)) {
 				if ((x == u.ux) && (y == u.uy))
 					You_hear("a CRASH! beneath you.");
 				else
-					You_hear("the boulder %s.", verb);
+					You_hear("a CRASH!");
 			} else if (cansee(x, y)) {
 				pline_The("boulder %s%s.",
 				    t->tseen ? "" : "triggers and ",
 				    t->ttyp == TRAPDOOR ? "plugs a trap door" :
 				    t->ttyp == HOLE ? "plugs a hole" :
 				    "fills a pit");
+			} else {
+				verbalize("Kerplunk!");
 			}
 		}
 		deltrap(t);

@@ -720,8 +720,20 @@ register int after;	/* this is extra fast monster movement */
 	/* maybe we tamed him while being swallowed --jgm */
 	if (!udist) return(0);
 
-	/* Intelligent pets may rebel (apart from minions, spell beings) */
+	/* Intelligent pets (apart from spell beings) may rebel.
+	 * Minions will rebel iff the hero converts.
+	 */
 	if (!rn2(850) && betrayed(mtmp)) return 1;
+	if (mtmp->isminion && EMIN(mtmp)->min_align != u.ualign.type) {
+	    if (canseemon(mtmp))
+		pline_The("%s senses your betrayal, and gets angry!",
+			Monnam(mtmp));
+	    else
+		pline("You feel uneasy about %s.", mon_nam(mtmp));
+	    mtmp->mtame = 0;
+	    mtmp->mpeaceful = 0;
+	    return 1;
+	}
 
 	nix = omx;	/* set before newdogpos */
 	niy = omy;
@@ -808,7 +820,12 @@ register int after;	/* this is extra fast monster movement */
 		if (m_carrying(mtmp, SKELETON_KEY)) allowflags |= BUSTDOOR;
 	}
 	if (is_giant(mtmp->data)) allowflags |= BUSTDOOR;
-	if (tunnels(mtmp->data)) allowflags |= ALLOW_DIG;
+	if (tunnels(mtmp->data)
+#ifdef REINCARNATION
+			&& !Is_rogue_level(&u.uz)
+#endif
+			)
+	       allowflags |= ALLOW_DIG;
 	cnt = mfndpos(mtmp, poss, info, allowflags);
 #ifdef DEBUG
 	debugpline("%d positions found with allow: %s", cnt,
