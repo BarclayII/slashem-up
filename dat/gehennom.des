@@ -1009,6 +1009,7 @@ MONSTER:'&',"erinys",(10,04),hostile
 MONSTER:'&',"marilith",(15,04),hostile
 MONSTER:'&',"nalfeshnee",(27,08),hostile
 # Moloch's horde
+MONSTER:'&',"Cthulhu",(18,08),hostile
 MONSTER:'@',"aligned priest",(20,03),noalign,hostile
 MONSTER:'@',"aligned priest",(15,04),noalign,hostile
 MONSTER:'@',"aligned priest",(11,05),noalign,hostile

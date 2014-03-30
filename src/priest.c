@@ -212,10 +212,10 @@ boolean sanctum;   /* is it the seat of the high priest? */
 		set_malign(priest); /* mpeaceful may have changed */
 
 		/* now his/her goodies... */
-		if(sanctum && EPRI(priest)->shralign == A_NONE &&
+		/*if(sanctum && EPRI(priest)->shralign == A_NONE &&
 		     on_level(&sanctum_level, &u.uz)) {
 			(void) mongets(priest, AMULET_OF_YENDOR);
-		}
+		}*/
 		/* 2 to 4 spellbooks */
 		for (cnt = rn1(3,2); cnt > 0; --cnt) {
 		    (void) mpickobj(priest, mkobj(SPBOOK_CLASS, FALSE));
