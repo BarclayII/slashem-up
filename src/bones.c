@@ -118,6 +118,8 @@ boolean restore;
 			} else if (otmp->oartifact == ART_KEY_OF_LAW ||
 				   otmp->oartifact == ART_KEY_OF_NEUTRALITY ||
 				   otmp->oartifact == ART_KEY_OF_CHAOS ||
+				   otmp->oartifact == ART_CLAVIS_SOLIS ||
+				   otmp->oartifact == ART_CLAVIS_LUNAE ||
 				   otmp->oartifact == ART_NIGHTHORN ||
 				   otmp->oartifact == ART_EYE_OF_THE_BEHOLDER ||
 				   otmp->oartifact == ART_HAND_OF_VECNA ||

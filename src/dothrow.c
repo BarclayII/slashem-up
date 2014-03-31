@@ -1875,6 +1875,20 @@ boolean from_invent;
 			}
 			/* monster breathing isn't handled... [yet?] */
 			break;
+#ifdef TOURIST
+		case EXPENSIVE_CAMERA: {
+		    struct monst *mtmp;
+
+	    	    if (!rn2(3) && (mtmp = makemon(&mons[PM_HOMUNCULUS],x,y, NO_MM_FLAGS)) != 0) {
+			pline("%s is released!", !canspotmon(mtmp) ?
+			    Something : Hallucination ?
+			    An(rndmonnam()) : "The picture-painting demon");
+			mtmp->mpeaceful = !obj->cursed;
+			set_malign(mtmp);
+		    }
+		    break;
+		}
+#endif
 		case EGG:
 			/* breaking your own eggs is bad luck */
 			if (hero_caused && obj->spe && obj->corpsenm >= LOW_PM)

@@ -521,7 +521,7 @@ struct mkroom	*sroom;
 /* make sure black marketeer can wield Thiefbane */
 	  shk->data->maligntyp = -1;
 /* black marketeer's equipment */
-	  otmp = mksobj(LONG_SWORD, FALSE, FALSE);
+	  otmp = mksobj(BROADSWORD, FALSE, FALSE);
 	  otmp = oname(otmp, artiname(ART_THIEFBANE));
 	  mpickobj(shk, otmp);
 	  if (otmp->spe < 5) otmp->spe += rnd(5);

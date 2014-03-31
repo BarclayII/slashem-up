@@ -1135,11 +1135,22 @@ int thrown;
 			tmp = 1;
 			break;
 #ifdef TOURIST
-		    case EXPENSIVE_CAMERA:
+		    case EXPENSIVE_CAMERA: {
+			struct monst *mtmp;
 			You("succeed in destroying %s camera.  Congratulations!",
 			    shk_your(yourbuf, obj));
+			if (!rn2(3) && (mtmp = makemon(&mons[PM_HOMUNCULUS],
+				u.ux, u.uy, NO_MM_FLAGS)) != 0) {
+			    pline("%s is released!", !canspotmon(mtmp) ?
+				Something : Hallucination ?
+				An(rndmonnam()) : "The picture-painting demon");
+		            mtmp->mpeaceful = !obj->cursed;
+		            set_malign(mtmp);
+			}
+
 			useup(obj);
 			return(TRUE);
+			}
 			/*NOTREACHED*/
 			break;
 #endif
@@ -2778,7 +2789,10 @@ use_weapon:
 				    !u.uswallow)
 				dhit &= ~HIT_UWEP; /* missed */
 				
-			    if (tmp1 > dice(UWEP_ROLL)) exercise(A_DEX, TRUE);
+			    if (tmp1 > dice(UWEP_ROLL)) {
+				exercise(A_DEX, TRUE);
+				exer_racial(uwep, 1);
+			    }
 #ifdef DEBUG
 			    pline("(%i/20)", tmp1);
 #endif
@@ -2794,8 +2808,10 @@ use_weapon:
 				    !u.uswallow)
 				dhit &= ~HIT_USWAPWEP;
 
-			    if (tmp2 > dice(USWAPWEP_ROLL))
+			    if (tmp2 > dice(USWAPWEP_ROLL)) {
 				exercise(A_DEX, TRUE);
+				exer_racial(uswapwep, 2);
+			    }
 #ifdef DEBUG
 			    pline("((%i/20))", tmp2);
 #endif

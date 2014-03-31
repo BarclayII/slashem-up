@@ -2453,6 +2453,26 @@ struct obj *tstone;
 	return;
     }
 
+    /* flint and steel can create sparks */
+    if (tstone->otyp == FLINT && objects[obj->otyp].oc_material == IRON) {
+	    struct monst *mtmp;
+	    if (Blind)
+		    verbalize("Spark!");
+	    else if (Hallucination)
+		    pline("Wow! Fireworks!");
+	    else
+		    You("see sparks!");
+	    makeknown(FLINT);
+	    for (mtmp = fmon; mtmp; mtmp = mtmp->nmon)
+		    if (!DEADMONSTER(mtmp) && 
+			monnear(mtmp, u.ux, u.uy) && rn2(10))
+			    monflee(mtmp, d(2, (tstone->blessed) ? 10 : 5), 
+					FALSE, TRUE);
+	    if (tstone->cursed && !rn2(3) && drain_item(obj))
+		    Your("%s less effective.", aobjnam(obj, "seem"));
+	    return;
+    }
+
     if (Blind) {
 	pline(scritch);
 	return;
@@ -2968,7 +2988,7 @@ use_pole (obj)
 	cc.x = u.ux;
 	cc.y = u.uy;
 	if (getpos(&cc, TRUE, "the spot to hit") < 0)
-	    return 0;	/* user pressed ESC */
+	    return res;	/* user pressed ESC */
 
 #ifdef WEAPON_SKILLS
 	/* Calculate range */

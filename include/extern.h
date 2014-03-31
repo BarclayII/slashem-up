@@ -98,6 +98,7 @@ E void FDECL(gainstr, (struct obj *,int));
 E void FDECL(losestr, (int));
 E void NDECL(restore_attrib);
 E void FDECL(exercise, (int,BOOLEAN_P));
+E void FDECL(exer_racial, (struct obj *,int));
 E void NDECL(exerchk);
 E void NDECL(reset_attribute_clock);
 E void FDECL(init_attr, (int));
