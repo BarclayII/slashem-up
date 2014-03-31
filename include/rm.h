@@ -341,7 +341,8 @@ struct rm {
 	Bitfield(mem_obj,10);	/* Remembered object/corpse */
 	Bitfield(mem_corpse,1);	/* Set if mem_obj refers to a corpse */
 	Bitfield(mem_invis,1);	/* Set if invisible monster remembered */
-	Bitfield(mem_spare,9);
+	Bitfield(mem_pile,1);	/* Set if perceived object pile */
+	Bitfield(mem_spare,8);
 #else
 	int glyph;		/* what the hero thinks is there */
 #endif

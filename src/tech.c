@@ -636,7 +636,9 @@ int tech_no;
 		break;
 	    case T_SLEEP_PUNCH:
 		if (Upolyd || uwep) {
-		    You("must be bare-handed to use your sleeping punch.");
+		    You("must be %s to use your sleeping punch.",
+				Upolyd ? "in your original form" :
+				"bare-handed");
 		    return 0;
 		}
 		Your("hands are surrounded with a dark blue aura.");

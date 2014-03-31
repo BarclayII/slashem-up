@@ -70,6 +70,9 @@ unsigned *ospecial;
 #endif
 	uchar ch;
 	unsigned special = 0;
+	boolean obj_pile = (offset != BOULDER &&
+		level.objects[x][y] &&
+		level.objects[x][y]->nexthere);
 
     /*
      *  Map the glyph back to a character and color.
@@ -145,10 +148,14 @@ unsigned *ospecial;
 	} else
 #endif
 	    obj_color(offset);
-	if (offset != BOULDER &&
-		level.objects[x][y] &&
-		level.objects[x][y]->nexthere)
+	/* inelegant kludge... */
+	if (!obj_pile && cansee(x,y))
+		levl[x][y].mem_pile = 0;
+	if ((obj_pile && cansee(x,y)) || levl[x][y].mem_pile) {
 		special |= MG_OBJPILE;
+		if (obj_pile && cansee(x,y))
+			levl[x][y].mem_pile = 1;
+	}
     } else if ((offset = (glyph - GLYPH_RIDDEN_OFF)) >= 0) {	/* mon ridden */
 	ch = monsyms[(int)mons[offset].mlet];
 #ifdef ROGUE_COLOR
@@ -171,10 +178,13 @@ unsigned *ospecial;
 #endif
 	    mon_color(offset);
 	    special |= MG_CORPSE;
-	    if (offset != BOULDER &&
-		level.objects[x][y] &&
-		level.objects[x][y]->nexthere)
+	if (!obj_pile && cansee(x,y))
+		levl[x][y].mem_pile = 0;
+	if ((obj_pile && cansee(x,y)) || levl[x][y].mem_pile) {
 		special |= MG_OBJPILE;
+		if (obj_pile && cansee(x,y))
+			levl[x][y].mem_pile = 1;
+	}
     } else if ((offset = (glyph - GLYPH_DETECT_OFF)) >= 0) {	/* mon detect */
 	ch = monsyms[(int)mons[offset].mlet];
 #ifdef ROGUE_COLOR

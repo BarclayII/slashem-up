@@ -519,9 +519,11 @@ int chance;
 				i = 2;
 			break;
 		case PM_GNOME:
-			if (is_gnomish_obj(otmp))
+			if (!is_gnomish_obj(otmp))
 				return;
 			break;
+		default:
+			return;
 	}
 	if (!rn2(chance))
 		exercise(exer_attr[i], TRUE);
