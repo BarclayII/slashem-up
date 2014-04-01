@@ -1145,6 +1145,8 @@ int thrown;
 				Something : Hallucination ?
 				An(rndmonnam()) : "The picture-painting demon");
 		            mtmp->mpeaceful = !obj->cursed;
+			    /*if (obj->blessed && rn2(2)) 
+				    tamedog(mtmp, (struct obj *)0);*/
 		            set_malign(mtmp);
 			}
 

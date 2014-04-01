@@ -907,25 +907,16 @@ int x;
 		    tmp = 18;
 		if (uarmh && uarmh->otyp == FEDORA) tmp += 1;
 		if (uarmc) {
-			switch(Race_switch) {
-				case PM_VAMPIRE:
-					if (!strcmp(OBJ_DESCR(objects[uarmc->otyp]), "opera cloak"))
-						tmp += 1;
-					break;
-				case PM_ORC:
-					if (uarmc->otyp == ORCISH_CLOAK)
-						tmp += 1;
-					break;
-				case PM_DWARF:
-					if (uarmc->otyp == DWARVISH_CLOAK)
-						tmp += 1;
-					break;
-				case PM_ELF:
-				case PM_DROW:
-					if (uarmc->otyp == ELVEN_CLOAK)
-						tmp += 1;
-					break;
-			}
+			if ((is_vampire(youmonst.data) &&
+			     !strcmp(OBJ_DESCR(objects[uarmc->otyp]), 
+				     "opera cloak")) ||
+			    (is_orc(youmonst.data) &&
+			     uarmc->otyp == ORCISH_CLOAK) ||
+			    (is_dwarf(youmonst.data) &&
+			     uarmc->otyp == DWARVISH_CLOAK) ||
+			    (is_elf(youmonst.data) &&
+			     uarmc->otyp == ELVEN_CLOAK))
+				tmp += 1;
 		}
 		return((tmp >= 25) ? 25 : (tmp <= 3) ? 3 : tmp);
 	} else if (x == A_INT || x == A_WIS) {

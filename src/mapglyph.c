@@ -148,13 +148,21 @@ unsigned *ospecial;
 	} else
 #endif
 	    obj_color(offset);
+#ifdef DISPLAY_LAYERS
 	/* inelegant kludge... */
 	if (!obj_pile && cansee(x,y))
 		levl[x][y].mem_pile = 0;
-	if ((obj_pile && cansee(x,y)) || levl[x][y].mem_pile) {
+#endif
+	if ((obj_pile && cansee(x,y)) 
+#ifdef DISPLAY_LAYERS
+			|| levl[x][y].mem_pile
+#endif
+			) {
 		special |= MG_OBJPILE;
+#ifdef DISPLAY_LAYERS
 		if (obj_pile && cansee(x,y))
 			levl[x][y].mem_pile = 1;
+#endif
 	}
     } else if ((offset = (glyph - GLYPH_RIDDEN_OFF)) >= 0) {	/* mon ridden */
 	ch = monsyms[(int)mons[offset].mlet];
@@ -178,12 +186,20 @@ unsigned *ospecial;
 #endif
 	    mon_color(offset);
 	    special |= MG_CORPSE;
+#ifdef DISPLAY_LAYERS
 	if (!obj_pile && cansee(x,y))
 		levl[x][y].mem_pile = 0;
-	if ((obj_pile && cansee(x,y)) || levl[x][y].mem_pile) {
+#endif
+	if ((obj_pile && cansee(x,y)) 
+#ifdef DISPLAY_LAYERS
+			|| levl[x][y].mem_pile
+#endif
+			) {
 		special |= MG_OBJPILE;
+#ifdef DISPLAY_LAYERS
 		if (obj_pile && cansee(x,y))
 			levl[x][y].mem_pile = 1;
+#endif
 	}
     } else if ((offset = (glyph - GLYPH_DETECT_OFF)) >= 0) {	/* mon detect */
 	ch = monsyms[(int)mons[offset].mlet];
