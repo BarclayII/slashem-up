@@ -137,7 +137,7 @@ SPEC_LEVS = asmodeus.lev baalz.lev bigrm-?.lev castle.lev fakewiz?.lev \
 	grund-?.lev demogorg.lev dispater.lev dragons.lev geryon.lev \
 	guild.lev kobold-?.lev lich.lev mall-?.lev mall.lev mineking.lev \
 	mtemple.lev nymph.lev rats.lev sea.lev spiders.lev stor-?.lev \
-	tomb.lev yeenoghu.lev frnknstn.lev nightmar.lev
+	tomb.lev yeenoghu.lev frnknstn.lev nightmar.lev heck-?-?.lev
 QUEST_LEVS = ???-goal.lev ???-fil?.lev ???-loca.lev ???-strt.lev
 
 SHARE_DATNODLB = $(CNF_SHARE_DATND)
