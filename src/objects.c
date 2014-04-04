@@ -98,7 +98,7 @@ WEAPON("orcish dagger", "crude dagger",
 WEAPON("dagger", (char *)0,
 	1, 1, 0, 25, 10,  4,  4,  3, 2, P,   P_DAGGER, IRON, HI_METAL),
 WEAPON("athame", (char *)0,
-	1, 1, 0,  0, 10,  4,  4,  3, 2, S,   P_DAGGER, IRON, HI_METAL),
+	1, 1, 0,  0, 10,  4,  4,  3, 2, P|S, P_DAGGER, IRON, HI_METAL),
 WEAPON("silver dagger", (char *)0,
 	1, 1, 0,  2, 12, 40,  4,  3, 2, P,   P_DAGGER, SILVER, HI_SILVER),
 	/* STEPHEN WHITE'S NEW CODE */
@@ -125,7 +125,7 @@ WEAPON("knife", (char *)0,
 WEAPON("stiletto", (char *)0,
 	1, 1, 0,  5,  5,  4,  3,  2, 0, P|S, P_KNIFE, IRON, HI_METAL),
 WEAPON("scalpel", (char *)0,
-	1, 1, 0,  0,  5,  4,  3,  3, 2, S,   P_KNIFE, METAL, HI_METAL),
+	1, 1, 0,  0,  5,  4,  3,  3, 2, P|S, P_KNIFE, METAL, HI_METAL),
 WEAPON("crysknife", (char *)0,
 	1, 0, 0,  0, 20,100, 20, 30, 3, P,   P_KNIFE, MINERAL, CLR_WHITE),
 	/* [Tom] increased crysknife damage from d10/d10 */
@@ -415,6 +415,8 @@ WEAPON("bullwhip", (char *)0,
 WEAPON("rubber hose", (char *)0,
 	1, 0, 0,  0, 20,  3,  4,  3, 0, B,   P_WHIP, PLASTIC, CLR_BROWN),
 #endif
+WEAPON("hunting crop", (char *)0,
+	1, 0, 0,  0, 20,  6,  2,  2, 1, 0,   P_WHIP, IRON, HI_METAL),
 
 /* With shuffled appearances... */
 #undef P
