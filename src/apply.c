@@ -3586,6 +3586,18 @@ doapply()
 	case BULLWHIP:
 		res = use_whip(obj);
 		break;
+#ifdef STEED
+	case HUNTING_CROP:
+		if (u.usteed) {
+		    You("whip %s!", mon_nam(u.usteed));
+		    kick_steed();
+		    res = 1;
+		} else {
+		    You("don't know who you should whip.");
+		    goto xit;
+		}   
+		break;
+#endif
 	case GRAPPLING_HOOK:
 		res = use_grapple(obj);
 		break;
