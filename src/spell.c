@@ -1061,15 +1061,17 @@ boolean atme;
 		if (!jump(max(role_skill,1)))
 			pline(nothing_happens);
 		break;
+		/* [BarclayII] since I introduced half resistance from L,
+		 * the elemental resistance spell and tech should be revised */
 	case SPE_RESIST_POISON:
-		if(!(HPoison_resistance & INTRINSIC)) {
+		if(!(HPoison_resistance & FROMSTART)) {
 			You("feel healthy ..... for the moment at least.");
 			incr_itimeout(&HPoison_resistance, rn1(1000, 500) +
 				spell_damage_bonus(spellid(spell))*100);
 		} else pline(nothing_happens);	/* Already have as intrinsic */
 		break;
 	case SPE_RESIST_SLEEP:
-		if(!(HSleep_resistance & INTRINSIC)) {
+		if(!(HSleep_resistance & FROMSTART)) {
 			if (Hallucination)
 				pline("Too much coffee!");
 			else
@@ -1079,14 +1081,14 @@ boolean atme;
 		} else pline(nothing_happens);	/* Already have as intrinsic */
 		break;
 	case SPE_ENDURE_COLD:
-		if(!(HCold_resistance & INTRINSIC)) {
+		if(!(HCold_resistance & FROMSTART)) {
 			You("feel warmer.");
 			incr_itimeout(&HCold_resistance, rn1(1000, 500) +
 				spell_damage_bonus(spellid(spell))*100);
 		} else pline(nothing_happens);	/* Already have as intrinsic */
 		break;
 	case SPE_ENDURE_HEAT:
-		if(!(HFire_resistance & INTRINSIC)) {
+		if(!(HFire_resistance & FROMSTART)) {
 			if (Hallucination)
 				pline("Excellent! You feel, like, totally cool!");
 			else
@@ -1096,7 +1098,7 @@ boolean atme;
 		} else pline(nothing_happens);	/* Already have as intrinsic */
 		break;
 	case SPE_INSULATE:
-		if(!(HShock_resistance & INTRINSIC)) {
+		if(!(HShock_resistance & FROMSTART)) {
 			if (Hallucination)
 				pline("Bummer! You've been grounded!");
 			else

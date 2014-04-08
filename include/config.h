@@ -224,7 +224,7 @@
 # define COMPRESS_EXTENSION ".Z"	     /* compress's extension */
 
 /* An example of one alternative you might want to use: */
-/* # define COMPRESS "/usr/local/bin/gzip" */   /* FSF gzip compression */
+/* # define COMPRESS "/usr/bin/gzip" */    /* FSF gzip compression */
 /* # define COMPRESS_EXTENSION ".gz" */	     /* normal gzip extension */
 
 /* # define COMPRESS "/usr/bin/bzip2"	*//* bzip2 compression */

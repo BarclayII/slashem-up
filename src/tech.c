@@ -1148,8 +1148,9 @@ int tech_no;
 		t_timeout = rn1(1000,500);
             	break;
 	    case T_WARD_FIRE:
+		/* [BarclayII] see spell.c for warding tech revision note */
 		/* Already have it intrinsically? */
-		if (HFire_resistance & FROMOUTSIDE) return (0);
+		if (HFire_resistance & FROMSTART) return (0);
 
 		You("invoke the ward against flame!");
 		HFire_resistance += rn1(100,50);
@@ -1159,7 +1160,7 @@ int tech_no;
 	    	break;
 	    case T_WARD_COLD:
 		/* Already have it intrinsically? */
-		if (HCold_resistance & FROMOUTSIDE) return (0);
+		if (HCold_resistance & FROMSTART) return (0);
 
 		You("invoke the ward against ice!");
 		HCold_resistance += rn1(100,50);
@@ -1169,7 +1170,7 @@ int tech_no;
 	    	break;
 	    case T_WARD_ELEC:
 		/* Already have it intrinsically? */
-		if (HShock_resistance & FROMOUTSIDE) return (0);
+		if (HShock_resistance & FROMSTART) return (0);
 
 		You("invoke the ward against lightning!");
 		HShock_resistance += rn1(100,50);

@@ -278,27 +278,27 @@ nh_timeout()
 							Fast ? " a bit" : "");
 			break;
 		case FIRE_RES:
-			if (!Fire_resistance)
+			if (!FFire_resistance)
 				You("feel a little warmer.");
 			break;
 		case COLD_RES:
-			if (!Cold_resistance)
+			if (!FCold_resistance)
 				You("feel a little cooler.");
 			break;
 		case SLEEP_RES:
-			if (!Sleep_resistance)
+			if (!FSleep_resistance)
 				You("feel a little sleepy.");
 			break;
 		case SHOCK_RES:
-			if (!Shock_resistance)
+			if (!FShock_resistance)
 				You("feel a little static cling.");
 			break;
 		case POISON_RES:
-			if (!Poison_resistance)
+			if (!FPoison_resistance)
 				You("feel a little less healthy.");
 			break;
 		case DISINT_RES:
-			if (!Disint_resistance)
+			if (!FDisint_resistance)
 				You("feel a little less firm.");
 			break;
 		case TELEPORT:

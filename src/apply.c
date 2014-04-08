@@ -2464,8 +2464,9 @@ struct obj *tstone;
 		    You("see sparks!");
 	    makeknown(FLINT);
 	    for (mtmp = fmon; mtmp; mtmp = mtmp->nmon)
-		    if (!DEADMONSTER(mtmp) && 
-			monnear(mtmp, u.ux, u.uy) && rn2(10))
+		    if (!DEADMONSTER(mtmp) && mtmp->mcansee && 
+			monnear(mtmp, u.ux, u.uy) && 
+			(rn2(30) > mtmp->data->mlevel))
 			    monflee(mtmp, d(2, (tstone->blessed) ? 10 : 5), 
 					FALSE, TRUE);
 	    if (tstone->cursed && !rn2(3) && drain_item(obj))
