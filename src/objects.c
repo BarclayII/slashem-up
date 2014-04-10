@@ -1118,8 +1118,11 @@ SPELL("enchant weapon",  "dull",        P_ENCHANTMENT_SPELL,  5,  8, 7, 1, NODIR
 SPELL("enchant armor",   "thin",        P_ENCHANTMENT_SPELL,  5,  8, 7, 1, NODIR,     CLR_WHITE),
 /* Protection spells */
 SPELL("protection",      "wide",        P_PROTECTION_SPELL,  5,  3, 1, 1, NODIR,     HI_PAPER),
-SPELL("resist poison",   "big",         P_PROTECTION_SPELL, 20,  2, 1, 1, NODIR,     CLR_GRAY),
-SPELL("resist sleep",    "fuzzy",       P_PROTECTION_SPELL, 20,  2, 1, 1, NODIR,     CLR_BROWN),
+/* [BarclayII] made resist poison and resist sleep level 2 spells since 
+ * elemental protection/warding tech provides full resistance. 
+ * The duration is also reduced */
+SPELL("resist poison",   "big",         P_PROTECTION_SPELL, 20,  2, 2, 1, NODIR,     CLR_GRAY),
+SPELL("resist sleep",    "fuzzy",       P_PROTECTION_SPELL, 20,  2, 2, 1, NODIR,     CLR_BROWN),
 SPELL("endure cold",     "deep",        P_PROTECTION_SPELL, 15,  3, 2, 1, NODIR,     HI_PAPER),
 SPELL("endure heat",     "spotted",     P_PROTECTION_SPELL, 15,  3, 2, 1, NODIR,     HI_PAPER),
 SPELL("insulate",        "long",        P_PROTECTION_SPELL, 15,  3, 2, 1, NODIR,     HI_PAPER),
