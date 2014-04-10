@@ -1063,13 +1063,13 @@ boolean atme;
 		break;
 		/* [BarclayII] since I introduced half resistance from L,
 		 * the elemental resistance spell and tech should be revised. 
-		 * I temporarily set the duration one-fifth of the original,
-		 * about more than twice as long as the ward techs */
+		 * I temporarily set the duration one-tenth of the original,
+		 * as efficient as ward techs */
 	case SPE_RESIST_POISON:
 		if(!(HPoison_resistance & FROMSTART)) {
 			You("feel healthy ..... for the moment at least.");
-			incr_itimeout(&HPoison_resistance, rn1(200, 100) +
-				spell_damage_bonus(spellid(spell))*20);
+			incr_itimeout(&HPoison_resistance, rn1(100, 50) +
+				spell_damage_bonus(spellid(spell))*10);
 		} else pline(nothing_happens);	/* Already have as intrinsic */
 		break;
 	case SPE_RESIST_SLEEP:
@@ -1078,15 +1078,15 @@ boolean atme;
 				pline("Too much coffee!");
 			else
 				You("no longer feel tired.");
-			incr_itimeout(&HSleep_resistance, rn1(200, 100) +
-				spell_damage_bonus(spellid(spell))*20);
+			incr_itimeout(&HSleep_resistance, rn1(100, 50) +
+				spell_damage_bonus(spellid(spell))*10);
 		} else pline(nothing_happens);	/* Already have as intrinsic */
 		break;
 	case SPE_ENDURE_COLD:
 		if(!(HCold_resistance & FROMSTART)) {
 			You("feel warmer.");
-			incr_itimeout(&HCold_resistance, rn1(200, 100) +
-				spell_damage_bonus(spellid(spell))*20);
+			incr_itimeout(&HCold_resistance, rn1(100, 50) +
+				spell_damage_bonus(spellid(spell))*10);
 		} else pline(nothing_happens);	/* Already have as intrinsic */
 		break;
 	case SPE_ENDURE_HEAT:
@@ -1095,8 +1095,8 @@ boolean atme;
 				pline("Excellent! You feel, like, totally cool!");
 			else
 				You("feel colder.");
-			incr_itimeout(&HFire_resistance, rn1(200, 100) +
-				spell_damage_bonus(spellid(spell))*20);
+			incr_itimeout(&HFire_resistance, rn1(100, 50) +
+				spell_damage_bonus(spellid(spell))*10);
 		} else pline(nothing_happens);	/* Already have as intrinsic */
 		break;
 	case SPE_INSULATE:
@@ -1105,8 +1105,8 @@ boolean atme;
 				pline("Bummer! You've been grounded!");
 			else
 				You("are not at all shocked by this feeling.");
-			incr_itimeout(&HShock_resistance, rn1(200, 100) +
-				spell_damage_bonus(spellid(spell))*20);
+			incr_itimeout(&HShock_resistance, rn1(100, 50) +
+				spell_damage_bonus(spellid(spell))*10);
 		} else pline(nothing_happens);	/* Already have as intrinsic */
 		break;
 	case SPE_ENLIGHTEN: 
