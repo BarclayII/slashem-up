@@ -1256,6 +1256,10 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 	if(otmp->oartifact==ART_GIANTKILLER && spec_dbon_applies && magr && dieroll==1)
 		return brave_little_tailor(magr,realizes_damage) > 1;
 
+	/* Angelbane deals extra damage against all A */
+	if (otmp->oartifact == ART_ANGELBANE && mdef->data->mlet == S_ANGEL)
+		*dmgptr += d(5,5);
+
 
 	if (!spec_dbon_applies && !spec_ability(otmp, SPFX_BEHEAD) ||
 		!special_applies) {
@@ -1513,6 +1517,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 		}
 	}
 	/* WAC -- 1/6 chance of cancellation with foobane weapons */
+	/* note: Angelbane is handled above */
 	if (otmp->oartifact == ART_GIANTKILLER ||
 	    otmp->oartifact == ART_ORCRIST ||
 	    otmp->oartifact == ART_DRAGONBANE ||

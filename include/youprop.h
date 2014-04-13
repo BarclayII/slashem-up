@@ -22,8 +22,10 @@
 
 #define maybe_polyd(if_so,if_not)	(Upolyd ? (if_so) : (if_not))
 
+/* elemental resistance gained from spells/techs should be full resistance */
 #define HALF_INTRINSIC(resistance)	(((resistance) & INTRINSIC) && \
-					 !((resistance) & FROMSTART))
+					 !((resistance) & FROMSTART) && \
+					 !((resistance) & TIMEOUT))
 
 
 /*** Resistances to troubles ***/

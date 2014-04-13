@@ -1012,6 +1012,12 @@ mdamagem(magr, mdef, mattk)
 	if (hit_as_three(magr))  objenchant = 3;
 	if (hit_as_four(magr))   objenchant = 4;
 
+
+	/* and overridden by Magicbane or Angelbane */
+	if (otmp && (otmp->oartifact == ART_MAGICBANE ||
+	    otmp->oartifact == ART_ANGELBANE))
+		objenchant = 4;
+
 	if (objenchant < canhitmon && !pick_hit_stone) nohit = TRUE;
 
 	/* cancellation factor is the same as when attacking the hero */
