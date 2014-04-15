@@ -1976,7 +1976,13 @@ tty_putstr(window, attr, str)
     if(str == (const char*)0 ||
 	((cw->flags & WIN_CANCELLED) && (cw->type != NHW_MESSAGE)))
 		return;
-    if(cw->type != NHW_MESSAGE)
+    /* [BarclayII] looks like STATUSCOLORS patch is not compatible with status
+     * compressing... Temporarily disabled status string compression */
+    if(cw->type != NHW_MESSAGE 
+#ifdef STATUS_COLORS
+	    && iflags.use_status_colors && window != WIN_STATUS
+#endif
+	    )
 		str = compress_str(str);
 
     ttyDisplay->lastwin = window;
