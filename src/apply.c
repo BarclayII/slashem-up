@@ -2466,8 +2466,9 @@ struct obj *tstone;
 	    for (mtmp = fmon; mtmp; mtmp = mtmp->nmon)
 		    if (!DEADMONSTER(mtmp) && mtmp->mcansee && 
 			monnear(mtmp, u.ux, u.uy) && 
-			(is_animal(mtmp->data) || is_undead(mtmp->data)))
-			    monflee(mtmp, d(2, (tstone->blessed) ? 10 : 5), 
+			(is_animal(mtmp->data) || is_undead(mtmp->data)) &&
+			rn2(3))
+			    monflee(mtmp, d(2, (tstone->blessed) ? 5 : 3), 
 					FALSE, TRUE);
 	    if (tstone->cursed && !rn2(3) && drain_item(obj))
 		    Your("%s less effective.", aobjnam(obj, "seem"));

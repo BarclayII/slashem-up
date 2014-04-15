@@ -1255,7 +1255,6 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 
 	if(otmp->oartifact==ART_GIANTKILLER && spec_dbon_applies && magr && dieroll==1)
 		return brave_little_tailor(magr,realizes_damage) > 1;
-
 	/*
 	 * Angelbane is complicated:
 	 * deals +5 damage against chaotic

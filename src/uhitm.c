@@ -887,7 +887,8 @@ int thrown;
 	    } /* Techinuse Elemental Fist */		
 
 	} else {
-	    if (obj->oartifact == ART_MAGICBANE) objenchant = 4;
+	    if (obj->oartifact == ART_MAGICBANE ||
+		obj->oartifact == ART_ANGELBANE) objenchant = 4;
 	    else if (obj->oartifact) objenchant += 2;
 
 #ifdef LIGHTSABERS
