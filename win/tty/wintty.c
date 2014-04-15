@@ -2734,9 +2734,27 @@ tty_print_glyph(window, x, y, glyph)
 #ifdef TEXTCOLOR
     if (!reverse_on && (special & (MG_STAIRS|MG_OBJPILE))) {
 	    if ((special & MG_STAIRS))
-		    term_start_bgcolor(CLR_RED);
+#ifndef WIN32CON
+		    if (ttyDisplay->color != CLR_RED)
+#endif
+		    	term_start_bgcolor(CLR_RED);
+#ifndef WIN32CON
+		    else {
+			term_start_attr(ATR_INVERSE);
+			reverse_on = TRUE;
+		    }
+#endif
 	    else
-		    term_start_bgcolor(CLR_BLUE);
+#ifndef WIN32CON
+		    if (ttyDisplay->color != CLR_BLUE)
+#endif
+		    	term_start_bgcolor(CLR_BLUE);
+#ifndef WIN32CON
+		    else {
+			term_start_attr(ATR_INVERSE);
+			reverse_on = TRUE;
+		    }
+#endif
     }
 #endif
 
