@@ -2464,8 +2464,9 @@ struct obj *tstone;
 		    You("see sparks!");
 	    makeknown(FLINT);
 	    for (mtmp = fmon; mtmp; mtmp = mtmp->nmon)
-		    if (!DEADMONSTER(mtmp) && 
-			monnear(mtmp, u.ux, u.uy) && rn2(10))
+		    if (!DEADMONSTER(mtmp) && mtmp->mcansee && 
+			monnear(mtmp, u.ux, u.uy) && 
+			(is_animal(mtmp->data) || is_undead(mtmp->data)))
 			    monflee(mtmp, d(2, (tstone->blessed) ? 10 : 5), 
 					FALSE, TRUE);
 	    if (tstone->cursed && !rn2(3) && drain_item(obj))
@@ -3586,6 +3587,18 @@ doapply()
 	case BULLWHIP:
 		res = use_whip(obj);
 		break;
+#ifdef STEED
+	case HUNTING_CROP:
+		if (u.usteed) {
+		    You("whip %s!", mon_nam(u.usteed));
+		    kick_steed();
+		    res = 1;
+		} else {
+		    You("don't know who you should whip.");
+		    goto xit;
+		}   
+		break;
+#endif
 	case GRAPPLING_HOOK:
 		res = use_grapple(obj);
 		break;
