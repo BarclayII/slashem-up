@@ -192,15 +192,15 @@ WEAPON("scimitar", "curved sword",
 
 /* Sabers */
 WEAPON("rapier", (char *)0,
-	1, 0, 0,  0, 30, 40,  6,  8,  0, P,  P_SABER, METAL, CLR_BLACK),
+	1, 0, 0,  10, 30, 40,  6,  8,  0, P,  P_SABER, METAL, CLR_BLACK),
 	/* STEPHEN WHITE'S NEW CODE */
 	/* Base for artifact (Scalpel) */
 #ifdef FIREARM_RANDGEN
 WEAPON("silver saber", (char *)0,
-	1, 0, 0, 25, 40, 75,  8,  8, 0, S,   P_SABER, SILVER, HI_SILVER),
+	1, 0, 0, 15, 40, 75,  8,  8, 0, S,   P_SABER, SILVER, HI_SILVER),
 #else
 WEAPON("silver saber", (char *)0,
-	1, 0, 0, 27, 40, 75,  8,  8, 0, S,   P_SABER, SILVER, HI_SILVER),
+	1, 0, 0, 17, 40, 75,  8,  8, 0, S,   P_SABER, SILVER, HI_SILVER),
 #endif
 
 /* Clubs */
@@ -659,7 +659,7 @@ BOOTS("jumping boots", "hiking boots",
 BOOTS("elven boots", "mud boots",
 		0, 1,  STEALTH,   12, 2, 15,  8,  9, 0, LEATHER, HI_LEATHER),
 BOOTS("kicking boots", "steel boots",
-		0, 1,  0,         12, 2, 15,  8,  9, 0, IRON, CLR_BROWN),
+		0, 1,  0,         12, 2, 15,  8,  9, 0, IRON, HI_METAL),
 BOOTS("fumble boots", "riding boots",
 		0, 1,  FUMBLING,  12, 2, 20, 30,  9, 0, LEATHER, HI_LEATHER),
 BOOTS("levitation boots", "snow boots",

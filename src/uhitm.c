@@ -2235,11 +2235,14 @@ register struct attack *mattk;
 		}
 
 		if (!negated && !mdef->msleeping &&
-			(mattk->aatyp != AT_WEAP || 
-			 (barehanded_hit && tech_inuse(T_SLEEP_PUNCH))) &&
+			(mattk->aatyp != AT_WEAP ||
+                        /* currently only drow get sleep-inducing melee attack
+                         * */ 
+			 (barehanded_hit && 
+                          (Upolyd || tech_inuse(T_SLEEP_PUNCH)))) &&
 			sleep_monst(mdef, rnd(15), -1)) {
 		    if (!Blind)
-			pline("%s is put to sleep by you!", Monnam(mdef));
+			pline("You put %s to sleep!", mon_nam(mdef));
 		    slept_monst(mdef);
 		}
 		else
