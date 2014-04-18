@@ -1350,7 +1350,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
        /* 
 	* The problem is that there's already a kind of knive called "Scalpel" 
 	*/
-	   if (otmp->oartifact == ART_MOUSER_S_SCALPEL && dieroll < 5) {
+	   if (otmp->oartifact == ART_MOUSER_S_SCALPEL && dieroll < 10) {
 		/* faster than a speeding bullet is the Gray Mouser... */
 		pline("There is a flurry of blows!");
 		int time = 1;
