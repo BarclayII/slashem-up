@@ -767,7 +767,7 @@ int tech_no;
 			if (u.usteed->mtame >= 10) {
 			    pline("%s looks tame enough.", Monnam(u.usteed));
 			}else{
-			    ++u.usteed->mtame;
+			    u.usteed->mtame += rnd((techlev(tech_no) + 2) / 3);
 			    pline("%s gets tamer.", Monnam(u.usteed));
 			    t_timeout = rn1(1000,500);
 			}
