@@ -1767,7 +1767,8 @@ physical:
 	    case AD_SLIM:
 		if (cancelled) break;   /* physical damage only */
 		if (!rn2(4) && !flaming(mdef->data) &&
-				mdef->data != &mons[PM_GREEN_SLIME]) {
+				mdef->data != &mons[PM_GREEN_SLIME] &&
+                                !is_rider(mdef->data)) {
 		    if (newcham(mdef, &mons[PM_GREEN_SLIME], FALSE, vis)) {
 			mdef->oldmonnm = PM_GREEN_SLIME;
 			(void) stop_timer(UNPOLY_MON, (genericptr_t) mdef);
@@ -1788,7 +1789,7 @@ physical:
 		break;
 	    case AD_POLY:
 		if (!magr->mcan && tmp < mdef->mhp) {
-		    if (resists_magm(mdef)) {
+		    if (resists_magm(mdef) || is_rider(mdef->data)) {
 			/* magic resistance protects from polymorph traps, so
 			 * make it guard against involuntary polymorph attacks
 			 * too... */

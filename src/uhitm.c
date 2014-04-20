@@ -2251,7 +2251,8 @@ register struct attack *mattk;
 	    case AD_SLIM:
 		if (negated) break;	/* physical damage only */
 		if (!rn2(4) && !flaming(mdef->data) &&
-				mdef->data != &mons[PM_GREEN_SLIME]) {
+				mdef->data != &mons[PM_GREEN_SLIME] &&
+                                !is_rider(mdef->data)) {
 		    You("turn %s into slime.", mon_nam(mdef));
 		    (void) newcham(mdef, &mons[PM_GREEN_SLIME], FALSE, !Blind);
 		    tmp = 0;
@@ -2286,7 +2287,7 @@ register struct attack *mattk;
 		break;
 	    case AD_POLY:
 		if (tmp < mdef->mhp) {
-		    if (resists_magm(mdef)) {
+		    if (resists_magm(mdef) || is_rider(mdef->data)) {
 			/* magic resistance protects from polymorph traps,
 			 * so make it guard against involuntary polymorph
 			 * attacks too... */
