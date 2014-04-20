@@ -280,9 +280,9 @@ boolean incr;	/* true iff via incremental experience growth */
 
 	if (!incr) You_feel("more experienced.");
 	num = newhp();
-	if (Role_if(PM_CAVEMAN) && !u.uconduct.literate) {
+	if (Role_if(PM_CAVEMAN) && !u.uconduct.literate && incr) {
 		exercise(A_WIS, TRUE);
-		num += rnd(u.ulevel) + 1;
+		num += rnd(u.ulevel);
 	}
 	u.uhpmax += num;
 	u.uhp += num;
