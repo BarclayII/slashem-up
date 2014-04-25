@@ -256,7 +256,7 @@ A("Doomblade",                  ORCISH_SHORT_SWORD,
  */
 A("Stormbringer",               RUNESWORD,
 	(SPFX_RESTR|SPFX_ATTK|SPFX_DEFN|SPFX_INTEL|SPFX_DRLI), 0, 0,
-	DRLI(5,2),	DRLI(0,0),	NO_CARY,	0, A_CHAOTIC, NON_PM, NON_PM, 8000L ),
+	DRLI(5,6),	DRLI(0,0),	NO_CARY,	0, A_CHAOTIC, NON_PM, NON_PM, 8000L ),
 
 #ifdef BLACKMARKET
 A("Thiefbane",                  BROADSWORD,
