@@ -415,8 +415,6 @@ WEAPON("bullwhip", (char *)0,
 WEAPON("rubber hose", (char *)0,
 	1, 0, 0,  0, 20,  3,  4,  3, 0, B,   P_WHIP, PLASTIC, CLR_BROWN),
 #endif
-WEAPON("hunting crop", (char *)0,
-	1, 0, 0,  0, 20,  6,  2,  2, 1, 0,   P_WHIP, IRON, HI_METAL),
 
 /* With shuffled appearances... */
 #undef P

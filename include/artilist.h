@@ -276,7 +276,7 @@ A("Elfrist",                    ORCISH_SPEAR,
 	(SPFX_DFLAG2|SPFX_WARN), 0, M2_ELF,
 	PHYS(5,15),     NO_DFNS,        NO_CARY,        0, A_CHAOTIC, NON_PM/*PM_HUMAN_WEREWOLF*/, PM_ORC, 300L ),
 
-A("Angelbane",			HUNTING_CROP,
+A("Angelbane",			BULLWHIP,
 	(SPFX_RESTR), 0, 0,
 	PHYS(8,5),	NO_DFNS,	NO_CARY,	0, A_CHAOTIC, NON_PM, NON_PM, 600L),
 

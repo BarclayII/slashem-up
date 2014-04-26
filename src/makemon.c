@@ -226,16 +226,6 @@ register struct monst *mtmp;
 }
 
 STATIC_OVL void
-demon_getbane(mtmp)
-register struct monst *mtmp;
-{
-    struct obj *otmp = mksobj(HUNTING_CROP, FALSE, FALSE);
-    otmp = oname(otmp, artiname(ART_ANGELBANE));
-    if (otmp->spe < 0) otmp->spe = 0;
-    (void) mpickobj(mtmp, otmp);
-}
-
-STATIC_OVL void
 m_initweap(mtmp)
 register struct monst *mtmp;
 {
@@ -934,10 +924,7 @@ register struct monst *mtmp;
 	    case S_DEMON:
 		switch (mm) {
 		    case PM_BALROG:
-			if (!rn2(80))
-			    demon_getbane(mtmp);
-			else
-			    (void)mongets(mtmp, BULLWHIP);
+			(void)mongets(mtmp, BULLWHIP);
 			(void)mongets(mtmp, BROADSWORD);
 			break;
 		    case PM_ORCUS:
@@ -946,8 +933,6 @@ register struct monst *mtmp;
 		    case PM_HORNED_DEVIL:
 			if (rn2(4))
 			    (void)mongets(mtmp, TRIDENT);
-			else if (!rn2(80))
-			    demon_getbane(mtmp);
 			else
 			    (void)mongets(mtmp, BULLWHIP);
 			break;
