@@ -270,7 +270,7 @@ A("Deathsword",                   TWO_HANDED_SWORD,
 
 A("Bat from Hell",                BASEBALL_BAT,
 	(SPFX_RESTR), 0, 0,
-	PHYS(3,20),      NO_DFNS,        NO_CARY,        0, A_CHAOTIC, PM_ROGUE, NON_PM, 5000L ),
+	PHYS(3,20),      NO_DFNS,        NO_CARY,        0, A_CHAOTIC, NON_PM, NON_PM, 5000L ),
 
 A("Elfrist",                    ORCISH_SPEAR,
 	(SPFX_DFLAG2|SPFX_WARN), 0, M2_ELF,
