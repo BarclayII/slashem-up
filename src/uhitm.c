@@ -771,7 +771,7 @@ int thrown;
 	if(!thrown && no_obj) {      /* attack with bare hands */
 	    /* gloves will do */
 	    objenchant = (uarmg && uarmg->spe >= 0) ? uarmg->spe : 0;
-	    if (Role_if(PM_MONK) && !Upolyd && u.ulevel/4 > objenchant)
+	    if (Role_if(PM_MONK) && !Upolyd)
 		objenchant = u.ulevel/4;
 	    noeffect = objenchant < canhitmon;
 	    if (martial_bonus()) {
