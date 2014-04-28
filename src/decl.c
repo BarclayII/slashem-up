@@ -67,8 +67,8 @@ NEARDATA struct fruit *ffruit = (struct fruit *)0;
 
 NEARDATA char tune[6] = DUMMY;
 
-const char startq_chars[NUM_STARTQ] = "rcga";
-NEARDATA char startq_order[NUM_STARTQ] = "rcga";
+const char startq_chars[NUM_STARTQ] = {'r', 'c', 'g', 'a'};
+NEARDATA char startq_order[NUM_STARTQ] = {'r', 'c', 'g', 'a'};
 
 const char *occtxt = DUMMY;
 const char quitchars[] = " \r\n\033";
