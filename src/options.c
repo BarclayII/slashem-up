@@ -1916,7 +1916,7 @@ goodfruit:
 	    if (!(opts = string_for_opt(opts, FALSE))) return;
 	    if (strlen(opts) == NUM_STARTQ) {
 		int sqidx = 0;
-		char tmpsq[NUM_STARTQ] = "";
+		char tmpsq[NUM_STARTQ + 1] = "";
 		for (i = 0; i < NUM_STARTQ; i++) {
 		    if (index(startq_chars, opts[i]) &&
 			!index(tmpsq, opts[i])) {
@@ -1928,7 +1928,7 @@ goodfruit:
 		if (sqidx != NUM_STARTQ)
                     badoption(opts);
                 else
-		    nmcpy(startq_order, tmpsq, NUM_STARTQ);
+		    nmcpy(startq_order, tmpsq, NUM_STARTQ + 1);
 	    } else badoption(opts);
 	    return;
 	}
