@@ -15,7 +15,6 @@ static void NDECL(doblitzlist);
 static int FDECL(get_tech_no,(int));
 static int FDECL(techeffects, (int));
 static void FDECL(hurtmon, (struct monst *,int));
-static int FDECL(mon_to_zombie, (int));
 STATIC_PTR int NDECL(tinker);
 STATIC_PTR int NDECL(draw_energy);
 static const struct innate_tech * NDECL(role_tech);

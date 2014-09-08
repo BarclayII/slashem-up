@@ -1438,6 +1438,9 @@ E boolean FDECL(munstone, (struct monst *,BOOLEAN_P));
 E void NDECL(awaken_soldiers);
 E int FDECL(do_play_instrument, (struct obj *));
 
+/* ### necro.c ### */
+E int raise_zombie(struct obj *);
+
 /* ### nhlan.c ### */
 #ifdef LAN_FEATURES
 E void NDECL(init_lan_features);
@@ -2103,6 +2106,7 @@ E int FDECL(tech_inuse, (int));
 E void NDECL(tech_timeout);
 E boolean FDECL(tech_known, (SHORT_P));
 E void FDECL(learntech, (SHORT_P,long,int));
+E int mon_to_zombie(int);
 
 /* ### teleport.c ### */
 
