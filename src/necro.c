@@ -4,11 +4,6 @@
 
 #include "hack.h"
 
-#define NECRO_PERFORMER	 ((u.ualign.type == A_CHAOTIC) && \
-			  (Role_if(PM_NECROMANCER) || \
-			   Role_if(PM_WIZARD) || \
-			   Role_if(PM_FLAME_MAGE) || \
-			   Role_if(PM_ICE_MAGE)))
 
 int ud_dwarf[] = {PM_GHOUL, PM_GHAST, PM_WIGHT, PM_WRAITH, PM_GHOST, PM_GUG,
 		  NON_PM};
@@ -61,13 +56,11 @@ struct obj *obj;
 	if (!humanoid(&mons[corpsenm])) return NON_PM;
 	if (is_undead(&mons[corpsenm]))
 		return corpsenm;
-	if (obj->oxlth && obj->oattached != OATTACHED_MONST) {
+	if (obj->oxlth && obj->oattached == OATTACHED_MONST) {
 		/* raise from a former undead corpse */
 		struct monst *mnew = get_mtraits(obj, FALSE);
-		if (is_undead(mnew->data))
-			for (i = NON_PM; i < NUMMONS; ++i)
-				if (mnew->data == &mons[i]) 
-					return i;
+		if (is_undead(&mons[mnew->mnum]))
+			return mnew->mnum;
 	}
 	/* 1 in 8 chance of creating a skeleton, regardless of monster type */
 	if (!rn2(8))

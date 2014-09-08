@@ -1199,6 +1199,7 @@ register struct obj	*sobj;
 		multi = 0;
 
 		/* [BarclayII] copied from tech.c */
+		if (NECRO_PERFORMER) {
 		for(i = -1; i <= 1; i++) for(j = -1; j <= 1; j++) {
 		    int corpsenm;
 
@@ -1208,8 +1209,7 @@ register struct obj	*sobj;
 
 			if (obj->otyp != CORPSE) continue;
 			corpsenm = raise_undead(obj);
-			if (corpsenm != -1 && !cant_create(&corpsenm, TRUE) &&
-			  (!obj->oxlth || obj->oattached != OATTACHED_MONST)) {
+			if (corpsenm != -1 && !cant_create(&corpsenm, TRUE)) {
 			    if (obj->oeaten)
 				obj->oeaten =
 					eaten_stat(mons[corpsenm].cnutrit, obj);
@@ -1231,8 +1231,7 @@ register struct obj	*sobj;
 			}
 		    }
 		}
-
-#if 0
+		} else {
 		if(!rn2(73) && !sobj->blessed) cnt += rnd(4);
 		if(confused || sobj->cursed) cnt += 12;
 		while(cnt--) {
@@ -1273,6 +1272,7 @@ register struct obj	*sobj;
 			    }
 			} else setmangry(mtmp);
 		}
+		}
 		multi = oldmulti;
 		/* WAC Give those who know command undead a shot at control.
 		 * Since spell is area affect,  do this after all undead
@@ -1291,7 +1291,7 @@ register struct obj	*sobj;
 			    You("don't seem to have the spell command undead memorized!");
 		    } else You("don't know how to command undead...");
 		}
-#endif
+
 		/* flush monsters before asking for identification */
 		flush_screen(0);
 		break;
