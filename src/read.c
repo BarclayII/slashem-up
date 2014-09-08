@@ -1193,8 +1193,45 @@ register struct obj	*sobj;
 	    {
 		int cnt = 1, oldmulti = multi;
                 struct monst *mtmp;
+		struct obj *obj, *otmp;
+		int corpsenm;
+		int i, j;
 		multi = 0;
-  
+
+		/* [BarclayII] copied from tech.c */
+		if (NECRO_PERFORMER) {
+		for(i = -1; i <= 1; i++) for(j = -1; j <= 1; j++) {
+		    int corpsenm;
+
+		    if (!isok(u.ux+i, u.uy+j)) continue;
+		    for (obj = level.objects[u.ux+i][u.uy+j]; obj; obj = otmp) {
+			otmp = obj->nexthere;
+
+			if (obj->otyp != CORPSE) continue;
+			corpsenm = raise_undead(obj);
+			if (corpsenm != -1 && !cant_create(&corpsenm, TRUE)) {
+			    if (obj->oeaten)
+				obj->oeaten =
+					eaten_stat(mons[corpsenm].cnutrit, obj);
+			    obj->corpsenm = corpsenm;
+			    mtmp = revive(obj);
+		    	    /* WAC Give N a shot at controlling the beasties
+		     	     * (if not cursed <g>).  Check curse status in case
+			     * this ever becomes a scroll
+			     */
+		    	    if (mtmp)
+			    	if (!sobj->cursed && Role_if(PM_NECROMANCER)) {
+				    if (!resist(mtmp, sobj->oclass, 0, TELL)) {
+					mtmp = tamedog(mtmp, (struct obj *) 0);
+					if (mtmp) You("dominate %s!", mon_nam(mtmp));
+			            }
+				} 
+				else
+				    setmangry(mtmp);
+			}
+		    }
+		}
+		} else {
 		if(!rn2(73) && !sobj->blessed) cnt += rnd(4);
 		if(confused || sobj->cursed) cnt += 12;
 		while(cnt--) {
@@ -1235,6 +1272,7 @@ register struct obj	*sobj;
 			    }
 			} else setmangry(mtmp);
 		}
+		}
 		multi = oldmulti;
 		/* WAC Give those who know command undead a shot at control.
 		 * Since spell is area affect,  do this after all undead
@@ -1253,6 +1291,7 @@ register struct obj	*sobj;
 			    You("don't seem to have the spell command undead memorized!");
 		    } else You("don't know how to command undead...");
 		}
+
 		/* flush monsters before asking for identification */
 		flush_screen(0);
 		break;
