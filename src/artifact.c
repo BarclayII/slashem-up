@@ -266,11 +266,14 @@ make_artif: if (by_align) otmp = mksobj((int)a->otyp, TRUE, FALSE);
 	     * at least I didn't find any problems with it currently... */
 make_artif: if (by_align) {
 		    otmp = mksobj((int)a->otyp, TRUE, FALSE);
+	    }
 		    place_object(otmp, u.ux, u.uy);
 		    otmp = oname(otmp, a->name);
 		    obj_extract_self(otmp);
+		    /*
 	    }else
 		    otmp = oname(otmp, a->name);
+		    */
 	    otmp->oartifact = m;
 	    artiexist[m] = TRUE;
 	} else {
@@ -1252,6 +1255,34 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 
 	if(otmp->oartifact==ART_GIANTKILLER && spec_dbon_applies && magr && dieroll==1)
 		return brave_little_tailor(magr,realizes_damage) > 1;
+	/*
+	 * Angelbane is complicated:
+	 * deals +5 damage against chaotic
+	 * 	 +10 damage against neutral
+	 * 	 +15 damage against lawful
+	 * plus 5d5 damage and cancellation effect against all A
+	 */
+
+	if (otmp->oartifact == ART_ANGELBANE)
+	{
+		if (youdefend)
+			*dmgptr += (u.ualign.type + 1) * 5;
+		else if (mdef)
+			*dmgptr += ((5 + mdef->data->maligntyp < 0) ? 0 : 
+					5 + mdef->data->maligntyp);
+		if (mdef && mdef->data->mlet == S_ANGEL) {
+			*dmgptr += d(5,4);
+		if (dieroll < 4) {
+		    if (realizes_damage) {
+			pline("%s %s!", The(distant_name(otmp, xname)), Blind ?
+				"roars deafeningly" : "shines brilliantly");
+			pline("It strikes %s!", hittee);
+		    }
+		    cancel_monst(mdef, otmp, youattack, TRUE, magr == mdef);
+		    return TRUE;
+		}
+		}
+	}
 
 
 	if (!spec_dbon_applies && !spec_ability(otmp, SPFX_BEHEAD) ||
@@ -1319,7 +1350,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
        /* 
 	* The problem is that there's already a kind of knive called "Scalpel" 
 	*/
-	   if (otmp->oartifact == ART_MOUSER_S_SCALPEL && dieroll < 5) {
+	   if (otmp->oartifact == ART_MOUSER_S_SCALPEL && dieroll < 10) {
 		/* faster than a speeding bullet is the Gray Mouser... */
 		pline("There is a flurry of blows!");
 		int time = 1;
@@ -1510,6 +1541,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 		}
 	}
 	/* WAC -- 1/6 chance of cancellation with foobane weapons */
+	/* note: Angelbane is handled above */
 	if (otmp->oartifact == ART_GIANTKILLER ||
 	    otmp->oartifact == ART_ORCRIST ||
 	    otmp->oartifact == ART_DRAGONBANE ||

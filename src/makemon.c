@@ -931,7 +931,10 @@ register struct monst *mtmp;
 			(void)mongets(mtmp, WAN_DEATH); /* the Wand of Orcus */
 			break;
 		    case PM_HORNED_DEVIL:
-			(void)mongets(mtmp, rn2(4) ? TRIDENT : BULLWHIP);
+			if (rn2(4))
+			    (void)mongets(mtmp, TRIDENT);
+			else
+			    (void)mongets(mtmp, BULLWHIP);
 			break;
 		    case PM_DISPATER:
 			(void)mongets(mtmp, WAN_STRIKING);
@@ -1659,6 +1662,26 @@ register int	mmflags;
 
 		otmp = oname(mksobj(SKELETON_KEY, TRUE, FALSE),
 				artiname(ART_KEY_OF_CHAOS));
+		if (otmp) {
+			otmp->blessed = otmp->cursed = 0;
+			mpickobj(mtmp, otmp);
+		}
+	/* Father Dagon holds Clavis Solis */
+	} else if (mndx == PM_FATHER_DAGON) {
+		struct obj *otmp;
+
+		otmp = oname(mksobj(SKELETON_KEY, TRUE, FALSE),
+				artiname(ART_CLAVIS_SOLIS));
+		if (otmp) {
+			otmp->blessed = otmp->cursed = 0;
+			mpickobj(mtmp, otmp);
+		}
+	/* and Mother Hydra holds Clavis Lunae */
+	} else if (mndx == PM_MOTHER_HYDRA) {
+		struct obj *otmp;
+
+		otmp = oname(mksobj(SKELETON_KEY, TRUE, FALSE),
+				artiname(ART_CLAVIS_LUNAE));
 		if (otmp) {
 			otmp->blessed = otmp->cursed = 0;
 			mpickobj(mtmp, otmp);

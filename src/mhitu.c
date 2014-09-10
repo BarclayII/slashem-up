@@ -164,12 +164,14 @@ register struct attack *mattk;
 		pline("%s just misses!", Monnam(mtmp));
 	    else if (blocker == &zeroobj)
 		pline("%s is stopped by the golden haze.", Monnam(mtmp));
-	    else
+	    else {
 		Your("%s %s%s %s attack.", 
 			simple_typename(blocker->otyp),
 			rn2(2) ? "block" : "deflect",
 			(blocker == uarmg || blocker == uarmf) ? "" : "s",
 			s_suffix(mon_nam(mtmp)));
+		exer_racial(blocker, 1);
+	    }
 
 	    if (MON_WEP(mtmp)) {
 		struct obj *obj = MON_WEP(mtmp);

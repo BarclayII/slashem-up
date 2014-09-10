@@ -956,7 +956,9 @@ mdamagem(magr, mdef, mattk)
 	struct permonst *pa = magr->data, *pd = mdef->data;
 	int armpro, num, tmp = d((int)mattk->damn, (int)mattk->damd);
 	boolean cancelled;
-	int canhitmon, objenchant;        
+	int canhitmon, objenchant;
+	boolean pick_hit_stone = (made_of_rock(mdef->data) && 
+			          otmp && is_pick(otmp));
         boolean nohit = FALSE;
 
 	if (touch_petrifies(pd) && !resists_ston(magr)) {
@@ -1010,7 +1012,13 @@ mdamagem(magr, mdef, mattk)
 	if (hit_as_three(magr))  objenchant = 3;
 	if (hit_as_four(magr))   objenchant = 4;
 
-	if (objenchant < canhitmon) nohit = TRUE;
+
+	/* and overridden by Magicbane or Angelbane */
+	if (otmp && (otmp->oartifact == ART_MAGICBANE ||
+	    otmp->oartifact == ART_ANGELBANE))
+		objenchant = 4;
+
+	if (objenchant < canhitmon && !pick_hit_stone) nohit = TRUE;
 
 	/* cancellation factor is the same as when attacking the hero */
 	armpro = magic_negation(mdef);
@@ -1759,7 +1767,8 @@ physical:
 	    case AD_SLIM:
 		if (cancelled) break;   /* physical damage only */
 		if (!rn2(4) && !flaming(mdef->data) &&
-				mdef->data != &mons[PM_GREEN_SLIME]) {
+				mdef->data != &mons[PM_GREEN_SLIME] &&
+                                !is_rider(mdef->data)) {
 		    if (newcham(mdef, &mons[PM_GREEN_SLIME], FALSE, vis)) {
 			mdef->oldmonnm = PM_GREEN_SLIME;
 			(void) stop_timer(UNPOLY_MON, (genericptr_t) mdef);
@@ -1780,7 +1789,7 @@ physical:
 		break;
 	    case AD_POLY:
 		if (!magr->mcan && tmp < mdef->mhp) {
-		    if (resists_magm(mdef)) {
+		    if (resists_magm(mdef) || is_rider(mdef->data)) {
 			/* magic resistance protects from polymorph traps, so
 			 * make it guard against involuntary polymorph attacks
 			 * too... */
@@ -1819,7 +1828,7 @@ physical:
 	if(!tmp) return(MM_MISS);
 
 	/* STEPHEN WHITE'S NEW CODE */
-	if (objenchant < canhitmon && vis) {
+	if (objenchant < canhitmon && vis && !pick_hit_stone) {
 			Strcpy(buf, Monnam(magr));
 			pline("%s doesn't seem to harm %s.", buf,
 								mon_nam(mdef));

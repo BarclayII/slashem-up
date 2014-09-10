@@ -457,6 +457,78 @@ exerper()
 	}
 }
 
+/*
+ * exer_racial: racial exercise
+ */
+
+void
+exer_racial(otmp, chance)
+struct obj *otmp;
+int chance;
+{
+	if (!otmp)
+		return;
+	int exer_attr[4] = {A_STR, A_CON, A_DEX, A_WIS};
+	int i;
+
+	switch(Race_switch) {
+		case PM_ORC:
+			if (!is_orcish_obj(otmp))
+				return;
+			else if (otmp == uwep || otmp == uswapwep)
+				i = 0;
+			else if (otmp == uarmh)
+				i = rn1(2, 2);
+			else
+				i = rn2(3);
+			break;
+		case PM_DWARF:
+			if (!is_dwarvish_obj(otmp))
+				return;
+			else if (is_dwarvish_armor(otmp)) {
+				chance *= 4;
+				if (otmp == uarmh)
+					i = rn1(2, 2);
+				else
+					i = rn2(3);
+			} else {
+				chance *= 2;
+				i = rn2(2) * 2;
+			}
+			break;
+		case PM_DROW:
+			if (!is_droven_obj(otmp) && !is_elven_obj(otmp))
+				return;
+			else if (is_droven_armor(otmp))
+				chance *= 4;
+			else
+				chance *= 3;
+			if (uarmh == otmp)
+				i = 3;
+			else
+				i = 2;
+			break;
+		case PM_ELF:
+			if (!is_elven_obj(otmp))
+				return;
+			else
+				chance *= 3;
+			if (uarmh == otmp)
+				i = 3;
+			else
+				i = 2;
+			break;
+		case PM_GNOME:
+			if (!is_gnomish_obj(otmp))
+				return;
+			break;
+		default:
+			return;
+	}
+	if (!rn2(chance))
+		exercise(exer_attr[i], TRUE);
+}
+
 void
 exerchk()
 {
@@ -833,7 +905,19 @@ int x;
 		if (tmp < 18 && (youmonst.data->mlet == S_NYMPH ||
 		    u.umonnum == PM_SUCCUBUS || u.umonnum == PM_INCUBUS))
 		    tmp = 18;
-		if (uarmh && uarmh->otyp == FEDORA) tmp += 1;        
+		if (uarmh && uarmh->otyp == FEDORA) tmp += 1;
+		if (uarmc) {
+			if ((is_vampire(youmonst.data) &&
+			     !strcmp(OBJ_DESCR(objects[uarmc->otyp]), 
+				     "opera cloak")) ||
+			    (is_orc(youmonst.data) &&
+			     uarmc->otyp == ORCISH_CLOAK) ||
+			    (is_dwarf(youmonst.data) &&
+			     uarmc->otyp == DWARVISH_CLOAK) ||
+			    (is_elf(youmonst.data) &&
+			     uarmc->otyp == ELVEN_CLOAK))
+				tmp += 1;
+		}
 		return((tmp >= 25) ? 25 : (tmp <= 3) ? 3 : tmp);
 	} else if (x == A_INT || x == A_WIS) {
 		/* yes, this may raise int/wis if player is sufficiently

@@ -15,7 +15,6 @@ static void NDECL(doblitzlist);
 static int FDECL(get_tech_no,(int));
 static int FDECL(techeffects, (int));
 static void FDECL(hurtmon, (struct monst *,int));
-static int FDECL(mon_to_zombie, (int));
 STATIC_PTR int NDECL(tinker);
 STATIC_PTR int NDECL(draw_energy);
 static const struct innate_tech * NDECL(role_tech);
@@ -636,7 +635,9 @@ int tech_no;
 		break;
 	    case T_SLEEP_PUNCH:
 		if (Upolyd || uwep) {
-		    You("must be bare-handed to use your sleeping punch.");
+		    You("must be %s to use your sleeping punch.",
+				Upolyd ? "in your original form" :
+				"bare-handed");
 		    return 0;
 		}
 		Your("hands are surrounded with a dark blue aura.");
@@ -765,7 +766,7 @@ int tech_no;
 			if (u.usteed->mtame >= 10) {
 			    pline("%s looks tame enough.", Monnam(u.usteed));
 			}else{
-			    ++u.usteed->mtame;
+			    u.usteed->mtame += rnd((techlev(tech_no) + 2) / 3);
 			    pline("%s gets tamer.", Monnam(u.usteed));
 			    t_timeout = rn1(1000,500);
 			}
@@ -1146,8 +1147,9 @@ int tech_no;
 		t_timeout = rn1(1000,500);
             	break;
 	    case T_WARD_FIRE:
+		/* [BarclayII] see spell.c for warding tech revision note */
 		/* Already have it intrinsically? */
-		if (HFire_resistance & FROMOUTSIDE) return (0);
+		if (HFire_resistance & FROMSTART) return (0);
 
 		You("invoke the ward against flame!");
 		HFire_resistance += rn1(100,50);
@@ -1157,7 +1159,7 @@ int tech_no;
 	    	break;
 	    case T_WARD_COLD:
 		/* Already have it intrinsically? */
-		if (HCold_resistance & FROMOUTSIDE) return (0);
+		if (HCold_resistance & FROMSTART) return (0);
 
 		You("invoke the ward against ice!");
 		HCold_resistance += rn1(100,50);
@@ -1167,7 +1169,7 @@ int tech_no;
 	    	break;
 	    case T_WARD_ELEC:
 		/* Already have it intrinsically? */
-		if (HShock_resistance & FROMOUTSIDE) return (0);
+		if (HShock_resistance & FROMSTART) return (0);
 
 		You("invoke the ward against lightning!");
 		HShock_resistance += rn1(100,50);

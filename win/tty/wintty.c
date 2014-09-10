@@ -1976,7 +1976,13 @@ tty_putstr(window, attr, str)
     if(str == (const char*)0 ||
 	((cw->flags & WIN_CANCELLED) && (cw->type != NHW_MESSAGE)))
 		return;
-    if(cw->type != NHW_MESSAGE)
+    /* [BarclayII] looks like STATUSCOLORS patch is not compatible with status
+     * compressing... Temporarily disabled status string compression */
+    if(cw->type != NHW_MESSAGE 
+#ifdef STATUS_COLORS
+	    && iflags.use_status_colors && window != WIN_STATUS
+#endif
+	    )
 		str = compress_str(str);
 
     ttyDisplay->lastwin = window;
@@ -2731,6 +2737,33 @@ tty_print_glyph(window, x, y, glyph)
 	reverse_on = TRUE;
     }
 
+#ifdef TEXTCOLOR
+    if (!reverse_on && (special & (MG_STAIRS|MG_OBJPILE))) {
+	    if ((special & MG_STAIRS))
+#ifndef WIN32CON
+		    if (ttyDisplay->color != CLR_RED)
+#endif
+		    	term_start_bgcolor(CLR_RED);
+#ifndef WIN32CON
+		    else {
+			term_start_attr(ATR_INVERSE);
+			reverse_on = TRUE;
+		    }
+#endif
+	    else
+#ifndef WIN32CON
+		    if (ttyDisplay->color != CLR_BLUE)
+#endif
+		    	term_start_bgcolor(CLR_BLUE);
+#ifndef WIN32CON
+		    else {
+			term_start_attr(ATR_INVERSE);
+			reverse_on = TRUE;
+		    }
+#endif
+    }
+#endif
+
 #if defined(USE_TILES) && defined(MSDOS)
     if (iflags.grmode && iflags.tile_view)
       xputg(glyph,ch,special);
@@ -2748,6 +2781,14 @@ tty_print_glyph(window, x, y, glyph)
 	}
 #endif
     }
+
+#ifdef TEXTCOLOR
+    if (!reverse_on && (special & (MG_STAIRS|MG_OBJPILE))) {
+	    term_end_bgcolor();
+	    term_end_color();
+	    ttyDisplay->color = NO_COLOR;
+    }
+#endif
 
     wins[window]->curx++;	/* one character over */
     ttyDisplay->curx++;		/* the real cursor moved too */

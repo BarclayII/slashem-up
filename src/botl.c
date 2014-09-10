@@ -564,8 +564,8 @@ bot2str(char *newbot2)
 	if(Sick) {
 		if (u.usick_type & SICK_VOMITABLE)
 #if defined(STATUS_COLORS) && defined(TEXTCOLOR)
-			add_colored_text(bot2_abbrev >= 2 ? " FPs" 
-					: " FoodPois", newbot2);
+			add_colored_text(bot2_abbrev >= 2 ? "FPs" 
+					: "FoodPois", newbot2);
 #else
 			   Sprintf(nb = eos(nb),
 			     bot2_abbrev >= 2 ? " FPs" : " FoodPois");

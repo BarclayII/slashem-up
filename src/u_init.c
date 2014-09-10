@@ -358,6 +358,11 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_DROW,		SHORT_SWORD,		DARK_ELVEN_SHORT_SWORD},
     { PM_DROW,		BOW,			DARK_ELVEN_BOW	      },
     { PM_DROW,		ARROW,			DARK_ELVEN_ARROW      },
+    { PM_DROW,		SPEAR,			ELVEN_SPEAR	      },
+    { PM_DROW,		HELMET,			ELVEN_LEATHER_HELM    },
+ /* { PM_DROW,		SMALL_SHIELD,		ELVEN_SHIELD	      }, */
+    { PM_DROW,		CLOAK_OF_DISPLACEMENT,	ELVEN_CLOAK	      },
+    { PM_DROW,		CRAM_RATION,		LEMBAS_WAFER	      },
     { PM_VAMPIRE,	POT_FRUIT_JUICE,	POT_BLOOD	      },
     { PM_VAMPIRE,	FOOD_RATION,		POT_VAMPIRE_BLOOD     },
     { NON_PM,	STRANGE_OBJECT,		STRANGE_OBJECT	      }

@@ -933,8 +933,10 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 #endif
 		    You("land %s!", predicament);
 		}
+		if (!Passes_walls) {
 		    u.utrap = rn1(6,2);
-		u.utraptype = TT_PIT;
+		    u.utraptype = TT_PIT;
+		}
 #ifdef STEED
 		if (!steedintrap(trap, (struct obj *)0)) {
 #endif
@@ -2599,8 +2601,24 @@ struct obj *box;	/* null for floor trap */
 	}
 	if (!box && burn_floor_paper(u.ux, u.uy, see_it, TRUE) && !see_it)
 	    You("smell paper burning.");
-	if (is_ice(u.ux, u.uy))
+	if (is_ice(u.ux, u.uy)) {
+	    struct trap *tt = (struct trap *)0;
+	    int xtmp = 0, ytmp = 0;
+	    if (!box) {
+		tt = t_at(u.ux, u.uy);
+		if (tt) {
+		    xtmp = tt->tx;
+		    ytmp = tt->ty;
+		    tt->tx = tt->ty = 0;
+		} else
+		    impossible("dofiretrap: no tt and no box?");
+	    }
 	    melt_ice(u.ux, u.uy);
+	    if (tt) {
+		tt->tx = xtmp;
+		tt->ty = ytmp;
+	    }
+	}
 }
 
 STATIC_OVL void
@@ -3634,6 +3652,11 @@ struct trap *ttmp;
 	}
 	/* Do you have the necessary capacity to lift anything? */
 	if (check_capacity((char *)0)) return 1;
+
+	if (Levitation) {
+		pline("You cannot reach %s.",mon_nam(mtmp));
+		return 0;
+	}
 
 	/* Will our hero succeed? */
 	if ((uprob = untrap_prob(ttmp)) && !mtmp->msleeping && mtmp->mcanmove) {

@@ -717,6 +717,7 @@ int thrown;
 	boolean get_dmg_bonus = TRUE;
 	boolean ispoisoned = FALSE, needpoismsg = FALSE, poiskilled = FALSE;
 	boolean silvermsg = FALSE, silverobj = FALSE;
+	boolean pick_hit_stone = (made_of_rock(mon->data) && (obj && is_pick(obj)));
 	boolean valid_weapon_attack = FALSE;
 	boolean unarmed = !uwep && !uarm && !uarms;
 #ifdef STEED
@@ -768,7 +769,9 @@ int thrown;
 
 	wakeup(mon);
 	if(!thrown && no_obj) {      /* attack with bare hands */
-	    if (Role_if(PM_MONK) && !Upolyd && u.ulevel/4 > objenchant)
+	    /* gloves will do */
+	    objenchant = (uarmg && uarmg->spe >= 0) ? uarmg->spe : 0;
+	    if (Role_if(PM_MONK) && !Upolyd)
 		objenchant = u.ulevel/4;
 	    noeffect = objenchant < canhitmon;
 	    if (martial_bonus()) {
@@ -884,7 +887,8 @@ int thrown;
 	    } /* Techinuse Elemental Fist */		
 
 	} else {
-	    if (obj->oartifact == ART_MAGICBANE) objenchant = 4;
+	    if (obj->oartifact == ART_MAGICBANE ||
+		obj->oartifact == ART_ANGELBANE) objenchant = 4;
 	    else if (obj->oartifact) objenchant += 2;
 
 #ifdef LIGHTSABERS
@@ -894,7 +898,8 @@ int thrown;
 	    if (is_poisonable(obj) && obj->opoisoned)
 		ispoisoned = TRUE;
 
-	    noeffect = objenchant < canhitmon && !ispoisoned;
+	    /* unenchanted picks still harm statue gargoyles */
+	    noeffect = objenchant < canhitmon && !ispoisoned && !pick_hit_stone;
 
 	    Strcpy(saved_oname, cxname(obj));
 	    if(obj->oclass == WEAPON_CLASS || is_weptool(obj) ||
@@ -1131,11 +1136,24 @@ int thrown;
 			tmp = 1;
 			break;
 #ifdef TOURIST
-		    case EXPENSIVE_CAMERA:
+		    case EXPENSIVE_CAMERA: {
+			struct monst *mtmp;
 			You("succeed in destroying %s camera.  Congratulations!",
 			    shk_your(yourbuf, obj));
+			if (!rn2(3) && (mtmp = makemon(&mons[PM_HOMUNCULUS],
+				u.ux, u.uy, NO_MM_FLAGS)) != 0) {
+			    pline("%s is released!", !canspotmon(mtmp) ?
+				Something : Hallucination ?
+				An(rndmonnam()) : "The picture-painting demon");
+		            mtmp->mpeaceful = !obj->cursed;
+			    /*if (obj->blessed && rn2(2)) 
+				    tamedog(mtmp, (struct obj *)0);*/
+		            set_malign(mtmp);
+			}
+
 			useup(obj);
 			return(TRUE);
+			}
 			/*NOTREACHED*/
 			break;
 #endif
@@ -2217,11 +2235,14 @@ register struct attack *mattk;
 		}
 
 		if (!negated && !mdef->msleeping &&
-			(mattk->aatyp != AT_WEAP || 
-			 (barehanded_hit && tech_inuse(T_SLEEP_PUNCH))) &&
+			(mattk->aatyp != AT_WEAP ||
+                        /* currently only drow get sleep-inducing melee attack
+                         * */ 
+			 (barehanded_hit && 
+                          (Upolyd || tech_inuse(T_SLEEP_PUNCH)))) &&
 			sleep_monst(mdef, rnd(15), -1)) {
 		    if (!Blind)
-			pline("%s is put to sleep by you!", Monnam(mdef));
+			pline("You put %s to sleep!", mon_nam(mdef));
 		    slept_monst(mdef);
 		}
 		else
@@ -2230,7 +2251,8 @@ register struct attack *mattk;
 	    case AD_SLIM:
 		if (negated) break;	/* physical damage only */
 		if (!rn2(4) && !flaming(mdef->data) &&
-				mdef->data != &mons[PM_GREEN_SLIME]) {
+				mdef->data != &mons[PM_GREEN_SLIME] &&
+                                !is_rider(mdef->data)) {
 		    You("turn %s into slime.", mon_nam(mdef));
 		    (void) newcham(mdef, &mons[PM_GREEN_SLIME], FALSE, !Blind);
 		    tmp = 0;
@@ -2265,7 +2287,7 @@ register struct attack *mattk;
 		break;
 	    case AD_POLY:
 		if (tmp < mdef->mhp) {
-		    if (resists_magm(mdef)) {
+		    if (resists_magm(mdef) || is_rider(mdef->data)) {
 			/* magic resistance protects from polymorph traps,
 			 * so make it guard against involuntary polymorph
 			 * attacks too... */
@@ -2774,7 +2796,10 @@ use_weapon:
 				    !u.uswallow)
 				dhit &= ~HIT_UWEP; /* missed */
 				
-			    if (tmp1 > dice(UWEP_ROLL)) exercise(A_DEX, TRUE);
+			    if (tmp1 > dice(UWEP_ROLL)) {
+				exercise(A_DEX, TRUE);
+				exer_racial(uwep, 1);
+			    }
 #ifdef DEBUG
 			    pline("(%i/20)", tmp1);
 #endif
@@ -2790,8 +2815,10 @@ use_weapon:
 				    !u.uswallow)
 				dhit &= ~HIT_USWAPWEP;
 
-			    if (tmp2 > dice(USWAPWEP_ROLL))
+			    if (tmp2 > dice(USWAPWEP_ROLL)) {
 				exercise(A_DEX, TRUE);
+				exer_racial(uswapwep, 2);
+			    }
 #ifdef DEBUG
 			    pline("((%i/20))", tmp2);
 #endif

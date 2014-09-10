@@ -1508,9 +1508,7 @@ long num;
 {
 	char obuf[BUFSZ];
 
-	Sprintf(obuf, "%s%s",
-		 (otmp->otyp == CORPSE &&
-			type_is_pname(&mons[otmp->corpsenm])) ? "" : "The ",
+	Sprintf(obuf, "The %s",
 		 xname(otmp));
 
 	if(num) { /* means: other objects are impacted */

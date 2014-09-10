@@ -70,6 +70,9 @@ unsigned *ospecial;
 #endif
 	uchar ch;
 	unsigned special = 0;
+	boolean obj_pile = (offset != BOULDER &&
+		level.objects[x][y] &&
+		level.objects[x][y]->nexthere);
 
     /*
      *  Map the glyph back to a character and color.
@@ -132,6 +135,7 @@ unsigned *ospecial;
 #endif
 	    cmap_color(offset);
     } else if ((offset = (glyph - GLYPH_OBJ_OFF)) >= 0) {	/* object */
+	if (On_stairs(x,y) && levl[x][y].seenv) special |= MG_STAIRS;
 	if (offset == BOULDER && iflags.bouldersym) ch = iflags.bouldersym;
 	else ch = oc_syms[(int)objects[offset].oc_class];
 #ifdef ROGUE_COLOR
@@ -144,6 +148,22 @@ unsigned *ospecial;
 	} else
 #endif
 	    obj_color(offset);
+#ifdef DISPLAY_LAYERS
+	/* inelegant kludge... */
+	if (!obj_pile && cansee(x,y))
+		levl[x][y].mem_pile = 0;
+#endif
+	if ((obj_pile && cansee(x,y)) 
+#ifdef DISPLAY_LAYERS
+			|| levl[x][y].mem_pile
+#endif
+			) {
+		special |= MG_OBJPILE;
+#ifdef DISPLAY_LAYERS
+		if (obj_pile && cansee(x,y))
+			levl[x][y].mem_pile = 1;
+#endif
+	}
     } else if ((offset = (glyph - GLYPH_RIDDEN_OFF)) >= 0) {	/* mon ridden */
 	ch = monsyms[(int)mons[offset].mlet];
 #ifdef ROGUE_COLOR
@@ -157,6 +177,7 @@ unsigned *ospecial;
 	    mon_color(offset);
 	    special |= MG_RIDDEN;
     } else if ((offset = (glyph - GLYPH_BODY_OFF)) >= 0) {	/* a corpse */
+	if (On_stairs(x,y) && levl[x][y].seenv) special |= MG_STAIRS;
 	ch = oc_syms[(int)objects[CORPSE].oc_class];
 #ifdef ROGUE_COLOR
 	if (HAS_ROGUE_IBM_GRAPHICS && iflags.use_color)
@@ -165,6 +186,21 @@ unsigned *ospecial;
 #endif
 	    mon_color(offset);
 	    special |= MG_CORPSE;
+#ifdef DISPLAY_LAYERS
+	if (!obj_pile && cansee(x,y))
+		levl[x][y].mem_pile = 0;
+#endif
+	if ((obj_pile && cansee(x,y)) 
+#ifdef DISPLAY_LAYERS
+			|| levl[x][y].mem_pile
+#endif
+			) {
+		special |= MG_OBJPILE;
+#ifdef DISPLAY_LAYERS
+		if (obj_pile && cansee(x,y))
+			levl[x][y].mem_pile = 1;
+#endif
+	}
     } else if ((offset = (glyph - GLYPH_DETECT_OFF)) >= 0) {	/* mon detect */
 	ch = monsyms[(int)mons[offset].mlet];
 #ifdef ROGUE_COLOR

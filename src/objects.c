@@ -98,7 +98,7 @@ WEAPON("orcish dagger", "crude dagger",
 WEAPON("dagger", (char *)0,
 	1, 1, 0, 25, 10,  4,  4,  3, 2, P,   P_DAGGER, IRON, HI_METAL),
 WEAPON("athame", (char *)0,
-	1, 1, 0,  0, 10,  4,  4,  3, 2, S,   P_DAGGER, IRON, HI_METAL),
+	1, 1, 0,  0, 10,  4,  4,  3, 2, P|S, P_DAGGER, IRON, HI_METAL),
 WEAPON("silver dagger", (char *)0,
 	1, 1, 0,  2, 12, 40,  4,  3, 2, P,   P_DAGGER, SILVER, HI_SILVER),
 	/* STEPHEN WHITE'S NEW CODE */
@@ -125,7 +125,7 @@ WEAPON("knife", (char *)0,
 WEAPON("stiletto", (char *)0,
 	1, 1, 0,  5,  5,  4,  3,  2, 0, P|S, P_KNIFE, IRON, HI_METAL),
 WEAPON("scalpel", (char *)0,
-	1, 1, 0,  0,  5,  4,  3,  3, 2, S,   P_KNIFE, METAL, HI_METAL),
+	1, 1, 0,  0,  5,  4,  3,  3, 2, P|S, P_KNIFE, METAL, HI_METAL),
 WEAPON("crysknife", (char *)0,
 	1, 0, 0,  0, 20,100, 20, 30, 3, P,   P_KNIFE, MINERAL, CLR_WHITE),
 	/* [Tom] increased crysknife damage from d10/d10 */
@@ -192,15 +192,15 @@ WEAPON("scimitar", "curved sword",
 
 /* Sabers */
 WEAPON("rapier", (char *)0,
-	1, 0, 0,  0, 30, 40,  6,  8,  0, P,  P_SABER, METAL, CLR_BLACK),
+	1, 0, 0,  10, 30, 40,  6,  8,  0, P,  P_SABER, METAL, CLR_BLACK),
 	/* STEPHEN WHITE'S NEW CODE */
 	/* Base for artifact (Scalpel) */
 #ifdef FIREARM_RANDGEN
 WEAPON("silver saber", (char *)0,
-	1, 0, 0, 25, 40, 75,  8,  8, 0, S,   P_SABER, SILVER, HI_SILVER),
+	1, 0, 0, 15, 40, 75,  8,  8, 0, S,   P_SABER, SILVER, HI_SILVER),
 #else
 WEAPON("silver saber", (char *)0,
-	1, 0, 0, 27, 40, 75,  8,  8, 0, S,   P_SABER, SILVER, HI_SILVER),
+	1, 0, 0, 17, 40, 75,  8,  8, 0, S,   P_SABER, SILVER, HI_SILVER),
 #endif
 
 /* Clubs */
@@ -657,7 +657,7 @@ BOOTS("jumping boots", "hiking boots",
 BOOTS("elven boots", "mud boots",
 		0, 1,  STEALTH,   12, 2, 15,  8,  9, 0, LEATHER, HI_LEATHER),
 BOOTS("kicking boots", "steel boots",
-		0, 1,  0,         12, 2, 15,  8,  9, 0, IRON, CLR_BROWN),
+		0, 1,  0,         12, 2, 15,  8,  9, 0, IRON, HI_METAL),
 BOOTS("fumble boots", "riding boots",
 		0, 1,  FUMBLING,  12, 2, 20, 30,  9, 0, LEATHER, HI_LEATHER),
 BOOTS("levitation boots", "snow boots",
@@ -701,7 +701,7 @@ RING("slow digestion",  SLOW_DIGESTION, "steel",
 					    200, 1, 0, 8, IRON, HI_METAL),
 RING("invisibility", INVIS,    "wire",      150, 1, 0, 5, IRON, HI_METAL),
 RING("poison resistance", POISON_RES, "pearl",
-					    150, 1, 0, 4, IRON, CLR_WHITE),
+					    150, 1, 0, 4, MINERAL, CLR_WHITE),
 RING("see invisible", SEE_INVIS, "engagement",
 											150, 1, 0, 5, IRON, HI_METAL),
 RING("shock resistance", SHOCK_RES, "copper",
@@ -1116,8 +1116,11 @@ SPELL("enchant weapon",  "dull",        P_ENCHANTMENT_SPELL,  5,  8, 7, 1, NODIR
 SPELL("enchant armor",   "thin",        P_ENCHANTMENT_SPELL,  5,  8, 7, 1, NODIR,     CLR_WHITE),
 /* Protection spells */
 SPELL("protection",      "wide",        P_PROTECTION_SPELL,  5,  3, 1, 1, NODIR,     HI_PAPER),
-SPELL("resist poison",   "big",         P_PROTECTION_SPELL, 20,  2, 1, 1, NODIR,     CLR_GRAY),
-SPELL("resist sleep",    "fuzzy",       P_PROTECTION_SPELL, 20,  2, 1, 1, NODIR,     CLR_BROWN),
+/* [BarclayII] made resist poison and resist sleep level 2 spells since 
+ * elemental protection/warding tech provides full resistance. 
+ * The duration is also reduced */
+SPELL("resist poison",   "big",         P_PROTECTION_SPELL, 20,  2, 2, 1, NODIR,     CLR_GRAY),
+SPELL("resist sleep",    "fuzzy",       P_PROTECTION_SPELL, 20,  2, 2, 1, NODIR,     CLR_BROWN),
 SPELL("endure cold",     "deep",        P_PROTECTION_SPELL, 15,  3, 2, 1, NODIR,     HI_PAPER),
 SPELL("endure heat",     "spotted",     P_PROTECTION_SPELL, 15,  3, 2, 1, NODIR,     HI_PAPER),
 SPELL("insulate",        "long",        P_PROTECTION_SPELL, 15,  3, 2, 1, NODIR,     HI_PAPER),

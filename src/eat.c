@@ -2907,9 +2907,14 @@ boolean incr;
 
 boolean can_reach_floorobj()
 {
+    struct trap *ttmp = t_at(u.ux, u.uy);
     return can_reach_floor() &&
 	  !((is_pool(u.ux, u.uy) || is_lava(u.ux, u.uy)) &&
-	    (Wwalking || is_clinger(youmonst.data) || (Flying && !Breathless)));
+	    (Wwalking || is_clinger(youmonst.data) || (Flying && !Breathless))
+	    || (ttmp && ttmp->tseen &&
+		(ttmp->ttyp == PIT || ttmp->ttyp == SPIKED_PIT) &&
+		(!u.utrap || (u.utrap && u.utraptype != TT_PIT)) &&
+		!Passes_walls && !Flying));
 }
 
 /* Returns an object representing food.  Object may be either on floor or

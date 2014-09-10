@@ -2367,8 +2367,8 @@ register struct monst *shkp;	/* if angry, impose a surcharge */
 		    tmp += tmp / 3L;
 	}
 #ifdef TOURIST
-	if ((Role_if(PM_TOURIST) && u.ulevel < (MAXULEV/2))
-	    || ((uarmu && !uarmu->oinvis) && (!uarm || uarm->oinvis) 
+	if (/*(Role_if(PM_TOURIST) && u.ulevel < (MAXULEV/2))
+	    || */((uarmu && !uarmu->oinvis) && (!uarm || uarm->oinvis) 
 	    && (!uarmc || uarmc->oinvis)))	/* touristy shirt visible */
 		tmp += tmp / 3L;
 	else
@@ -2392,6 +2392,10 @@ register struct monst *shkp;	/* if angry, impose a surcharge */
 	if (Role_if(PM_ROGUE)) tmp *= 2L;
 	/* samurais are from out of town... */
 	if (Role_if(PM_SAMURAI)) tmp *= 2L;
+#ifdef TOURIST
+	/* [BarclayII] tourists are REAL suckers... */
+	if (Role_if(PM_TOURIST)) tmp *= 3L;
+#endif
 
 	/* anger surcharge should match rile_shk's */
 	if (shkp && ESHK(shkp)->surcharge) tmp += (tmp + 2L) / 3L;

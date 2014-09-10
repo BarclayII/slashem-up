@@ -87,11 +87,11 @@ A("Dragonbane",			DWARVISH_SPEAR,
 	PHYS(8,0),	NO_DFNS,	NO_CARY,	0, A_NONE, NON_PM, NON_PM, 500L ),
 
 A("Excalibur",                  LONG_SWORD,
-	(SPFX_RESTR|SPFX_SEEK|SPFX_DEFN|SPFX_INTEL|SPFX_SEARCH),0,0,
+	(SPFX_RESTR|SPFX_NOGEN|SPFX_SEEK|SPFX_DEFN|SPFX_INTEL|SPFX_SEARCH),0,0,
 	PHYS(5,10),	DRLI(0,0),	NO_CARY,	0, A_LAWFUL, PM_KNIGHT, NON_PM, 4000L ),
 
 A("Sunsword",                   LONG_SWORD,
-	(SPFX_RESTR|SPFX_WARN|SPFX_BLIND|SPFX_DFLAG2), 0, M2_UNDEAD,
+	(SPFX_RESTR|SPFX_BLIND|SPFX_DFLAG2), 0, M2_UNDEAD,
 	PHYS(5,0),	DFNS(AD_BLND),	NO_CARY,	0, A_LAWFUL, NON_PM, NON_PM, 1500L ),
 
 /*
@@ -181,7 +181,7 @@ A("Vorpal Blade",		LONG_SWORD,
 	PHYS(5,8),	NO_DFNS,	NO_CARY,	0, A_NEUTRAL, NON_PM, NON_PM, 4000L ),
 
 A("Disrupter",                  MACE,
-	(SPFX_RESTR|SPFX_DFLAG2), 0, M2_UNDEAD,
+	(SPFX_RESTR|SPFX_WARN|SPFX_DFLAG2), 0, M2_UNDEAD,
 	PHYS(5,30),     NO_DFNS,        NO_CARY,        0, A_NEUTRAL, PM_PRIEST, NON_PM, 500L ),
 
 /*
@@ -256,10 +256,10 @@ A("Doomblade",                  ORCISH_SHORT_SWORD,
  */
 A("Stormbringer",               RUNESWORD,
 	(SPFX_RESTR|SPFX_ATTK|SPFX_DEFN|SPFX_INTEL|SPFX_DRLI), 0, 0,
-	DRLI(5,2),	DRLI(0,0),	NO_CARY,	0, A_CHAOTIC, NON_PM, NON_PM, 8000L ),
+	DRLI(5,6),	DRLI(0,0),	NO_CARY,	0, A_CHAOTIC, NON_PM, NON_PM, 8000L ),
 
 #ifdef BLACKMARKET
-A("Thiefbane",                  LONG_SWORD,
+A("Thiefbane",                  BROADSWORD,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_BEHEAD|SPFX_DCLAS|SPFX_DRLI), 0, S_HUMAN,
 	DRLI(5,1),      NO_DFNS,        NO_CARY,        0, A_CHAOTIC, NON_PM, NON_PM, 1500L ),
 #endif /* BLACKMARKET */
@@ -270,11 +270,15 @@ A("Deathsword",                   TWO_HANDED_SWORD,
 
 A("Bat from Hell",                BASEBALL_BAT,
 	(SPFX_RESTR), 0, 0,
-	PHYS(3,20),      NO_DFNS,        NO_CARY,        0, A_CHAOTIC, PM_ROGUE, NON_PM, 5000L ),
+	PHYS(3,20),      NO_DFNS,        NO_CARY,        0, A_CHAOTIC, NON_PM, NON_PM, 5000L ),
 
 A("Elfrist",                    ORCISH_SPEAR,
 	(SPFX_DFLAG2|SPFX_WARN), 0, M2_ELF,
 	PHYS(5,15),     NO_DFNS,        NO_CARY,        0, A_CHAOTIC, NON_PM/*PM_HUMAN_WEREWOLF*/, PM_ORC, 300L ),
+
+A("Angelbane",			BULLWHIP,
+	(SPFX_RESTR), 0, 0,
+	PHYS(8,5),	NO_DFNS,	NO_CARY,	0, A_CHAOTIC, NON_PM, NON_PM, 600L),
 
 A("Plague", DARK_ELVEN_BOW,	/* KMH */
 	(SPFX_RESTR|SPFX_DEFN), 0, 0,
@@ -332,6 +336,18 @@ A("The Key of Chaos", SKELETON_KEY,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), 0, 0,
 	NO_ATTK,        NO_DFNS,        NO_CARY,
 	0,      A_CHAOTIC, NON_PM, NON_PM, 1000L ),
+
+/* To be used... for unlocking the way to the wizard's tower, like those
+ * alignment keys */
+A("Clavis Solis", SKELETON_KEY,
+	(SPFX_NOGEN|SPFX_RESTR), 0, 0,
+	NO_ATTK,	NO_DFNS,	NO_CARY,
+	0,	A_NONE, NON_PM, NON_PM, 3000L),
+
+A("Clavis Lunae", SKELETON_KEY,
+	(SPFX_NOGEN|SPFX_RESTR), 0, 0,
+	NO_ATTK,	NO_DFNS,	NO_CARY,
+	0,	A_NONE, NON_PM, NON_PM, 3000L),
 
 
 /*** The artifacts for the quest dungeon, all self-willed ***/

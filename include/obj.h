@@ -270,6 +270,8 @@ struct obj {
 				|| (otmp)->otyp == DWARVISH_MITHRIL_COAT\
 				|| (otmp)->otyp == DWARVISH_CLOAK\
 				|| (otmp)->otyp == DWARVISH_ROUNDSHIELD)
+#define is_droven_armor(otmp)	((otmp->otyp == DARK_ELVEN_MITHRIL_COAT))
+
 #define is_gnomish_armor(otmp)	(FALSE)
 
 				
@@ -340,6 +342,13 @@ struct obj {
 
 /* Gnomish gear */
 #define is_gnomish_obj(otmp)	(is_gnomish_armor(otmp))
+
+/* Droven gear */
+#define is_droven_obj(otmp)	(is_droven_armor(otmp)\
+				|| (otmp)->otyp == DARK_ELVEN_DAGGER\
+				|| (otmp)->otyp == DARK_ELVEN_SHORT_SWORD\
+				|| (otmp)->otyp == DARK_ELVEN_ARROW\
+				|| (otmp)->otyp == DARK_ELVEN_BOW)
 
 /* Light sources */
 #define Is_candle(otmp)	((otmp)->otyp == TALLOW_CANDLE || \

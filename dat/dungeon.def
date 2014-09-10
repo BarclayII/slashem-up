@@ -65,7 +65,7 @@ BRANCH:	"Chaotic Quest" @ (15, 5) portal
 # The rogue level (if required), on levels 15 to 19. The portal to one
 #   of the quest levels may also be on this level. The rogue level is not
 #   defined by default in Slash'EM. The dungeon is crowded enough already.
-%REINCARNATION LEVEL: "rogue" "R" @ (15, 5)
+%REINCARNATION LEVEL: "rogue" "Q" @ (15, 5)
 
 
 # Post-quest levels
@@ -80,12 +80,17 @@ BRANCH: 	"The Temple of Moloch" @ (32, 4)
 BRANCH: 	"The Giant Caverns" @ (32, 4)
 #   And the levels...
 LEVEL:		"nymph" "N" @ (23, 2) 45
-RNDLEVEL:	"bigrm" "B" @ (20, 7) 15 5
 #   Storage room (treasure) on levels 19-26, 66% of the time
 #   "Unused 'cause they suck"?
 RNDLEVEL:	"stor" "S" @ (19, 8) 66 3
 #   Rounding out the bottom levels
 LEVEL:		"guild" "G" @ (26, 6) 50
+
+# Big rooms...
+RNDLEVEL:	"bigrm" "none" @ (20, 15) 10 5
+RNDLEVEL:	"bigrm" "none" @ (20, 15) 10 5
+RNDLEVEL:	"bigrm" "none" @ (20, 15) 10 5
+RNDLEVEL:	"bigrm" "none" @ (20, 15) 10 5
 
 
 # The famous Fort Ludios...

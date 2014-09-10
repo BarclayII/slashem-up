@@ -98,6 +98,7 @@ E void FDECL(gainstr, (struct obj *,int));
 E void FDECL(losestr, (int));
 E void NDECL(restore_attrib);
 E void FDECL(exercise, (int,BOOLEAN_P));
+E void FDECL(exer_racial, (struct obj *,int));
 E void NDECL(exerchk);
 E void NDECL(reset_attribute_clock);
 E void FDECL(init_attr, (int));
@@ -1437,6 +1438,9 @@ E boolean FDECL(munstone, (struct monst *,BOOLEAN_P));
 E void NDECL(awaken_soldiers);
 E int FDECL(do_play_instrument, (struct obj *));
 
+/* ### necro.c ### */
+E int raise_zombie(struct obj *);
+
 /* ### nhlan.c ### */
 #ifdef LAN_FEATURES
 E void NDECL(init_lan_features);
@@ -1642,6 +1646,8 @@ E boolean FDECL(is_autopickup_exception, (struct obj *, BOOLEAN_P));
 
 /* ### pline.c ### */
 
+E void FDECL(msgpline_add, (int, char *));
+E void NDECL(msgpline_free);
 E void VDECL(pline, (const char *,...)) PRINTF_F(1,2);
 E void VDECL(Norep, (const char *,...)) PRINTF_F(1,2);
 E void NDECL(free_youbuf);
@@ -2100,6 +2106,7 @@ E int FDECL(tech_inuse, (int));
 E void NDECL(tech_timeout);
 E boolean FDECL(tech_known, (SHORT_P));
 E void FDECL(learntech, (SHORT_P,long,int));
+E int mon_to_zombie(int);
 
 /* ### teleport.c ### */
 
@@ -2519,6 +2526,7 @@ E int NDECL(pick_nasty);
 E int FDECL(nasty, (struct monst*));
 E void NDECL(resurrect);
 E void NDECL(intervene);
+E int NDECL(demigod_delay);
 E void NDECL(wizdead);
 E void FDECL(cuss, (struct monst *));
 
