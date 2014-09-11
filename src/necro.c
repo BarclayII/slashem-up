@@ -47,8 +47,6 @@ struct obj *obj;
 	int pm_undead = NON_PM;
 	int necro = Role_if(PM_NECROMANCER);
 	/* check if the corpse is really a corpse */
-	if (!obj && !rn2(15))
-		return rn2(3) ? PM_SHADOW : PM_SHADE;
 	if (!obj || obj->otyp != CORPSE)
 		return NON_PM;
 	/* check if the corpse is a humanoid corpse */

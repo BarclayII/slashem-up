@@ -1202,6 +1202,7 @@ register struct obj	*sobj;
 		if (NECRO_PERFORMER) {
 		for(i = -1; i <= 1; i++) for(j = -1; j <= 1; j++) {
 		    int corpsenm;
+                    mtmp = (struct monst *)0;
 
 		    if (!isok(u.ux+i, u.uy+j)) continue;
 		    for (obj = level.objects[u.ux+i][u.uy+j]; obj; obj = otmp) {
@@ -1215,21 +1216,22 @@ register struct obj	*sobj;
 					eaten_stat(mons[corpsenm].cnutrit, obj);
 			    obj->corpsenm = corpsenm;
 			    mtmp = revive(obj);
-		    	    /* WAC Give N a shot at controlling the beasties
-		     	     * (if not cursed <g>).  Check curse status in case
-			     * this ever becomes a scroll
-			     */
-		    	    if (mtmp)
-			    	if (!sobj->cursed && Role_if(PM_NECROMANCER)) {
-				    if (!resist(mtmp, sobj->oclass, 0, TELL)) {
-					mtmp = tamedog(mtmp, (struct obj *) 0);
-					if (mtmp) You("dominate %s!", mon_nam(mtmp));
-			            }
-				} 
-				else
-				    setmangry(mtmp);
+                            goto try_tame;
 			}
 		    }
+                    if (!rn2(32))
+                        mtmp = makemon(rn2(3) ? &mons[PM_SHADOW] :
+					&mons[PM_SHADE],
+                                       u.ux, u.uy, NO_MM_FLAGS);
+try_tame:	    if (mtmp)
+			if (!sobj->cursed && Role_if(PM_NECROMANCER)) {
+			    if (!resist(mtmp, sobj->oclass, 0, TELL)) {
+				mtmp = tamedog(mtmp, (struct obj *) 0);
+				if (mtmp) You("dominate %s!", mon_nam(mtmp));
+			    }
+			} 
+			else
+			    setmangry(mtmp);
 		}
 		} else {
 		if(!rn2(73) && !sobj->blessed) cnt += rnd(4);
@@ -1278,12 +1280,13 @@ register struct obj	*sobj;
 		 * Since spell is area affect,  do this after all undead
 		 * are summoned
 		 */
-		if (!Role_if(PM_NECROMANCER) && !(sobj->cursed)) {
+		if (!Role_if(PM_NECROMANCER) && !(sobj->cursed) &&
+		    NECRO_PERFORMER) {
 		    if (objects[SPE_COMMAND_UNDEAD].oc_name_known) {
 			int sp_no;
 			for (sp_no = 0; sp_no < MAXSPELL; sp_no++)
 			    if (spl_book[sp_no].sp_id == SPE_COMMAND_UNDEAD) {
-				You("try to command %s", mon_nam(mtmp));
+				You("try to command the undead...");
 				spelleffects(sp_no, TRUE);
 				break;
 			    }
