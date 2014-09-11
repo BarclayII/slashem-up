@@ -1402,9 +1402,10 @@ random_object:
 	     */
 	    for (wastyp = otmp->corpsenm; ; wastyp = rndmonnum()) {
 		/* makemon without rndmonst() might create a group */
-		was = makemon(&mons[wastyp], 0, 0, NO_MM_FLAGS);
-		if (!resists_ston(was)) break;
-		mongone(was);
+		if (was = makemon(&mons[wastyp], 0, 0, NO_MM_FLAGS)) {
+		    if (!resists_ston(was)) break;
+		    mongone(was);
+		}
 	    }
 	    otmp->corpsenm = wastyp;
 	    while(was->minvent) {

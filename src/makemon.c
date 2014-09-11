@@ -132,7 +132,8 @@ register int x, y, n;
 		 * smaller group.
 		 */
 		if (enexto(&mm, mm.x, mm.y, mtmp->data)) {
-		    mon = makemon(mtmp->data, mm.x, mm.y, NO_MM_FLAGS);
+		    if (!(mon = makemon(mtmp->data, mm.x, mm.y, NO_MM_FLAGS)))
+			    break;
 		    mon->mpeaceful = FALSE;
 		    mon->mavenge = 0;
 		    set_malign(mon);
