@@ -418,7 +418,7 @@ typedef unsigned char	uchar;
 /* #define FIREARM_RANDGEN */
 
 /* Re-enable the Palantir of Westernesse */
-#define PALANTIR
+/* #define PALANTIR */
 
 #define TOUGH_LONGWORM
 
