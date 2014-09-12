@@ -98,7 +98,7 @@ register struct monst *mon;
 }
 
 int
-were_summon(ptr,yours,visible,genbuf)	/* were-creature (even you) summons a horde */
+were_summon(ptr,yours,visible,genbuf,ux,uy)	/* were-creature (even you) summons a horde */
 register struct permonst *ptr;
 register boolean yours;
 int *visible;			/* number of visible helpers created */
@@ -157,7 +157,7 @@ char *genbuf;
 		default:
 			continue;
 	    }
-	    mtmp = makemon(&mons[typ], u.ux, u.uy, NO_MM_FLAGS);
+	    mtmp = makemon(&mons[typ], ux, uy, NO_MM_FLAGS);
 	    if (mtmp) {
 		total++;
 		if (canseemon(mtmp)) *visible += 1;

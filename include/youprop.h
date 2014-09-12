@@ -215,6 +215,11 @@
 #define EDisplaced		u.uprops[DISPLACED].extrinsic
 #define Displaced		EDisplaced
 
+#define invis_mistake(ptr)	(Invisible && !perceives((ptr)->data) && \
+				 ((ptr)->mux != u.ux || (ptr)->muy != u.uy))
+#define displ_mistake(ptr)	(Displaced && \
+				 ((ptr)->mux != u.ux || (ptr)->muy != u.uy))
+
 #define HStealth		u.uprops[STEALTH].intrinsic
 #define EStealth		u.uprops[STEALTH].extrinsic
 #define BStealth		u.uprops[STEALTH].blocked

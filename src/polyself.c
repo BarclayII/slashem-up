@@ -1196,7 +1196,8 @@ dosummon()
 
 	You("call upon your brethren for help!");
 	exercise(A_WIS, TRUE);
-	if (!were_summon(youmonst.data, TRUE, &placeholder, (char *)0))
+	if (!were_summon(youmonst.data, TRUE, &placeholder, (char *)0,
+			 u.ux, u.uy))
 		pline("But none arrive.");
 	return(1);
 }

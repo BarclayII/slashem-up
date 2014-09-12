@@ -607,7 +607,8 @@ mattacku(mtmp)
 		char buf[BUFSZ], genericwere[BUFSZ];
 
 		Strcpy(genericwere, "creature");
-		numhelp = were_summon(mdat, FALSE, &numseen, genericwere);
+		numhelp = were_summon(mdat, FALSE, &numseen, genericwere,
+				      mtmp->mux, mtmp->muy);
 		if (youseeit) {
 			pline("%s summons help!", Monnam(mtmp));
 			if (numhelp > 0) {

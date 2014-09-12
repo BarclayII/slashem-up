@@ -308,10 +308,9 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	    pline("%s casts a spell%s!",
 		  canspotmon(mtmp) ? Monnam(mtmp) : "Something",
 		  is_undirected_spell(mattk->adtyp, spellnum) ? "" :
-		  (Invisible && !perceives(mtmp->data) && 
-		   (mtmp->mux != u.ux || mtmp->muy != u.uy)) ?
+		  (invis_mistake(mtmp)) ?
 		  " at a spot near you" :
-		  (Displaced && (mtmp->mux != u.ux || mtmp->muy != u.uy)) ?
+		  (displ_mistake(mtmp)) ?
 		  " at your displaced image" :
 		  " at you");
 	}
@@ -428,17 +427,16 @@ int spellnum;
 	dmg = 0;
 	break;
     case MGC_CREATE_POOL:
-	if (Invisible && !perceives(mtmp->data) &&
-			(mtmp->mux != u.ux || mtmp->muy != u.uy)
-			&& (levl[mtmp->mux][mtmp->muy].typ == ROOM || 
-			    levl[mtmp->mux][mtmp->muy].typ == CORR)){
+	if (invis_mistake(mtmp) &&
+		(levl[mtmp->mux][mtmp->muy].typ == ROOM || 
+		levl[mtmp->mux][mtmp->muy].typ == CORR)) {
 	    pline("A pool appears beneath a spot near you!");
 	    levl[mtmp->mux][mtmp->muy].typ = POOL;
 	    del_engr_at(mtmp->mux, mtmp->muy);
 	    water_damage(level.objects[mtmp->mux][mtmp->muy], FALSE, TRUE);
 	    spoteffects(FALSE);
-	} else if (Displaced && (mtmp->mux != u.ux || mtmp->muy != u.uy)
-			&& (levl[mtmp->mux][mtmp->muy].typ == ROOM || 
+	} else if (displ_mistake(mtmp) &&
+			   (levl[mtmp->mux][mtmp->muy].typ == ROOM || 
 			    levl[mtmp->mux][mtmp->muy].typ == CORR)) {
 	    pline("A pool appears beneath your displaced image!");
 	    levl[mtmp->mux][mtmp->muy].typ = POOL;
@@ -478,10 +476,9 @@ int spellnum;
 
 	    /* messages not quite right if plural monsters created but
 	       only a single monster is seen */
-	    if (Invisible && !perceives(mtmp->data) &&
-				    (mtmp->mux != u.ux || mtmp->muy != u.uy))
+	    if (invis_mistake(mtmp))
 		pline("%s around a spot near you!", mappear);
-	    else if (Displaced && (mtmp->mux != u.ux || mtmp->muy != u.uy))
+	    else if (displ_mistake(mtmp))
 		pline("%s around your displaced image!", mappear);
 	    else
 		pline("%s from nowhere!", mappear);
@@ -701,11 +698,10 @@ int spellnum;
 	else if (let == S_SNAKE)
 	    pline("%s transforms a clump of sticks into snakes!",
 		Monnam(mtmp));
-	else if (Invisible && !perceives(mtmp->data) &&
-				(mtmp->mux != u.ux || mtmp->muy != u.uy))
+	else if (invis_mistake(mtmp))
 	    pline("%s summons insects around a spot near you!",
 		Monnam(mtmp));
-	else if (Displaced && (mtmp->mux != u.ux || mtmp->muy != u.uy))
+	else if (displ_mistake(mtmp))
 	    pline("%s summons insects around your displaced image!",
 		Monnam(mtmp));
 	else
