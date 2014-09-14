@@ -130,7 +130,7 @@ struct obj *obj;
 		}
 	}
 	/* modify trait object */
-	if (obj->oxlth && obj->oattached == OATTACHED_MONST)
+	if (obj->oxlth && obj->oattached == OATTACHED_MONST && pm_undead != -1)
 		mnew->mnum = pm_undead;
 	return pm_undead;
 }
