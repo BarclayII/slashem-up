@@ -1,5 +1,8 @@
 /* sys/autoconf/autoconf.hin.  Generated from sys/autoconf/configure.ac by autoheader.  */
 
+/* Mouser's Scalpel */
+#undef ARTIFACT_SCALPEL
+
 /* Exceptions to autopickup (experimental) */
 #undef AUTOPICKUP_EXCEPTIONS
 
@@ -11,6 +14,9 @@
 
 /* Charon's boat, enables Cerebus (not implemented) */
 #undef CHARON
+
+/* Sokoban prize selectable */
+#undef CHOOSABLE_SOKOPRIZE
 
 /* Allow smaller screens */
 #undef CLIPPING
@@ -33,17 +39,29 @@
 /* Dwarf race */
 #undef DWARF
 
+/* Easier player-vampires */
+#undef EASIER_VAMPIRE
+
 /* Remember which monsters have been eaten */
 #undef EATEN_MEMORY
 
 /* Engraving the E-word repels monsters */
 #undef ELBERETH
 
+/* Enhanced flame and ice mage artifact */
+#undef ENHANCED_MAGE_ARTI
+
 /* Show experience on bottom line */
 #undef EXP_ON_BOTL
 
 /* Guns and Bullets */
 #undef FIREARMS
+
+/* Randomly generated firearms */
+#undef FIREARM_RANDGEN
+
+/* Flip Levels patch */
+#undef FLIP_SPECIAL
 
 /* OpenGL graphics */
 #undef GL_GRAPHICS
@@ -116,6 +134,9 @@
 /* Microsoft Window's native graphics */
 #undef MSWIN_GRAPHICS
 
+/* Unique covetous monsters ignores Elbereth and alike */
+#undef NEMESES_IGNORE_SCARE
+
 /* Prevent wishing for special artifacts */
 #undef NOARTIFACTWISH
 
@@ -140,8 +161,14 @@
 /* Define to the one symbol short name of this package. */
 #undef PACKAGE_TARNAME
 
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
+
+/* The Palantir of Westernesse */
+#undef PALANTIR
 
 /* Posix regex is available */
 #undef POSIX_REGEX
@@ -187,6 +214,15 @@
 
 /* A System V like system */
 #undef SYSV
+
+/* Dr. Frankenstein is tougher */
+#undef TOUGHFRANK
+
+/* Vlad the Impaler is tougher */
+#undef TOUGHVLAD
+
+/* Tougher long worms */
+#undef TOUGH_LONGWORM
 
 /* Tourist class */
 #undef TOURIST
