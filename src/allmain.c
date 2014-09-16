@@ -692,7 +692,6 @@ post_input()
 		if (flags.time && flags.run) flags.botl = 1;
 		display_nhwindow(WIN_MAP, FALSE);
 	}
-
 }
 
 #ifdef POSITIONBAR
