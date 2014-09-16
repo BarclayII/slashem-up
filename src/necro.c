@@ -44,6 +44,7 @@ struct obj *obj;
 	if (!NECRO_PERFORMER)
 		return NON_PM;
 	int corpsenm, i, mlet;
+	struct monst *mnew = (struct monst *)0;
 	int pm_undead = NON_PM;
 	int necro = Role_if(PM_NECROMANCER);
 	/* check if the corpse is really a corpse */
@@ -56,7 +57,7 @@ struct obj *obj;
 		return corpsenm;
 	if (obj->oxlth && obj->oattached == OATTACHED_MONST) {
 		/* raise from a former undead corpse */
-		struct monst *mnew = get_mtraits(obj, FALSE);
+		mnew = get_mtraits(obj, FALSE);
 		if (is_undead(&mons[mnew->mnum]))
 			return mnew->mnum;
 	}
@@ -128,5 +129,8 @@ struct obj *obj;
 			if (arr) pm_undead = random_pick_mon(arr);
 		}
 	}
+	/* modify trait object */
+	if (obj->oxlth && obj->oattached == OATTACHED_MONST && pm_undead != -1)
+		mnew->mnum = pm_undead;
 	return pm_undead;
 }
