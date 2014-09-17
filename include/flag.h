@@ -111,7 +111,10 @@ struct flag {
 	unsigned run;		/* 0: h (etc), 1: H (etc), 2: fh (etc) */
 				/* 3: FH, 4: ff+, 5: ff-, 6: FF+, 7: FF- */
 				/* 8: travel */
-	unsigned long warntype; /* warn_of_mon monster type M2 */
+	/* [BarclayII] separated warntype to extrinsic and intrinsic */
+	unsigned long warntype;	/* warn_of_mon monster type M2 */
+	unsigned long warntypei;	/* intrinsic version */
+#define typewarned	(flags.warntype | flags.warntypei)
 	int	 warnlevel;
 	int	 djinni_count, ghost_count;	/* potion effect tuning */
 	int	 pickup_burden;		/* maximum burden before prompt */

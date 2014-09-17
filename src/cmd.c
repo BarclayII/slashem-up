@@ -1356,10 +1356,10 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	if (See_invisible) enl_msg(You_, "see", "saw", " invisible");
 	if (Blind_telepat) you_are("telepathic");
 	if (Warning) you_are("warned");
-	if (Warn_of_mon && flags.warntype) {
+	if (Warn_of_mon && typewarned) {
 	    /* [ALI] Add support for undead */
 	    int i, nth = 0;
-	    unsigned long warntype = flags.warntype;
+	    unsigned long warntype = typewarned;
 	    struct { unsigned long mask; const char *str; } warntypes[] = {
 		M2_ORC,		"orcs",
 		M2_DEMON,	"demons",
@@ -1465,6 +1465,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	    you_have(enlght_combatinc("damage", u.udaminc, final, buf));
 	if (Slow_digestion) you_have("slower digestion");
 	if (Regeneration) enl_msg("You regenerate", "", "d", "");
+	if (Bleeding) you_are("bleeding");
 	if (u.uspellprot || Protection) {
 	    int prot = 0;
 
@@ -1747,15 +1748,15 @@ int final;
 	if (See_invisible) dump("  ", "You saw invisible");
 	if (Blind_telepat) dump(youwere, "telepathic");
 	if (Warning) dump(youwere, "warned");
-	if (Warn_of_mon && flags.warntype) {
+	if (Warn_of_mon && typewarned) {
 		Sprintf(buf, "aware of the presence of %s",
-			(flags.warntype & M2_ORC) ? "orcs" :
-			(flags.warntype & M2_DEMON) ? "demons" :
+			(typewarned & M2_ORC) ? "orcs" :
+			(typewarned & M2_DEMON) ? "demons" :
 			something); 
 		dump(youwere, buf);
-		if(flags.warntype & M2_ELF)
+		if(typewarned & M2_ELF)
 			dump(youwere, "aware of the presence of elves");
-		if(flags.warntype & M2_WERE)
+		if(typewarned & M2_WERE)
 			dump(youwere, "aware of the presence of werecreatures");
 	}
 	if (Undead_warning) dump(youwere, "warned of undead");
@@ -1828,6 +1829,7 @@ int final;
 		enlght_combatinc("damage", u.udaminc, final, buf));
 	if (Slow_digestion) dump(youhad, "slower digestion");
 	if (Regeneration) dump("  ", "You regenerated");
+	if (Bleeding) dump(youwere, "bleeding");
 	if (u.uspellprot || Protection) {
 	    int prot = 0;
 
