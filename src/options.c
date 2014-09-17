@@ -617,7 +617,7 @@ initoptions()
 	iflags.bouldersym = 0;
 	iflags.travelcc.x = iflags.travelcc.y = -1;
 	flags.warnlevel = 1;
-	flags.warntype = 0L;
+	flags.warntype = flags.warntypei = 0L;
 
      /* assert( sizeof flags.inv_order == sizeof def_inv_order ); */
 	(void)memcpy((genericptr_t)flags.inv_order,

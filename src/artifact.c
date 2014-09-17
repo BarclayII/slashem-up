@@ -588,10 +588,10 @@ long wp_mask;
 	    if (spec_m2(otmp)) {
 	    	if (on) {
 			EWarn_of_mon |= wp_mask;
-			flags.warntype |= spec_m2(otmp);
+			warnset(spec_m2(otmp), FALSE);
 	    	} else {
 			EWarn_of_mon &= ~wp_mask;
-	    		flags.warntype &= ~spec_m2(otmp);
+	    		warnunset(spec_m2(otmp), FALSE);
 		}
 		see_monsters();
 	    } else {

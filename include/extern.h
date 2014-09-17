@@ -108,6 +108,8 @@ E int NDECL(newhp);
 E schar FDECL(acurr, (int));
 E schar NDECL(acurrstr);
 E void FDECL(adjalign, (int));
+E void FDECL(warnset, (unsigned long, boolean));
+E void FDECL(warnunset, (unsigned long, boolean));
 /* KMH, balance patch -- new function */
 E void NDECL(recalc_health);
 

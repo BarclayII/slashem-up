@@ -806,9 +806,9 @@ int oldlevel, newlevel;
 	/* ALI -- update Warn_of_mon */
 	HWarn_of_mon = HUndead_warning;
 	if (HUndead_warning)
-	    flags.warntype |= M2_UNDEAD;
+	    warnset(M2_UNDEAD, TRUE);
 	else
-	    flags.warntype &= ~M2_UNDEAD;
+	    warnset(M2_UNDEAD, FALSE);
 	
 	/* WAC -- adjust techniques */
 	adjtech(oldlevel, newlevel);
@@ -853,6 +853,28 @@ newhp()
 	
 	hp += conplus;
 	return((hp <= 0) ? 1 : hp);
+}
+
+void
+warnset(mask, intrinsic)
+unsigned long mask;
+boolean intrinsic;
+{
+	if (intrinsic)
+		flags.warntypei |= mask;
+	else
+		flags.warntype |= mask;
+}
+
+void
+warnunset(mask, intrinsic)
+unsigned long mask;
+boolean intrinsic;
+{
+	if (intrinsic)
+		flags.warntypei &= ~mask;
+	else
+		flags.warntype &= ~mask;
 }
 
 #endif /* OVLB */
