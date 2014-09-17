@@ -324,7 +324,8 @@
 #define Regeneration		(HRegeneration || ERegeneration || \
 				 regenerates(youmonst.data))
 
-#define Bleeding		u.uprops[BLEEDING].intrinsic
+#define HBleeding		u.uprops[BLEEDING].intrinsic
+#define Bleeding		HBleeding
 
 #define HEnergy_regeneration	u.uprops[ENERGY_REGENERATION].intrinsic
 #define EEnergy_regeneration	u.uprops[ENERGY_REGENERATION].extrinsic

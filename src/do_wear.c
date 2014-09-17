@@ -795,7 +795,6 @@ register struct obj *obj;
 
     switch(obj->otyp){
 	case RIN_TELEPORTATION:
-	case RIN_REGENERATION:
 	case RIN_SEARCHING:
 	case RIN_STEALTH:
 	case RIN_HUNGER:
@@ -817,6 +816,11 @@ register struct obj *obj;
 	case RIN_SUSTAIN_ABILITY:
 	case MEAT_RING:
 		break;
+	case RIN_REGENERATION:
+		if (Bleeding) {
+			Bleeding = FALSE;
+			Your("wounds are quickly healed!");
+		}
 	case RIN_SLEEPING:        
 		HSleeping = rnd(100);
 		break;
