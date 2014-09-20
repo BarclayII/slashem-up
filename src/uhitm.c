@@ -3434,7 +3434,8 @@ struct monst *mtmp;
 		   *generic = "a monster",
 		   *what = 0;
 
-	if(!u.ustuck && !mtmp->mflee && dmgtype(mtmp->data,AD_STCK))
+	if(!u.ustuck && !mtmp->mflee && dmgtype(mtmp->data,AD_STCK)
+	   && monnear(mtmp, u.ux, u.uy))
 	    setustuck(mtmp);
 
 	if (Blind) {
