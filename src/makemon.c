@@ -624,17 +624,17 @@ register struct monst *mtmp;
 		   default:
 		   break;
 		  } 
-		  if ((int) mtmp->m_lev > rn2(40))
+		  if ((int) mtmp->m_lev > rn2(60))
 		     (void) mongets(mtmp, rnd_offensive_item(mtmp));
-		  if ((int) mtmp->m_lev > rn2(40))
+		  if ((int) mtmp->m_lev > rn2(60))
 		     (void) mongets(mtmp, rnd_offensive_item(mtmp));
-		  if ((int) mtmp->m_lev > rn2(40))
+		  if ((int) mtmp->m_lev > rn2(60))
 		     (void) mongets(mtmp, rnd_defensive_item(mtmp));
-		  if ((int) mtmp->m_lev > rn2(40))
+		  if ((int) mtmp->m_lev > rn2(60))
 		     (void) mongets(mtmp, rnd_defensive_item(mtmp));
-		  if ((int) mtmp->m_lev > rn2(40))
+		  if ((int) mtmp->m_lev > rn2(60))
 		     (void) mongets(mtmp, rnd_misc_item(mtmp));
-		  if ((int) mtmp->m_lev > rn2(40))
+		  if ((int) mtmp->m_lev > rn2(60))
 		     (void) mongets(mtmp, rnd_misc_item(mtmp));
 		 } /* end of other characters */
 	       /*break;*/
