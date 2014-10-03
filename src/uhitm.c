@@ -720,9 +720,7 @@ int thrown;
 	boolean pick_hit_stone = (made_of_rock(mon->data) && (obj && is_pick(obj)));
 	boolean valid_weapon_attack = FALSE;
 	boolean unarmed = !uwep && !uarm && !uarms;
-#ifdef STEED
 	int jousting = 0;
-#endif
 	boolean vapekilled = FALSE; /* WAC added boolean for vamps vaporize */
 	boolean burnmsg = FALSE;
 	boolean no_obj = !obj;	/* since !obj can change if weapon breaks, etc. */
@@ -1026,14 +1024,16 @@ int thrown;
 				&& hates_silver(mdat)) {
 			silvermsg = TRUE; silverobj = TRUE;
 		    }
+		    if (!thrown && tmp > 0 && mon != u.ustuck &&
+			((Role_if(PM_BARBARIAN) && bimanual(obj))
 #ifdef STEED
-		    if (u.usteed && !thrown && tmp > 0 &&
-			    weapon_type(obj) == P_LANCE && mon != u.ustuck) {
+			 || (u.usteed && weapon_type(obj) == P_LANCE)
+#endif
+			)) {
 			jousting = joust(mon, obj);
 			/* exercise skill even for minimal damage hits */
 			if (jousting) valid_weapon_attack = TRUE;
 		    }
-#endif
 		    if (thrown && (is_ammo(obj) || is_missile(obj))) {
 #ifdef P_SPOON
 			if (obj->oartifact == ART_HOUCHOU) {
@@ -1404,20 +1404,27 @@ int thrown;
 	    }
 	}
 
-#ifdef STEED
 	if (jousting) {
-	    tmp += d(2, (obj == uwep) ? 10 : 2);        /* [was in dmgval()] */
-	    You("joust %s%s",
+#ifdef STEED
+	    if (weapon_type(obj) == P_LANCE) {
+	    	tmp += d(2, (obj == uwep) ? 10 : 2);    /* [was in dmgval()] */
+	    	You("joust %s%s",
 			 mon_nam(mon), canseemon(mon) ? exclam(tmp) : ".");
-	    if (jousting < 0) {
-		Your("%s shatters on impact!", xname(obj));
-		/* (must be either primary or secondary weapon to get here) */
-		u.twoweap = FALSE;      /* untwoweapon() is too verbose here */
-		if (obj == uwep) uwepgone();            /* set unweapon */
-		/* minor side-effect: broken lance won't split puddings */
-		useup(obj);
-		obj = 0;
-	    }
+	    	if (jousting < 0) {
+		    Your("%s shatters on impact!", xname(obj));
+		    /* (must be either primary or secondary weapon to get here)
+		     */
+		    u.twoweap = FALSE;  /* untwoweapon() is too verbose here */
+		    if (obj == uwep) uwepgone();            /* set unweapon */
+		    /* minor side-effect: broken lance won't split puddings */
+		    useup(obj);
+		    obj = 0;
+	    	}
+	    } else
+#endif
+		pline("%s %s from your powerful strike!", Monnam(mon),
+			 makeplural(stagger(mon->data, "stagger")));
+
 	    /* avoid migrating a dead monster */
 	    if (mon->mhp > tmp) {
 		mhurtle(mon, u.dx, u.dy, 1);
@@ -1426,7 +1433,6 @@ int thrown;
 	    }
 	    hittxt = TRUE;
 	} else
-#endif
 
 	/* VERY small chance of stunning opponent if unarmed. */
 	if (unarmed && tmp > 1 && !thrown && !obj && !Upolyd) {
@@ -1721,7 +1727,8 @@ struct obj *obj;	/* weapon */
     if (skill_rating == P_ISRESTRICTED) skill_rating = P_UNSKILLED; /* 0=>1 */
 
     /* odds to joust are expert:80%, skilled:60%, basic:40%, unskilled:20% */
-    if ((joust_dieroll = rn2(5)) < skill_rating) {
+    if ((joust_dieroll = rn2(5)) * 
+	(weapon_type(obj) == P_LANCE ? 1 : 2) < skill_rating) {
 	if (joust_dieroll == 0 && rnl(50) == (50-1) &&
 		!unsolid(mon->data) && !obj_resists(obj, 0, 100))
 	    return -1;	/* hit that breaks lance */
