@@ -134,6 +134,7 @@ register boolean special;
 	    		rnd_class(ELVEN_LEATHER_HELM, HELM_OF_TELEPATHY);
 	    short shield = !rn2(8) ? STRANGE_OBJECT :
 	    		rnd_class(ELVEN_SHIELD, SHIELD_OF_REFLECTION);
+	    short amulet = STRANGE_OBJECT;
 	    int quan;
 	    struct obj *otmp;
 
@@ -182,15 +183,13 @@ register boolean special;
 		    break;
 		case PM_MONK:
 		    weapon = STRANGE_OBJECT;
-		    armor = STRANGE_OBJECT;
-		    cloak = ROBE;
+		    armor = rnd_class(ROBE, ROBE_OF_POWER);
 		    if (rn2(2)) shield = STRANGE_OBJECT;
 		    break;
 		case PM_PRIEST:
 		case PM_PRIESTESS:
 		    if (rn2(2)) weapon = MACE;
-		    if (rn2(2)) armor = rnd_class(PLATE_MAIL, CHAIN_MAIL);
-		    if (rn2(4)) cloak = ROBE;
+		    if (rn2(2)) armor = rnd_class(ROBE, ROBE_OF_POWER);
 		    if (rn2(4)) helm = rn2(2) ? HELM_OF_BRILLIANCE : HELM_OF_TELEPATHY;
 		    if (rn2(2)) shield = STRANGE_OBJECT;
 		    break;
@@ -210,11 +209,11 @@ register boolean special;
 		    break;
 #endif
 		case PM_UNDEAD_SLAYER:
-		    if (rn2(2)) weapon = SILVER_SPEAR;
+		    if (rn2(2)) weapon = rn2(2) ? SILVER_SPEAR : SILVER_SABER;
 		    if (rn2(2)) armor = rnd_class(PLATE_MAIL, CHAIN_MAIL);
 		    break;
 		case PM_VALKYRIE:
-		    if (rn2(2)) weapon = WAR_HAMMER;
+		    if (rn2(2)) weapon = rn2(2) ? HEAVY_HAMMER : LONG_SWORD;
 		    if (rn2(2)) armor = rnd_class(PLATE_MAIL, CHAIN_MAIL);
 		    break;
 		case PM_FLAME_MAGE:
@@ -223,10 +222,13 @@ register boolean special;
 		case PM_WIZARD:
 		    if (rn2(4)) weapon = rn2(2) ? QUARTERSTAFF : ATHAME;
 		    if (rn2(2)) {
-		    	armor = rn2(2) ? BLACK_DRAGON_SCALE_MAIL :
-		    			SILVER_DRAGON_SCALE_MAIL;
 		    	cloak = CLOAK_OF_MAGIC_RESISTANCE;
 		    }
+		    if (rn2(2))
+			amulet = rn2(2) ? AMULET_OF_REFLECTION :
+				 AMULET_OF_DRAIN_RESISTANCE;
+		    if (rn2(4))
+			armor = rnd_class(ROBE, ROBE_OF_POWER);
 		    if (rn2(4)) helm = HELM_OF_BRILLIANCE;
 		    shield = STRANGE_OBJECT;
 		    break;
@@ -260,6 +262,8 @@ register boolean special;
 					       GAUNTLETS_OF_DEXTERITY));
 		if (rn2(8))
 		    mk_mplayer_armor(mtmp, rnd_class(LOW_BOOTS, LEVITATION_BOOTS));
+		if (amulet != STRANGE_OBJECT)
+			(void) mongets(mtmp, amulet);
 		m_dowear(mtmp, TRUE);
 
 		quan = rn2(3) ? rn2(3) : rn2(16);
@@ -274,23 +278,29 @@ register boolean special;
 #endif
 		quan = rn2(10);
 		while(quan--)
-		    (void) mpickobj(mtmp, mkobj(RANDOM_CLASS, FALSE));
+		    	(void) mpickobj(mtmp, mkobj(RANDOM_CLASS, FALSE));
+	    	quan = rnd(3);
+	    	while(quan--)
+			(void)mongets(mtmp, rnd_offensive_item(mtmp));
+	    	quan = rnd(3);
+	    	while(quan--)
+			(void)mongets(mtmp, rnd_defensive_item(mtmp));
+	    	quan = rnd(3);
+	    	while(quan--)
+			(void)mongets(mtmp, rnd_misc_item(mtmp));
 	    } else { /* wandering characters... */
 #ifndef GOLDOBJ
 	       mtmp->mgold = rn2((mtmp->m_lev)*100);
 #else
 	       mkmonmoney(mtmp, rn2((mtmp->m_lev)*100));
 #endif
+	       if (!rn2(5))
+		       (void)mongets(mtmp, rnd_offensive_item(mtmp));
+	       if (!rn2(5))
+		       (void)mongets(mtmp, rnd_defensive_item(mtmp));
+	       if (!rn2(5))
+		       (void)mongets(mtmp, rnd_misc_item(mtmp));
 	    }
-	    quan = rnd(3);
-	    while(quan--)
-		(void)mongets(mtmp, rnd_offensive_item(mtmp));
-	    quan = rnd(3);
-	    while(quan--)
-		(void)mongets(mtmp, rnd_defensive_item(mtmp));
-	    quan = rnd(3);
-	    while(quan--)
-		(void)mongets(mtmp, rnd_misc_item(mtmp));
 	}
 
 	return(mtmp);
