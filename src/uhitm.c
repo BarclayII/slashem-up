@@ -1727,8 +1727,8 @@ struct obj *obj;	/* weapon */
     if (skill_rating == P_ISRESTRICTED) skill_rating = P_UNSKILLED; /* 0=>1 */
 
     /* odds to joust are expert:80%, skilled:60%, basic:40%, unskilled:20% */
-    if ((joust_dieroll = rn2(5)) * 
-	(weapon_type(obj) == P_LANCE ? 1 : 2) < skill_rating) {
+    if ((joust_dieroll = rn2((weapon_type(obj) == P_LANCE) ? 5 : 50)) <
+	skill_rating) {
 	if (joust_dieroll == 0 && rnl(50) == (50-1) &&
 		!unsolid(mon->data) && !obj_resists(obj, 0, 100))
 	    return -1;	/* hit that breaks lance */
