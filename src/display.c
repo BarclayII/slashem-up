@@ -182,7 +182,7 @@ magic_map_background(x, y, show)
     if (!cansee(x,y) && !lev->waslit) {
 	/* Floor spaces are dark if unlit.  Corridors are dark if unlit. */
 	if (lev->typ == ROOM && cmap == S_room)
-	    cmap = S_stone;
+	    cmap = S_darkroom;
 	else if (lev->typ == CORR && cmap == S_litcorr)
 	    cmap = S_corr;
     }
@@ -338,7 +338,7 @@ unmap_object(x, y)
 	/* turn remembered dark room squares dark */
 	if (!lev->waslit && lev->glyph == cmap_to_glyph(S_room) &&
 							    lev->typ == ROOM)
-	    lev->glyph = cmap_to_glyph(S_stone);
+	    lev->glyph = cmap_to_glyph(S_darkroom);
     } else
 	levl[x][y].glyph = cmap_to_glyph(S_stone);	/* default val */
 #endif
@@ -653,23 +653,23 @@ feel_location(x, y)
 		    map_background(x, y, 1);
 		} else {
 #ifdef DISPLAY_LAYERS
-		    lev->mem_bg = lev->waslit ? S_room : S_stone;
+		    lev->mem_bg = lev->waslit ? S_room : S_darkroom;
 #else
 		    lev->glyph = lev->waslit ? cmap_to_glyph(S_room) :
-					       cmap_to_glyph(S_stone);
+					       cmap_to_glyph(S_darkroom);
 #endif
 		    show_glyph(x, y, memory_glyph(x, y));
 		}
 #ifdef DISPLAY_LAYERS
 	    } else if ((lev->mem_bg >= S_stone && lev->mem_bg < S_room) ||
 		       memory_is_invisible(x, y)) {
-		lev->mem_bg = lev->waslit ? S_room : S_stone;
+		lev->mem_bg = lev->waslit ? S_room : S_darkroom;
 #else
-	    } else if ((lev->glyph >= cmap_to_glyph(S_stone) &&
+	    } else if ((lev->glyph >= cmap_to_glyph(S_darkroom) &&
 			lev->glyph < cmap_to_glyph(S_room)) ||
 		       glyph_is_invisible(levl[x][y].glyph)) {
 		lev->glyph = lev->waslit ? cmap_to_glyph(S_room) :
-					   cmap_to_glyph(S_stone);
+					   cmap_to_glyph(S_darkroom);
 #endif
 		show_glyph(x, y, memory_glyph(x, y));
 	    }
@@ -725,7 +725,7 @@ feel_location(x, y)
 #else
 	if (lev->typ == ROOM &&
 		    lev->glyph == cmap_to_glyph(S_room) && !lev->waslit)
-	    show_glyph(x,y, lev->glyph = cmap_to_glyph(S_stone));
+	    show_glyph(x,y, lev->glyph = cmap_to_glyph(S_darkroom));
 	else if (lev->typ == CORR &&
 		    lev->glyph == cmap_to_glyph(S_litcorr) && !lev->waslit)
 	    show_glyph(x,y, lev->glyph = cmap_to_glyph(S_corr));
@@ -883,7 +883,7 @@ newsym(x,y)
 	    if (lev->glyph == cmap_to_glyph(S_litcorr) && lev->typ == CORR)
 		show_glyph(x, y, lev->glyph = cmap_to_glyph(S_corr));
 	    else if (lev->glyph == cmap_to_glyph(S_room) && lev->typ == ROOM)
-		show_glyph(x, y, lev->glyph = cmap_to_glyph(S_stone));
+		show_glyph(x, y, lev->glyph = cmap_to_glyph(S_darkroom));
 #endif	/* DISPLAY_LAYERS */
 	    else
 		goto show_mem;
@@ -1697,7 +1697,9 @@ back_to_cmap(x,y)
 	case STONE:
 	    idx = level.flags.arboreal ? S_tree : S_stone;
 	    break;
-	case ROOM:		idx = S_room;	  break;
+	case ROOM:
+	    idx = (!cansee(x,y) && !ptr->waslit) ? S_darkroom : S_room;
+	    break;
 	case CORR:
 	    idx = (ptr->waslit || flags.lit_corridor) ? S_litcorr : S_corr;
 	    break;
@@ -1755,11 +1757,11 @@ back_to_cmap(x,y)
 	    case DB_MOAT:  idx = S_pool; break;
 	    case DB_LAVA:  idx = S_lava; break;
 	    case DB_ICE:   idx = S_ice;  break;
-	    case DB_FLOOR: idx = S_room; break;
+	    case DB_FLOOR: idx = (!cansee(x,y) && !ptr->waslit) ? S_darkroom : S_room; break;
 	    default:
 		impossible("Strange db-under: %d",
 			   ptr->drawbridgemask & DB_UNDER);
-		idx = S_room; /* something is better than nothing */
+		idx = (!cansee(x,y) && !ptr->waslit) ? S_darkroom : S_room; /* something is better than nothing */
 		break;
 	    }
 	    break;
@@ -1768,7 +1770,7 @@ back_to_cmap(x,y)
 	    break;
 	default:
 	    impossible("back_to_glyph:  unknown level type [ = %d ]",ptr->typ);
-	    idx = S_room;
+	    idx = (!cansee(x,y) && !ptr->waslit) ? S_darkroom : S_room;
 	    break;
     }
     return idx;
