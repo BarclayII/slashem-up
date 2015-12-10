@@ -381,6 +381,7 @@ typedef unsigned char	uchar;
 
 /* dungeon levels */
 #define WALLIFIED_MAZE	/* Fancy mazes - Jean-Christophe Collet */
+#define WALLIFIED_CORRIDORS /* Fancy corridors */
 #define REINCARNATION      /* Special Rogue-like levels */
 #define BLACKMARKET     /* Massimo Campostrini (campo@sunthpi3.difi.unipi.it) */
 

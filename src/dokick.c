@@ -859,7 +859,7 @@ dokick()
 		    if(!Levitation && rn2(30) < avrg_attrib) {
 			pline("Crash!  You kick open a secret passage!");
 			exercise(A_DEX, TRUE);
-			maploc->typ = CORR;
+			maploc->typ = SCORR_OPEN;
 			if (Blind)
 			    feel_location(x,y);	/* we know it's gone */
 			else

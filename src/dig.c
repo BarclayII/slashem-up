@@ -1362,7 +1362,7 @@ zap_dig()
 		    break;
 		} else if (room->typ == STONE || room->typ == SCORR) {
 		    if (!(room->wall_info & W_NONDIGGABLE)) {
-			room->typ = CORR;
+			room->typ = SCORR_OPEN;
 			unblock_point(zx,zy); /* vision */
 		    } else if (!Blind)
 			pline_The("rock glows then fades.");

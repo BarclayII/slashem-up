@@ -528,7 +528,12 @@ boolean nxcor;
 
 	/* KMH -- Support for arboreal levels */
 	if (!dig_corridor(&org, &dest, nxcor,
-			level.flags.arboreal ? ROOM : CORR, STONE))
+#ifdef WALLIFIED_CORRIDORS
+					ROOM
+#else
+	  level.flags.arboreal ? ROOM : CORR
+#endif
+					    , STONE))
 	    return;
 
 	/* we succeeded in digging the corridor */
@@ -713,9 +718,15 @@ int trap_type;
 	    if(!place_niche(aroom,&dy,&xx,&yy)) continue;
 
 	    rm = &levl[xx][yy+dy];
+#ifdef WALLIFIED_CORRIDORS
+	    rm->typ = ROOM;
+#else
+	    rm->typ = CORR;
+#endif
 	    if(trap_type || !rn2(4)) {
-
+#ifndef WALLIFIED_CORRIDORS
 		rm->typ = SCORR;
+#endif
 		if(trap_type) {
 		    if((trap_type == HOLE || trap_type == TRAPDOOR)
 			&& !Can_fall_thru(&u.uz))
@@ -732,7 +743,6 @@ int trap_type;
 		}
 		dosdoor(xx, yy, aroom, SDOOR);
 	    } else {
-		rm->typ = CORR;
 		if(rn2(7))
 		    dosdoor(xx, yy, aroom, rn2(5) ? SDOOR : DOOR);
 		else {
@@ -962,6 +972,11 @@ makelevel()
 				rooms[nroom].hx = -1;
 		}
 	}
+
+#ifdef WALLIFIED_CORRIDORS
+	wallify_map(); /* add walls... */
+	wallification(1, 0, COLNO-1, ROWNO-1, FALSE); /* ...then clean them up */
+#endif
 
     {
 	register int u_depth = depth(&u.uz);

@@ -77,15 +77,27 @@ xchar *ry;
                 if (guard && ((x == guard->mx && y == guard->my) || 
                               (guard->isgd && in_fcorridor(guard, x, y)))) 
                     continue; 
-                if (levl[x][y].typ == CORR) { 
+	      if(levl[x][y].typ == 
+#ifdef WALLIFIED_CORRIDORS
+				ROOM
+#else
+				CORR
+#endif
+		  /* better not send our hero into (possibly locked) shops */
+		      && !*in_rooms(x, y, SHOPBASE)) {
                     if (x < u.ux) lx = x + 1; 
                     else if (x > u.ux) lx = x - 1; 
                     else lx = x; 
                     if (y < u.uy) ly = y + 1; 
                     else if (y > u.uy) ly = y - 1; 
                     else ly = y; 
-                    if (levl[lx][ly].typ != STONE && 
-                        levl[lx][ly].typ != CORR) 
+		  if(levl[lx][ly].typ != STONE && levl[lx][ly].typ != 
+#ifdef WALLIFIED_CORRIDORS
+				ROOM
+#else
+				CORR
+#endif
+                                    )
                         goto incr_radius; 
                     *rx = x; 
                     *ry = y; 

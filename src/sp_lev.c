@@ -1706,12 +1706,34 @@ schar ftyp, btyp;
 
 	    crm = &levl[xx][yy];
 	    if(crm->typ == btyp) {
-		if(ftyp != CORR || rn2(100)) {
+		if(ftyp != 
+#ifdef WALLIFIED_MAZE
+			   ROOM
+#else
+			   CORR
+#endif
+				|| rn2(100)) {
 			crm->typ = ftyp;
 			if(nxcor && !rn2(50))
 				(void) mksobj_at(BOULDER, xx, yy, TRUE, FALSE);
+#ifdef WALLIFIED_MAZE
+			else if(nxcor && !rn2(max(21,75 - level_difficulty()*2))) {
+			    	coord mm;
+				mm.x = xx;
+				mm.y = yy;
+				mktrap(0,1,(struct mkroom *)0,&mm);
+			} if(nxcor && !rn2(227 + 3 * abs(depth(&u.uz)))) {
+				char buf[BUFSZ];
+				const char *mesg = random_engraving(buf);
+				if (mesg) make_engr_at(xx, yy, mesg, 0L, MARK);
+			}
+#endif
+
 		} else {
 			crm->typ = SCORR;
+#ifdef WALLIFIED_MAZE
+			crm->horizontal = !!abs(dy);
+#endif
 		}
 	    } else
 	    if(crm->typ != ftyp && crm->typ != SCORR) {
@@ -1847,7 +1869,13 @@ corridor	*c;
 		      case W_WEST:  dest.x--; break;
 		      case W_EAST:  dest.x++; break;
 		}
-		(void) dig_corridor(&org, &dest, FALSE, CORR, STONE);
+		(void) dig_corridor(&org, &dest, FALSE, 
+#ifdef WALLIFIED_CORRIDORS
+							ROOM
+#else
+							CORR
+#endif
+							    , STONE);
 	}
 }
 
@@ -2437,6 +2465,10 @@ dlb *fd;
 		create_corridor(&tmpcor);
 	}
 
+#ifdef WALLIFIED_CORRIDORS
+	wallify_map(); /* add walls... */
+	wallification(1, 0, COLNO-1, ROWNO-1, FALSE); /* ...then clean them up */
+#endif
 #ifdef FLIP_SPECIAL
     	int c = 0;
     	if (rn2(2)) c |= 1;

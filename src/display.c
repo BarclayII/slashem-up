@@ -1693,7 +1693,9 @@ back_to_cmap(x,y)
 
     switch (ptr->typ) {
     /* KMH -- support arboreal levels */
-	case SCORR:
+#ifndef WALLIFIED_MAZE
+ 	case SCORR:
+#endif
 	case STONE:
 	    idx = level.flags.arboreal ? S_tree : S_stone;
 	    break;
@@ -1703,6 +1705,23 @@ back_to_cmap(x,y)
 	case CORR:
 	    idx = (ptr->waslit || flags.lit_corridor) ? S_litcorr : S_corr;
 	    break;
+#ifdef WALLIFIED_MAZE
+	case SCORR:
+	    if (
+#ifdef REINCARNATION
+	    Is_rogue_level(&u.uz) ||
+#endif
+	    !ptr->seenv) {
+		idx = S_stone;
+		break;
+	    }
+	    /* A hack to make wallified secret corridors work */
+	    ptr->typ = HWALL; /* Make it a wall */
+	    wallification(x-1,y-1,x+1,y+1,FALSE); /* Give it the correct spine */
+	    idx = wall_angle(ptr); /* Find the angle */
+	    ptr->typ = SCORR; /* Back to secret door */
+	    break;
+#endif
 	case HWALL:
 	case VWALL:
 	case TLCORNER:
@@ -2052,6 +2071,12 @@ set_wall_state()
     for (x = 0; x < COLNO; x++)
 	for (lev = &levl[x][0], y = 0; y < ROWNO; y++, lev++) {
 	    switch (lev->typ) {
+#ifdef WALLIFIED_CORRIDORS
+		case SCORR:
+#ifdef REINCARNATION
+		    if (Is_rogue_level(&u.uz)) continue;
+#endif
+#endif
 		case SDOOR:
 		    wmode = set_wall(x, y, (int) lev->horizontal);
 		    break;

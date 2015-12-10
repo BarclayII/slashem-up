@@ -331,6 +331,19 @@ extern const struct symdef def_warnsyms[WARNCOUNT];
 #define ICED_MOAT	16
 
 /*
+ * What terrain to use for found secret corridors.
+ */
+#ifdef WALLIFIED_MAZE
+#ifdef REINCARNATION
+#define SCORR_OPEN	(!Is_rogue_level(&u.uz) ? ROOM : CORR)
+#else
+#define SCORR_OPEN	ROOM
+#endif /*REINCARNATION*/
+#else
+#define SCORR_OPEN	CORR
+#endif /*WALLIFIED_MAZE*/
+
+/*
  * The structure describing a coordinate position.
  * Before adding fields, remember that this will significantly affect
  * the size of temporary files and save files.

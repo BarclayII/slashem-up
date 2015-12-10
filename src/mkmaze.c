@@ -48,7 +48,11 @@ iswall_or_stone(x,y)
 
     type = levl[x][y].typ;
     return (type == STONE || IS_WALL(type) || IS_DOOR(type) ||
-	    type == SDOOR || type == IRONBARS);
+	    type == SDOOR || 
+#ifdef WALLIFIED_CORRIDORS
+			type == SCORR ||
+#endif
+			type == IRONBARS);
 }
 
 /* return TRUE if out of bounds, wall or rock */

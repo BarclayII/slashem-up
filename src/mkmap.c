@@ -14,7 +14,9 @@ STATIC_DCL schar FDECL(get_map,(int,int,SCHAR_P));
 STATIC_DCL void FDECL(pass_one,(SCHAR_P,SCHAR_P));
 STATIC_DCL void FDECL(pass_two,(SCHAR_P,SCHAR_P));
 STATIC_DCL void FDECL(pass_three,(SCHAR_P,SCHAR_P));
+#ifndef WALLIFIED_CORRIDORS
 STATIC_DCL void NDECL(wallify_map);
+#endif
 STATIC_DCL void FDECL(join_map,(SCHAR_P,SCHAR_P));
 STATIC_DCL void FDECL(finish_map,(SCHAR_P,SCHAR_P,XCHAR_P,XCHAR_P));
 STATIC_DCL void FDECL(remove_room,(unsigned));
@@ -247,7 +249,10 @@ flood_fill_rm(sx, sy, rmno, lit, anyroom)
  *	If we have drawn a map without walls, this allows us to
  *	auto-magically wallify it.  Taken from lev_main.c.
  */
-STATIC_OVL void
+#ifndef WALLIFIED_CORRIDORS
+STATIC_OVL
+#endif
+void
 wallify_map()
 {
 
@@ -258,7 +263,11 @@ wallify_map()
 	    if(levl[x][y].typ == STONE) {
 		for(yy = y - 1; yy <= y+1; yy++)
 		    for(xx = x - 1; xx <= x+1; xx++)
-			if(isok(xx,yy) && levl[xx][yy].typ == ROOM) {
+			if(isok(xx,yy) && (levl[xx][yy].typ == ROOM
+#ifdef WALLIFIED_CORRIDORS
+					|| levl[xx][yy].typ == SCORR
+#endif
+								    )) {
 			    if(yy != y)	levl[x][y].typ = HWALL;
 			    else	levl[x][y].typ = VWALL;
 			}
