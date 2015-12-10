@@ -853,7 +853,7 @@ xchar	rtype, rlit;
 	if (!vault) {
 		smeq[nroom] = nroom;
 		add_room(xabs, yabs, xabs+wtmp-1, yabs+htmp-1,
-			 rlit, rtype, FALSE);
+			 rlit, rtype, FALSE, TRUE);
 	} else {
 		rooms[nroom].lx = xabs;
 		rooms[nroom].ly = yabs;
@@ -2770,13 +2770,13 @@ dlb *fd;
 		    flood_fill_rm(tmpregion.x1, tmpregion.y1,
 				  nroom+ROOMOFFSET, tmpregion.rlit, TRUE);
 		    add_room(min_rx, min_ry, max_rx, max_ry,
-			     FALSE, tmpregion.rtype, TRUE);
+			     FALSE, tmpregion.rtype, TRUE, FALSE);
 		    troom->rlit = tmpregion.rlit;
 		    troom->irregular = TRUE;
 		} else {
 		    add_room(tmpregion.x1, tmpregion.y1,
 			     tmpregion.x2, tmpregion.y2,
-			     tmpregion.rlit, tmpregion.rtype, TRUE);
+			     tmpregion.rlit, tmpregion.rtype, TRUE, FALSE);
 #ifdef SPECIALIZATION
 		    topologize(troom,FALSE);		/* set roomno */
 #else
