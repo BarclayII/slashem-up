@@ -41,11 +41,12 @@ STATIC_PTR int FDECL( CFDECLSPEC do_comp,(const genericptr,const genericptr));
 STATIC_DCL void FDECL(dosdoor,(XCHAR_P,XCHAR_P,struct mkroom *,int));
 STATIC_DCL void FDECL(join,(int,int,BOOLEAN_P));
 STATIC_DCL void FDECL(do_room_or_subroom, (struct mkroom *,int,int,int,int,
-				       BOOLEAN_P,SCHAR_P,BOOLEAN_P,BOOLEAN_P));
+				       BOOLEAN_P,SCHAR_P,BOOLEAN_P,BOOLEAN_P,BOOLEAN_P));
 STATIC_DCL void NDECL(makerooms);
 STATIC_DCL void FDECL(finddpos,(coord *,XCHAR_P,XCHAR_P,XCHAR_P,XCHAR_P));
 STATIC_DCL void FDECL(mkinvpos, (XCHAR_P,XCHAR_P,int));
 STATIC_DCL void FDECL(mk_knox_portal, (XCHAR_P,XCHAR_P));
+STATIC_DCL int NDECL(randomwalltype);
 
 #define create_vault()	create_room(-1, -1, 2, 2, -1, -1, VAULT, TRUE)
 #define init_vault()	vault_x = -1
@@ -115,8 +116,15 @@ sort_rooms()
 #endif
 }
 
+STATIC_OVL int
+randomwalltype(void)
+{
+	/* not included */
+	return STONE;
+}
+
 STATIC_OVL void
-do_room_or_subroom(croom, lowx, lowy, hix, hiy, lit, rtype, special, is_room)
+do_room_or_subroom(croom, lowx, lowy, hix, hiy, lit, rtype, special, is_room, canbeshaped)
     register struct mkroom *croom;
     int lowx, lowy;
     register int hix, hiy;
@@ -124,9 +132,13 @@ do_room_or_subroom(croom, lowx, lowy, hix, hiy, lit, rtype, special, is_room)
     schar rtype;
     boolean special;
     boolean is_room;
+    boolean canbeshaped;
 {
 	register int x, y;
 	struct rm *lev;
+
+	int wallifytype = STONE;
+	boolean wallifyxtra = 0;
 
 	/* locations might bump level edges in wall-less rooms */
 	/* add/subtract 1 to allow for edge locations */
@@ -181,7 +193,216 @@ do_room_or_subroom(croom, lowx, lowy, hix, hiy, lit, rtype, special, is_room)
 		levl[hix+1][lowy-1].typ = TRCORNER;
 		levl[lowx-1][hiy+1].typ = BLCORNER;
 		levl[hix+1][hiy+1].typ = BRCORNER;
-	    } else {	/* a subroom */
+	    }
+        if (canbeshaped && (hix - lowx > 3) && (hiy - lowy > 3) && (rn2(10) < 5) )  {  
+            int xcmax = 0, ycmax = 0, xcut = 0, ycut = 0;  
+            boolean dotl = FALSE, dotr = FALSE, dobl = FALSE, dobr = FALSE, docenter = FALSE;  
+            switch (rnd(9)) {  
+            case 1:  
+            case 2:  
+            case 3:  
+                /* L-shaped */  
+                xcmax = (hix - lowx) * 2 / 3;
+                ycmax = (hiy - lowy) * 2 / 3;
+                switch(rn2(4)) {  
+                case 1:  
+                    dotr = TRUE;  
+                    break;  
+                case 2:  
+                    dobr = TRUE;  
+                    break;  
+                case 3:  
+                    dotl = TRUE;  
+                    break;  
+                default:  
+                    dobl = TRUE;  
+                    break;  
+                }  
+                break;  
+            case 4:  
+            case 5:  
+                /* T-shaped */  
+                xcmax = (hix - lowx) * 2 / 5;
+                ycmax = (hiy - lowy) * 2 / 5;
+                switch(rn2(4)) {  
+                case 1:  
+                    dotr = TRUE;  
+                    dotl = TRUE;  
+                case 2:  
+                    dobr = TRUE;  
+                    dobl = TRUE;  
+                case 3:  
+                    dotr = TRUE;  
+                    dobr = TRUE;  
+                default:  
+                    dotl = TRUE;  
+                    dobl = TRUE;  
+                }  
+                break;  
+            case 6:  
+                /* S/Z shaped ("Tetris Piece") */  
+                xcmax = (hix - lowx) * 2 / 3;
+                ycmax = (hiy - lowy) * 2 / 3;
+                switch(rn2(2)) {  
+                case 1:  
+                    dotr = TRUE;  
+                    dobl = TRUE;  
+                default:  
+                    dotl = TRUE;  
+                    dobr = TRUE;  
+                }  
+                break;  
+            case 7:  
+                /* Plus Shaped */  
+                xcmax = (hix - lowx) * 2 / 5;
+                ycmax = (hiy - lowy) * 2 / 5;
+                dotr = TRUE;  
+                dotl = TRUE;  
+                dobr = TRUE;  
+                dobl = TRUE;  
+                break;  
+            case 8:  
+                /* square-O shaped (pillar cut out of middle) */  
+                xcmax = (hix - lowx) / 2;  
+                ycmax = (hiy - lowy) / 2;  
+                docenter = TRUE;  
+                break;  
+            case 9:  
+                /* X-shaped */  
+                xcmax = (hix - lowx) / 3;  
+                ycmax = (hiy - lowy) / 3;  
+                dotr = TRUE;  
+                dotl = TRUE;  
+                dobr = TRUE;  
+                dobl = TRUE;  
+                docenter = TRUE;  
+                break;  
+                /* TODO: oval */  
+            default:  
+                /* Rectangular -- nothing to do */  
+                break;  
+            }  
+            if (dotr || dotl || dobr || dobl || docenter) {  
+                xcut = 1 + rn2(xcmax);  
+                ycut = 1 + rn2(ycmax);  
+                /* Sometimes, instead of a small cut, do a max cut.  
+                   This improves the probability of a larger cut,  
+                   without removing the possibility for small ones. */  
+                if ((xcut < (xcmax / 2)) && !rn2(3))  
+                    xcut = xcmax;  
+                if ((ycut < (ycmax / 2)) && !rn2(3))  
+                    ycut = ycmax;  
+            }  
+            /* Now do the actual cuts. */  
+            if (dotr) {  
+                /* top-right cutout */  
+                for (y = 0; y < ycut; y++) {  
+                    for (x = 0; x < xcut; x++) {  
+				levl[hix + 1 - x][lowy + y - 1].typ = (wallifyxtra ? randomwalltype() : wallifytype);
+                    }  
+                    levl[hix + 1 - xcut][lowy + y - 1].typ = (wallifytype ? (wallifyxtra ? randomwalltype() : wallifytype) : VWALL);
+                }  
+                for (x = 0; x < xcut; x++)  
+                    levl[hix + 1 - x][lowy + ycut - 1].typ = (wallifytype ? (wallifyxtra ? randomwalltype() : wallifytype) : HWALL);
+                levl[hix + 1 - xcut][lowy + ycut - 1].typ = (wallifytype ? (wallifyxtra ? randomwalltype() : wallifytype) : BLCORNER);
+                levl[hix + 1][lowy + ycut - 1].typ = (wallifytype ? (wallifyxtra ? randomwalltype() : wallifytype) : TRCORNER);
+                levl[hix + 1 - xcut][lowy - 1].typ = (wallifytype ? (wallifyxtra ? randomwalltype() : wallifytype) : TRCORNER);
+            }  
+            if (dobr) {  
+                /* bottom-right cutout */  
+                for (y = 0; y < ycut; y++) {  
+                    for (x = 0; x < xcut; x++) {  
+                        levl[hix + 1 - x][hiy + 1 - y].typ = (wallifyxtra ? randomwalltype() : wallifytype);
+                    }  
+                    levl[hix + 1 - xcut][hiy + 1 - y].typ = (wallifytype ? (wallifyxtra ? randomwalltype() : wallifytype) : VWALL);
+                }  
+                for (x = 0; x < xcut; x++)  
+                    levl[hix + 1 - x][hiy + 1 - ycut].typ = (wallifytype ? (wallifyxtra ? randomwalltype() : wallifytype) : HWALL);
+                levl[hix + 1 - xcut][hiy + 1 - ycut].typ = (wallifytype ? (wallifyxtra ? randomwalltype() : wallifytype) : TLCORNER);
+                levl[hix + 1][hiy + 1 - ycut].typ = (wallifytype ? (wallifyxtra ? randomwalltype() : wallifytype) : BRCORNER);
+                levl[hix + 1 - xcut][hiy + 1].typ = (wallifytype ? (wallifyxtra ? randomwalltype() : wallifytype) : BRCORNER);
+            }  
+            if (dotl) {  
+                /* top-left cutout */  
+                for (y = 0; y < ycut; y++) {  
+                    for (x = 0; x < xcut; x++) {  
+                        levl[lowx + x - 1][lowy + y - 1].typ = (wallifyxtra ? randomwalltype() : wallifytype);
+                    }  
+                    levl[lowx + xcut - 1][lowy + y - 1].typ = (wallifytype ? (wallifyxtra ? randomwalltype() : wallifytype) : VWALL);
+                }  
+                for (x = 0; x < xcut; x++)  
+                    levl[lowx + x - 1][lowy + ycut - 1].typ = (wallifytype ? (wallifyxtra ? randomwalltype() : wallifytype) : HWALL);
+                levl[lowx + xcut - 1][lowy + ycut - 1].typ = (wallifytype ? (wallifyxtra ? randomwalltype() : wallifytype) : BRCORNER);
+                levl[lowx - 1][lowy + ycut - 1].typ = (wallifytype ? (wallifyxtra ? randomwalltype() : wallifytype) : TLCORNER);
+                levl[lowx + xcut - 1][lowy - 1].typ = (wallifytype ? (wallifyxtra ? randomwalltype() : wallifytype) : TLCORNER);
+            }  
+            if (dobl) {  
+                /* bottom-left cutout */  
+                for (y = 0; y < ycut; y++) {  
+                    for (x = 0; x < xcut; x++) {  
+                        levl[lowx + x - 1][hiy + 1 - y].typ = (wallifyxtra ? randomwalltype() : wallifytype);
+                    }  
+                    levl[lowx + xcut - 1][hiy + 1 - y].typ = (wallifytype ? (wallifyxtra ? randomwalltype() : wallifytype) : VWALL);
+                }  
+                for (x = 0; x < xcut; x++)  
+                    levl[lowx + x - 1][hiy + 1 - ycut].typ = (wallifytype ? (wallifyxtra ? randomwalltype() : wallifytype) : HWALL);
+                levl[lowx + xcut - 1][hiy + 1 - ycut].typ = (wallifytype ? (wallifyxtra ? randomwalltype() : wallifytype) : TRCORNER);
+                levl[lowx - 1][hiy + 1 - ycut].typ = (wallifytype ? (wallifyxtra ? randomwalltype() : wallifytype) : BLCORNER);
+                levl[lowx + xcut - 1][hiy + 1].typ = (wallifytype ? (wallifyxtra ? randomwalltype() : wallifytype) : BLCORNER);
+            }  
+            if (docenter) {  
+                /* pillar in the middle */  
+                int xcenter = lowx + ((hix - lowx) / 2);  
+                int ycenter = lowy + ((hiy - lowy) / 2);  
+                int xparity = ((hix - lowx) % 2) ? 1 : 0;  
+                int yparity = ((hiy - lowy) % 2) ? 1 : 0;  
+                int xradius = (xcut + 1) / 2;  
+                int yradius = (ycut + 1) / 2;  
+                int vcorrmin = xcenter - xradius + 1;  
+                int vcorrmax = xcenter + xradius + xparity - 1;  
+                int hcorrmin = ycenter - yradius + 1;  
+                int hcorrmax = ycenter + yradius + yparity - 1;  
+                for (x = xcenter - xradius; x <= xcenter + xradius + xparity; x++) {  
+                    for (y = ycenter - yradius; y <= ycenter + yradius + yparity; y++) {  
+
+				if (wallifytype) levl[x][y].typ = wallifyxtra ? randomwalltype() : wallifytype;
+				else levl[x][y].typ =  
+                            ((x == xcenter - xradius) &&  
+                             (y == ycenter - yradius)) ? TLCORNER :  
+                            ((x == xcenter - xradius) &&  
+                             (y == ycenter + yradius + yparity)) ? BLCORNER :  
+                            ((x == xcenter + xradius + xparity) &&  
+                             (y == ycenter - yradius)) ? TRCORNER :  
+                            ((x == xcenter + xradius + xparity) &&  
+                             (y == ycenter + yradius + yparity)) ? BRCORNER :  
+                            ((x == xcenter - xradius) ||  
+                             (x == xcenter + xradius + xparity)) ? VWALL :  
+                            ((y == ycenter - yradius) ||  
+                             (y == ycenter + yradius + yparity)) ? HWALL : STONE;  
+                    }  
+                }  
+                if ((vcorrmax - vcorrmin) > 1 && rn2(3)) {  
+                    x = vcorrmin + rn2(vcorrmax - vcorrmin);  
+                    for (y = ycenter - yradius; y <= ycenter + yradius + yparity; y++) {  
+                        levl[x][y].typ =  
+                            ((y == ycenter - yradius) ||  
+                             (y == ycenter + yradius + yparity)) ? SDOOR : SCORR;  
+                        if (levl[x][y].typ == SDOOR) {  
+                            levl[x][y].horizontal = 1;  
+                        }  
+                    }  
+                }  
+                if ((hcorrmax - hcorrmin) > 1 && rn2(3)) {  
+                    y = hcorrmin + rn2(hcorrmax - hcorrmin);  
+                    for (x = xcenter - xradius; x <= xcenter + xradius + xparity; x++) {  
+                        levl[x][y].typ =  
+                            ((x == xcenter - xradius) ||  
+                             (x == xcenter + xradius + xparity)) ? SDOOR : SCORR;  
+                    }  
+                }  
+            }
+          }  
+	    if (!is_room) {	/* a subroom */
 		wallification(lowx-1, lowy-1, hix+1, hiy+1, FALSE);
 	    }
 	}
@@ -189,17 +410,18 @@ do_room_or_subroom(croom, lowx, lowy, hix, hiy, lit, rtype, special, is_room)
 
 
 void
-add_room(lowx, lowy, hix, hiy, lit, rtype, special)
+add_room(lowx, lowy, hix, hiy, lit, rtype, special, canbeshaped)
 register int lowx, lowy, hix, hiy;
 boolean lit;
 schar rtype;
 boolean special;
+boolean canbeshaped;
 {
 	register struct mkroom *croom;
 
 	croom = &rooms[nroom];
 	do_room_or_subroom(croom, lowx, lowy, hix, hiy, lit,
-					    rtype, special, (boolean) TRUE);
+					    rtype, special, (boolean) TRUE, canbeshaped);
 	croom++;
 	croom->hx = -1;
 	nroom++;
@@ -217,7 +439,7 @@ boolean special;
 
 	croom = &subrooms[nsubroom];
 	do_room_or_subroom(croom, lowx, lowy, hix, hiy, lit,
-					    rtype, special, (boolean) FALSE);
+					    rtype, special, (boolean) FALSE, (boolean) FALSE);
 	proom->sbrooms[proom->nsubrooms++] = croom;
 	croom++;
 	croom->hx = -1;
@@ -725,7 +947,7 @@ makelevel()
 		if (check_room(&vault_x, &w, &vault_y, &h, TRUE)) {
 		    fill_vault:
 			add_room(vault_x, vault_y, vault_x+w,
-				 vault_y+h, TRUE, VAULT, FALSE);
+				 vault_y+h, TRUE, VAULT, FALSE, FALSE);
 			level.flags.has_vault = 1;
 			++room_threshold;
 			fill_room(&rooms[nroom - 1], FALSE);
