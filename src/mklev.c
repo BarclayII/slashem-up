@@ -299,6 +299,7 @@ do_room_or_subroom(croom, lowx, lowy, hix, hiy, lit, rtype, special, is_room, ca
                 for (y = 0; y < ycut; y++) {  
                     for (x = 0; x < xcut; x++) {  
 				levl[hix + 1 - x][lowy + y - 1].typ = (wallifyxtra ? randomwalltype() : wallifytype);
+				levl[hix + 1 - x][lowy + y - 1].lit = 0;
                     }  
                     levl[hix + 1 - xcut][lowy + y - 1].typ = (wallifytype ? (wallifyxtra ? randomwalltype() : wallifytype) : VWALL);
                 }  
@@ -313,6 +314,7 @@ do_room_or_subroom(croom, lowx, lowy, hix, hiy, lit, rtype, special, is_room, ca
                 for (y = 0; y < ycut; y++) {  
                     for (x = 0; x < xcut; x++) {  
                         levl[hix + 1 - x][hiy + 1 - y].typ = (wallifyxtra ? randomwalltype() : wallifytype);
+			levl[hix + 1 - x][hiy + 1 - y].lit = 0;
                     }  
                     levl[hix + 1 - xcut][hiy + 1 - y].typ = (wallifytype ? (wallifyxtra ? randomwalltype() : wallifytype) : VWALL);
                 }  
@@ -327,6 +329,7 @@ do_room_or_subroom(croom, lowx, lowy, hix, hiy, lit, rtype, special, is_room, ca
                 for (y = 0; y < ycut; y++) {  
                     for (x = 0; x < xcut; x++) {  
                         levl[lowx + x - 1][lowy + y - 1].typ = (wallifyxtra ? randomwalltype() : wallifytype);
+			levl[lowx + x - 1][lowy + y - 1].lit = 0;
                     }  
                     levl[lowx + xcut - 1][lowy + y - 1].typ = (wallifytype ? (wallifyxtra ? randomwalltype() : wallifytype) : VWALL);
                 }  
@@ -341,6 +344,7 @@ do_room_or_subroom(croom, lowx, lowy, hix, hiy, lit, rtype, special, is_room, ca
                 for (y = 0; y < ycut; y++) {  
                     for (x = 0; x < xcut; x++) {  
                         levl[lowx + x - 1][hiy + 1 - y].typ = (wallifyxtra ? randomwalltype() : wallifytype);
+			levl[lowx + x - 1][hiy + 1 - y].lit = 0;
                     }  
                     levl[lowx + xcut - 1][hiy + 1 - y].typ = (wallifytype ? (wallifyxtra ? randomwalltype() : wallifytype) : VWALL);
                 }  
@@ -378,7 +382,9 @@ do_room_or_subroom(croom, lowx, lowy, hix, hiy, lit, rtype, special, is_room, ca
                             ((x == xcenter - xradius) ||  
                              (x == xcenter + xradius + xparity)) ? VWALL :  
                             ((y == ycenter - yradius) ||  
-                             (y == ycenter + yradius + yparity)) ? HWALL : STONE;  
+                             (y == ycenter + yradius + yparity)) ? HWALL : STONE;
+				if (levl[x][y].typ == STONE)
+					levl[x][y].lit = 0;
                     }  
                 }  
                 if ((vcorrmax - vcorrmin) > 1 && rn2(3)) {  
