@@ -568,6 +568,9 @@ newgame()
 
 	alchemy_init();
 
+	dragon_shuffle_init();
+	dragon_do_shuffle();
+
 #ifndef NO_SIGNAL
 	(void) signal(SIGINT, (SIG_RET_TYPE) done1);
 #endif

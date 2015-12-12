@@ -163,6 +163,7 @@ E NEARDATA char tune[6];
 
 /* quite ugly, but i can't think of a better way yet */
 E NEARDATA short alchemy_table[28][28];	/* POT_WATER - POT_BOOZE */
+E NEARDATA int dragon_shuffle[PM_YELLOW_DRAGON - PM_GRAY_DRAGON];
 
 #define MAXLINFO (MAXDUNGEON * MAXLEVEL)
 E struct linfo level_info[MAXLINFO];
