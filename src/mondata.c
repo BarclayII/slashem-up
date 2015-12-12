@@ -770,6 +770,46 @@ struct attack *mattk;
     return what;
 }
 
+void
+dragon_shuffle_init()
+{
+	int i;
+	for (i = 0; i < PM_YELLOW_DRAGON - PM_GRAY_DRAGON; ++i)
+		dragon_shuffle[i] =
+		    rn2(PM_YELLOW_DRAGON - PM_GRAY_DRAGON - i) + i;
+}
+
+void
+dragon_do_shuffle()
+{
+	/*
+	 * need to shuffle the following names:
+	 * 1. (Adult) dragons
+	 * 2. Baby dragons
+	 * 3. Dragon scales
+	 * 4. Dragon scale mails
+	 *
+	 * Developers could still code under the early convention where
+	 * gray = magic resistance, silver = reflection, etc.
+	 */
+	int i, j;
+#define __swap(a, b, type) { type t = a; a = b; b = t; }
+	for (i = 0; i < PM_YELLOW_DRAGON - PM_GRAY_DRAGON; ++i) {
+		j = dragon_shuffle[i];
+		__swap(mons[PM_GRAY_DRAGON + i].mname, mons[PM_GRAY_DRAGON + j].mname, const char *);
+		__swap(mons[PM_GRAY_DRAGON + i].mcolor, mons[PM_GRAY_DRAGON + j].mcolor, uchar);
+		__swap(mons[PM_BABY_GRAY_DRAGON + i].mname, mons[PM_BABY_GRAY_DRAGON + j].mname, const char *);
+		__swap(mons[PM_BABY_GRAY_DRAGON + i].mcolor, mons[PM_BABY_GRAY_DRAGON + j].mcolor, uchar);
+		__swap(objects[GRAY_DRAGON_SCALES + i].oc_name_idx, objects[GRAY_DRAGON_SCALES + j].oc_name_idx, short);
+		__swap(objects[GRAY_DRAGON_SCALES + i].oc_descr_idx, objects[GRAY_DRAGON_SCALES + j].oc_descr_idx, short);
+		__swap(objects[GRAY_DRAGON_SCALES + i].oc_color, objects[GRAY_DRAGON_SCALES + j].oc_color, uchar);
+		__swap(objects[GRAY_DRAGON_SCALE_MAIL + i].oc_name_idx, objects[GRAY_DRAGON_SCALE_MAIL + j].oc_name_idx, short);
+		__swap(objects[GRAY_DRAGON_SCALE_MAIL + i].oc_descr_idx, objects[GRAY_DRAGON_SCALE_MAIL + j].oc_descr_idx, short);
+		__swap(objects[GRAY_DRAGON_SCALE_MAIL + i].oc_color, objects[GRAY_DRAGON_SCALE_MAIL + j].oc_color, uchar);
+#undef __swap
+	}
+}
+
 #endif /* OVLB */
 
 /*mondata.c*/
