@@ -347,7 +347,7 @@ static uchar ibm_graphics[MAXPCHARS] = {
 	240,	/* S_bars:	equivalency, courtesy Sascha */
 	241,	/* S_tree:	plus or minus symbol */
 	0xfa,	/* S_room:	meta-z, centered dot */
-	g_FILLER(S_stone),	/* S_darkroom:	meta-z, centered dot */
+	0xfa,	/* S_darkroom:	meta-z, centered dot */
 /*20*/	0xb0,	/* S_corr:	meta-0, light shading */
 	0xb1,	/* S_litcorr:	meta-1, medium shading */
 	g_FILLER(S_upstair),
@@ -448,7 +448,7 @@ static uchar dec_graphics[MAXPCHARS] = {
 	0xfb,	/* S_bars:	meta-{, small pi, courtesy Pat Rankin */
 	0xe7,	/* S_tree:	meta-g, plus-or-minus, courtesy Pat Rankin */
 	0xfe,	/* S_room:	meta-~, centered dot */
-	g_FILLER(S_stone),	/* S_darkroom:	meta-~, centered dot */
+	0xfe,	/* S_darkroom:	meta-~, centered dot */
 /*20*/	g_FILLER(S_corr),
 	g_FILLER(S_litcorr),
 	g_FILLER(S_upstair),

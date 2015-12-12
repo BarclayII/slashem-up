@@ -415,8 +415,14 @@ int memory_glyph(x, y)
 	    return objnum_to_glyph(levl[x][y].mem_obj - 1);
     else if (levl[x][y].mem_trap)
 	return cmap_to_glyph(levl[x][y].mem_trap - 1 + MAXDCHARS);
-    else
+    else {
+	if ((levl[x][y].mem_bg == S_room || levl[x][y].mem_bg == S_ndoor) &&
+	    !cansee(x, y))
+	    return cmap_to_glyph(S_darkroom);
+	if (levl[x][y].mem_bg == S_litcorr && !cansee(x, y))
+	    return cmap_to_glyph(S_corr);
 	return cmap_to_glyph(levl[x][y].mem_bg);
+    }
 #else
     return levl[x][y].glyph;
 #endif
@@ -681,10 +687,14 @@ feel_location(x, y)
 #ifdef DISPLAY_LAYERS
 	    if (lev->typ == CORR && lev->mem_bg == S_litcorr && !lev->waslit)
 		show_glyph(x, y, cmap_to_glyph(lev->mem_bg = S_corr));
+            else if (lev->typ == ROOM && iflags.use_color && lev->mem_bg == S_room)
+                show_glyph(x, y, cmap_to_glyph(lev->mem_bg = S_darkroom));
 #else
 	    if (lev->typ == CORR &&
 		    lev->glyph == cmap_to_glyph(S_litcorr) && !lev->waslit)
 		show_glyph(x, y, lev->glyph = cmap_to_glyph(S_corr));
+            else if (lev->typ == ROOM && iflags.use_color && lev->glyph == cmap_to_glyph(S_room))
+                show_glyph(x, y, lev->glyph = cmap_to_glyph(S_darkroom));
 #endif
 	}
     } else {
