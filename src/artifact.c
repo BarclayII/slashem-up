@@ -473,6 +473,23 @@ register struct obj *otmp;
 	return FALSE;
 }
 
+/* determine whether an item confers Protection, from nethack-3.6.0 */
+boolean
+artifact_protection(otmp, being_worn)
+struct obj *otmp;
+boolean being_worn;
+{
+    const struct artifact *arti;
+
+    if (being_worn && objects[otmp->otyp].oc_oprop == PROTECTION)
+        return TRUE;
+    arti = get_artifact(otmp);
+    if (!arti)
+        return FALSE;
+    return (boolean) ((arti->cspfx & SPFX_PROTECT) != 0
+                      || (being_worn && (arti->spfx & SPFX_PROTECT) != 0));
+}
+
 /* used for monsters */
 boolean
 protects(adtyp, otmp)

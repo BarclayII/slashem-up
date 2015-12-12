@@ -36,6 +36,7 @@
 
 #define SPFX_DISPL  0x8000000L  /* Displacement (TEST) */
 #define SPFX_BLIND  0x10000000L /* Blinding (TEST) */
+#define SPFX_PROTECT 0x20000000L /* Protection (nethack-3.6.0) */
 
 #define SPFX_DBONUS 0x1F00000L	/* attack bonus mask */
 

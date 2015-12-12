@@ -68,6 +68,7 @@ E boolean FDECL(confers_luck, (struct obj *));
 E boolean FDECL(arti_reflects, (struct obj *));
 E boolean FDECL(restrict_name, (struct obj *,const char *));
 E boolean FDECL(defends, (int,struct obj *));
+E boolean FDECL(artifact_protection, (struct obj *,BOOLEAN_P));
 E boolean FDECL(protects, (int,struct obj *));
 E void FDECL(set_artifact_intrinsic, (struct obj *,BOOLEAN_P,long));
 E int FDECL(touch_artifact, (struct obj *,struct monst *));

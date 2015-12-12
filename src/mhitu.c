@@ -971,44 +971,47 @@ int
 magic_negation(mon)
 struct monst *mon;
 {
-	struct obj *armor;
-	int armpro = 0;
+    struct obj *o;
+    long wearmask;
+    int armpro, mc = 0;
+    boolean is_you = (mon == &youmonst),
+            gotprot = is_you ? (EProtection != 0L)
+                             /* high priests have innate protection */
+                             : (mon->data == &mons[PM_HIGH_PRIEST]);
 
-	armor = (mon == &youmonst) ? uarm : which_armor(mon, W_ARM);
-	if (armor && armpro < objects[armor->otyp].a_can)
-	    armpro = objects[armor->otyp].a_can;
-	armor = (mon == &youmonst) ? uarmc : which_armor(mon, W_ARMC);
-	if (armor && armpro < objects[armor->otyp].a_can)
-	    armpro = objects[armor->otyp].a_can;
-	armor = (mon == &youmonst) ? uarmh : which_armor(mon, W_ARMH);
-	if (armor && armpro < objects[armor->otyp].a_can)
-	    armpro = objects[armor->otyp].a_can;
+    for (o = is_you ? invent : mon->minvent; o; o = o->nobj) {
+        /* a_can field is only applicable for armor (which must be worn) */
+        if ((o->owornmask & W_ARMOR) != 0L) {
+            armpro = objects[o->otyp].a_can;
+            if (armpro > mc)
+                mc = armpro;
+        }
+        /* if we've already confirmed Protection, skip additional checks */
+        if (is_you || gotprot)
+            continue;
 
-	/* armor types for shirt, gloves, shoes, and shield don't currently
-	   provide any magic cancellation but we might as well be complete */
-#ifdef TOURIST
-	armor = (mon == &youmonst) ? uarmu : which_armor(mon, W_ARMU);
-	if (armor && armpro < objects[armor->otyp].a_can)
-	    armpro = objects[armor->otyp].a_can;
-#endif
-	armor = (mon == &youmonst) ? uarmg : which_armor(mon, W_ARMG);
-	if (armor && armpro < objects[armor->otyp].a_can)
-	    armpro = objects[armor->otyp].a_can;
-	armor = (mon == &youmonst) ? uarmf : which_armor(mon, W_ARMF);
-	if (armor && armpro < objects[armor->otyp].a_can)
-	    armpro = objects[armor->otyp].a_can;
-	armor = (mon == &youmonst) ? uarms : which_armor(mon, W_ARMS);
-	if (armor && armpro < objects[armor->otyp].a_can)
-	    armpro = objects[armor->otyp].a_can;
+        /* omit W_SWAPWEP+W_QUIVER; */
+        wearmask = W_ARMOR | W_ACCESSORY;
+        if (o->oclass == WEAPON_CLASS || is_weptool(o))
+            wearmask |= W_WEP;
+	/* W_ART + W_ARTI */
+        if (artifact_protection(o, ((o->owornmask & wearmask) != 0L) ? TRUE : FALSE))
+            gotprot = TRUE;
+    }
 
-#ifdef STEED
-	/* this one is really a stretch... */
-	armor = (mon == &youmonst) ? 0 : which_armor(mon, W_SADDLE);
-	if (armor && armpro < objects[armor->otyp].a_can)
-	    armpro = objects[armor->otyp].a_can;
-#endif
-
-	return armpro;
+    if (gotprot) {
+        /* extrinsic Protection increases mc by 1 */
+        if (mc < 3)
+            mc += 1;
+    } else if (mc < 1) {
+        /* intrinsic Protection is weaker (play balance; obtaining divine
+           protection is too easy); it confers minimum mc 1 instead of 0 */
+        if ((is_you && ((HProtection && u.ublessed) || u.uspellprot))
+            /* aligned priests and angels have innate intrinsic Protection */
+            || (mon->data == &mons[PM_ALIGNED_PRIEST] || is_minion(mon->data)))
+            mc = 1;
+    }
+    return mc;
 }
 
 /*
