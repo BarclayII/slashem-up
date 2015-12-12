@@ -242,22 +242,28 @@ xchar x, y;
 	return((struct engr *) 0);
 }
 
-#ifdef ELBERETH
 /* Decide whether a particular string is engraved at a specified
- * location; a case-insensitive substring match used.
+ * location; a case-insensitive substring match is used.
  * Ignore headstones, in case the player names herself "Elbereth".
+ *
+ * If strict checking is requested, the word is only considered to be
+ * present if it is intact and is the first word in the engraving.
+ * ("Elbereth burrito" matches; "o Elbereth" does not.)
  */
 int
-sengr_at(s, x, y)
-	const char *s;
-	xchar x, y;
+sengr_at(s, x, y, strict)
+const char *s;
+xchar x, y;
+boolean strict;
 {
-	register struct engr *ep = engr_at(x,y);
+    register struct engr *ep = engr_at(x, y);
 
-	return (ep && ep->engr_type != HEADSTONE &&
-		ep->engr_time <= moves && strstri(ep->engr_txt, s) != 0);
+    if (ep && ep->engr_type != HEADSTONE && ep->engr_time <= moves) {
+        return strict ? (strncmpi(ep->engr_txt, s, strlen(s)) == 0)
+                      : (strstri(ep->engr_txt, s) != 0);
+    }
+    return FALSE;
 }
-#endif /* ELBERETH */
 
 #endif /* OVL0 */
 #ifdef OVL2

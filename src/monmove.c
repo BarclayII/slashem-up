@@ -168,30 +168,51 @@ onscary(x, y, mtmp)
 int x, y;
 struct monst *mtmp;
 {
-	if (mtmp->isshk || mtmp->isgd || mtmp->iswiz || !mtmp->mcansee ||
-			mtmp->mpeaceful || mtmp->data->mlet == S_HUMAN ||
-	    is_lminion(mtmp) || mtmp->data == &mons[PM_ANGEL] ||
+    boolean epresent = sengr_at("Elbereth", x, y, TRUE);
+    /* creatures who are directly resistant to magical scaring:
+     * Rodney, lawful minions, angels, the Riders */
+    if (mtmp->iswiz || is_lminion(mtmp) || mtmp->data == &mons[PM_ANGEL]
+        || is_rider(mtmp->data) ||
 #ifdef TOUGHVLAD
-			/* Vlad ignores Elbereth/Scare Monster/Garlic */
-			mtmp->data == &mons[PM_VLAD_THE_IMPALER] ||
+		/* Vlad ignores Elbereth/Scare Monster/Garlic */
+		mtmp->data == &mons[PM_VLAD_THE_IMPALER] ||
 #endif
 #ifdef NEMESES_IGNORE_SCARE
-			/* All covetous monsters except master and arch liches
-			 * now ignores Elbereth and alike.
-			 */
-			(mtmp->data->mflags3 & 
-			 (M3_WANTSARTI|M3_WANTSAMUL)) ||
+		/* All covetous monsters except master and arch liches
+		 * now ignores Elbereth and alike.
+		 */
+		(mtmp->data->mflags3 & 
+		 (M3_WANTSARTI|M3_WANTSAMUL)) ||
 #endif
-	    mtmp->data == &mons[PM_CTHULHU] ||
-	    is_rider(mtmp->data) || mtmp->data == &mons[PM_MINOTAUR])
-		return(FALSE);
+	mtmp->data == &mons[PM_CTHULHU])
+        return FALSE;
 
-	return (boolean)(sobj_at(SCR_SCARE_MONSTER, x, y)
-#ifdef ELBERETH
-			 || sengr_at("Elbereth", x, y)
-#endif
-			 || (is_vampire(mtmp->data)
-			     && IS_ALTAR(levl[x][y].typ)));
+    /* should this still be true for defiled/molochian altars? */
+    if (IS_ALTAR(levl[x][y].typ)
+        && (mtmp->data->mflags2 & M2_VAMPIRE))
+        return TRUE;
+
+    /* the scare monster scroll doesn't have any of the below
+     * restrictions, being its own source of power */
+    if (sobj_at(SCR_SCARE_MONSTER, x, y))
+        return TRUE;
+
+    /* creatures who don't (or can't) fear a written Elbereth:
+     * all the above plus shopkeepers, guards, blind or
+     * peaceful monsters, humans, and minotaurs.
+     *
+     * if the player isn't actually on the square OR the player's image
+     * isn't displaced to the square, no protection is being granted
+     *
+     * Elbereth doesn't work in Gehennom, the Elemental Planes, or the
+     * Astral Plane; the influence of the Valar only reaches so far.  */
+    return (epresent
+            && ((u.ux == x && u.uy == y)
+                || (Displaced && mtmp->mux == x && mtmp->muy == y))
+            && !(mtmp->isshk || mtmp->isgd || !mtmp->mcansee
+                 || mtmp->mpeaceful || mtmp->data->mlet == S_HUMAN
+                 || mtmp->data == &mons[PM_MINOTAUR]
+                 || Inhell || In_endgame(&u.uz)));
 }
 
 #endif /* OVL2 */
