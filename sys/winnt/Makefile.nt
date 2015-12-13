@@ -1025,6 +1025,7 @@ spotless: clean
 	if exist $(DAT)\quest.dat	del $(DAT)\quest.dat
 	if exist $(DAT)\sanctum.lev	del $(DAT)\sanctum.lev
 	if exist $(DAT)\soko?-?.lev	del $(DAT)\soko?-?.lev
+	if exist $(DAT)\sokrem-?.lev	del $(DAT)\sokrem-?.lev
 	if exist $(DAT)\tower?.lev	del $(DAT)\tower?.lev
 	if exist $(DAT)\valley.lev	del $(DAT)\valley.lev
 	if exist $(DAT)\water.lev	del $(DAT)\water.lev

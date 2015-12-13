@@ -967,9 +967,10 @@ init_dungeons()
 	}
 /*
  *	I hate hardwiring these names. :-(
+ *	[BarclayII] then don't do it :-(
  */
 	quest_dnum = dname_to_dnum("The Quest");
-	sokoban_dnum = dname_to_dnum("Sokoban");
+	sokoban_dnum = dname_to_dnum("The Remains of Sokoban");
 	mines_dnum = dname_to_dnum("The Gnomish Mines");
 	spiders_dnum = dname_to_dnum("The Spider Caves");        
 	tower_dnum = dname_to_dnum("Vlad's Tower");

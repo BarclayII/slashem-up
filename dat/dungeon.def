@@ -43,7 +43,7 @@ LEVELDESC:	town
 #   Oracle on levels 7 to 9.
 LEVEL:		"oracle" "O" @ (7, 3)
 LEVALIGN:	neutral
-CHAINBRANCH:	"Sokoban" "oracle" + (1, 0) up -1
+CHAINBRANCH:	"The Remains of Sokoban" "oracle" + (1, 0) up -1
 
 
 # Levels between the Oracle and the Quest.
@@ -208,14 +208,17 @@ LEVEL:			"lich" "none" @ (1, 0)
 
 #
 # Sokoban
+# [BarclayII] removed Sokoban
 #
-DUNGEON:		"Sokoban" "none" (4, 0)
+#DUNGEON:		"Sokoban" "none" (4, 0)
+DUNGEON:		"The Remains of Sokoban" "none" (1, 0)
 DESCRIPTION:    mazelike
 ALIGNMENT:      neutral
-RNDLEVEL:		"soko1" "none" @ (1, 0) 4
-RNDLEVEL:		"soko2" "none" @ (2, 0) 7
-RNDLEVEL:		"soko3" "none" @ (3, 0) 7
-RNDLEVEL:		"soko4" "none" @ (4, 0) 5
+RNDLEVEL:		"sokrem" "none" @ (1, 0) 4
+#RNDLEVEL:		"soko1" "none" @ (1, 0) 4
+#RNDLEVEL:		"soko2" "none" @ (2, 0) 7
+#RNDLEVEL:		"soko3" "none" @ (3, 0) 7
+#RNDLEVEL:		"soko4" "none" @ (4, 0) 5
 
 
 ### Grund's Stronghold ###
