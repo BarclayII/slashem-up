@@ -262,11 +262,15 @@ register struct monst *mtmp;
 		    switch (mm) {
 			case PM_SOLDIER:
 #ifdef FIREARMS
-			  w1 = rn2(2) ? RIFLE : SUBMACHINE_GUN;
-		  	  m_initthrow(mtmp, BULLET, 25);
-		  	  m_initthrow(mtmp, BULLET, 25);
+			  if (rn2(4)) {
+			      w1 = rn2(2) ? RIFLE : SUBMACHINE_GUN;
+		  	      m_initthrow(mtmp, BULLET, 25);
+		  	      m_initthrow(mtmp, BULLET, 25);
+			  } else {
+			      (void) mongets(mtmp, FRAG_GRENADE);
+			      (void) mongets(mtmp, FRAG_GRENADE);
+			  }
 			  w2 = rn2(2) ? KNIFE : DAGGER;
-			  (void) mongets(mtmp, FRAG_GRENADE);
 			  break;
 #endif
 			case PM_WATCHMAN:
@@ -280,44 +284,52 @@ register struct monst *mtmp;
 			  break;
 			case PM_LIEUTENANT:
 #ifdef FIREARMS
-			  if (rn2(2)) {
+			  if (rn2(4)) {
+			      if (rn2(2)) {
 			  	w1 = HEAVY_MACHINE_GUN;
 			  	m_initthrow(mtmp, BULLET, 50);
 			  	m_initthrow(mtmp, BULLET, 50);
 			  	m_initthrow(mtmp, BULLET, 50);
-			  } else {
+			      } else {
 			  	w1 = SUBMACHINE_GUN;
 			  	m_initthrow(mtmp, BULLET, 30);
 			  	m_initthrow(mtmp, BULLET, 30);
-			  }
-			  w2 = rn2(2) ? KNIFE : DAGGER;
-			  if (rn2(2)) {
-			  	(void) mongets(mtmp, FRAG_GRENADE);
-			  	(void) mongets(mtmp, FRAG_GRENADE);
+			      }
 			  } else {
-			  	(void) mongets(mtmp, GAS_GRENADE);
-			  	(void) mongets(mtmp, GAS_GRENADE);
+			      if (rn2(2)) {
+			  	m_initthrow(mtmp, FRAG_GRENADE, 5);
+			      } else {
+			  	m_initthrow(mtmp, GAS_GRENADE, 5);
+			      }
 			  }
+			  w2 = rn2(2) ? SHORT_SWORD : DAGGER;
 			  break;
 #endif
 			case PM_SERGEANT:
 #ifdef FIREARMS
-			  if (rn2(2)) {
+			  if (rn2(5)) {
+			     if (rn2(2)) {
 			  	w1 = AUTO_SHOTGUN;
 			  	m_initthrow(mtmp, SHOTGUN_SHELL, 10);
 			  	m_initthrow(mtmp, SHOTGUN_SHELL, 10);
-			  } else {
+			     } else {
 			  	w1 = ASSAULT_RIFLE;
 			  	m_initthrow(mtmp, BULLET, 30);
 			  	m_initthrow(mtmp, BULLET, 30);
-			  }
-			  w2= rn2(2) ? DAGGER : KNIFE;
-			  if (rn2(2)) {
-			  	m_initthrow(mtmp, FRAG_GRENADE, 5);
+			     }
 			  } else {
-			  	m_initthrow(mtmp, GAS_GRENADE, 5);
+			     int grenades = 5;
+			     if (!rn2(5)) {
+			        (void) mongets(mtmp, GRENADE_LAUNCHER);
+				grenades = 10;
+			     }
+			     if (rn2(2)) {
+			  	m_initthrow(mtmp, FRAG_GRENADE, grenades);
+			     } else {
+			  	m_initthrow(mtmp, GAS_GRENADE, grenades);
+			     }
 			  }
-			  if (!rn2(5)) (void) mongets(mtmp, GRENADE_LAUNCHER);
+			  w2= rn2(2) ? RAPIER : SHORT_SWORD;
 			  break;
 #endif
 #ifdef YEOMAN
@@ -327,31 +339,33 @@ register struct monst *mtmp;
 			  break;
 			case PM_CAPTAIN:
 #ifdef FIREARMS
-			  if (rn2(2)) {
+			  if (rn2(5)) {
+			     if (rn2(2)) {
 			  	w1 = AUTO_SHOTGUN;
 			  	m_initthrow(mtmp, SHOTGUN_SHELL, 20);
 			  	m_initthrow(mtmp, SHOTGUN_SHELL, 20);
-			  } else if (rn2(2)) {
+			     } else if (rn2(2)) {
 			  	w1 = HEAVY_MACHINE_GUN;
 			  	m_initthrow(mtmp, BULLET, 60);
 			  	m_initthrow(mtmp, BULLET, 60);
 			  	m_initthrow(mtmp, BULLET, 60);
-			  } else {
+			     } else {
 			  	w1 = ASSAULT_RIFLE;
 			  	m_initthrow(mtmp, BULLET, 60);
 			  	m_initthrow(mtmp, BULLET, 60);
-			  }
-			  if (rn2(2)) {
+			     }
+			  } else {
+			     if (rn2(2)) {
 				  w2 = ROCKET_LAUNCHER;
 			  	  m_initthrow(mtmp, ROCKET, 5);
-			  } else if (rn2(2)) {
+			     } else if (rn2(2)) {
 				  (void) mongets(mtmp, GRENADE_LAUNCHER);			  
 			  	  m_initthrow(mtmp, 
 			  	  	(rn2(2) ? FRAG_GRENADE : GAS_GRENADE), 
 			  	  	5);
-			  } else {
-				  w2 = rn2(2) ? SILVER_SABER : DAGGER;
+			     }
 			  }
+			  w2 = rn2(2) ? SILVER_SABER : RAPIER;
 			  break;
 #endif
 #ifdef YEOMAN
