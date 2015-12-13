@@ -191,8 +191,8 @@ MONSTER:'s',random,place[4],asleep
 MONSTER[50%]:'s',random,place[4],hostile
 
 # no temple 
-ALTAR:place[5],coaligned,altar
-MONSTER:'@',"aligned priest",place[5],coaligned,peaceful
+ALTAR:place[5],random,altar
+#MONSTER:'@',"aligned priest",place[5],coaligned,peaceful
 
 # boulder path
 OBJECT:'`',"boulder",(44,0)
