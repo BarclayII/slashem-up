@@ -709,6 +709,7 @@ xchar	rtype, rlit;
 	int	trycnt = 0;
 	boolean	vault = FALSE;
 	int	xlim = XLIM, ylim = YLIM;
+	boolean	canbeshaped = FALSE;
 
 	if (rtype == -1)	/* Is the type random ? */
 	    rtype = OROOM;
@@ -787,6 +788,7 @@ xchar	rtype, rlit;
 			r2.lx = xabs-1; r2.ly = yabs-1;
 			r2.hx = xabs + wtmp;
 			r2.hy = yabs + htmp;
+			canbeshaped = TRUE;
 		} else {	/* Only some parameters are random */
 			int rndpos = 0;
 			if (xtmp < 0 && ytmp < 0) { /* Position is RANDOM */
@@ -843,6 +845,7 @@ xchar	rtype, rlit;
 			r2.hx = xabs + wtmp + rndpos;
 			r2.hy = yabs + htmp + rndpos;
 			r1 = get_rect(&r2);
+			canbeshaped = FALSE;
 		}
 	} while (++trycnt <= 100 && !r1);
 	if (!r1) {	/* creation of room failed ? */
@@ -853,7 +856,7 @@ xchar	rtype, rlit;
 	if (!vault) {
 		smeq[nroom] = nroom;
 		add_room(xabs, yabs, xabs+wtmp-1, yabs+htmp-1,
-			 rlit, rtype, FALSE, TRUE);
+			 rlit, rtype, FALSE, canbeshaped);
 	} else {
 		rooms[nroom].lx = xabs;
 		rooms[nroom].ly = yabs;
