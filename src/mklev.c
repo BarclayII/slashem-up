@@ -926,8 +926,16 @@ makelevel()
 
 	/* construct stairs (up and down in different rooms if possible) */
 	croom = &rooms[rn2(nroom)];
-	if (!Is_botlevel(&u.uz))
-	     mkstairs(somex(croom), somey(croom), 0, croom);	/* down */
+	if (!Is_botlevel(&u.uz)) {
+	     /* [BarclayII] I wonder why downstairs didn't take the
+	      * same measure as upstairs */
+	    xchar sx, sy;
+	    do {
+		sx = somex(croom);
+		sy = somey(croom);
+	    } while(levl[sx][sy].typ != ROOM);
+	     mkstairs(sx, sy, 0, croom);	/* down */
+	}
 	if (nroom > 1) {
 	    troom = croom;
 	    croom = &rooms[rn2(nroom-1)];
@@ -939,7 +947,7 @@ makelevel()
 	    do {
 		sx = somex(croom);
 		sy = somey(croom);
-	    } while(occupied(sx, sy));
+	    } while(occupied(sx, sy) || levl[sx][sy].typ != ROOM);
 	    mkstairs(sx, sy, 1, croom);	/* up */
 	}
 
