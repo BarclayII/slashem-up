@@ -23,7 +23,7 @@
  *		provide it (no need to change sec#1, vmsconf.h handles it).
  */
 
-#define UNIX		/* delete if no fork(), exec() available */
+/*#define UNIX*/		/* delete if no fork(), exec() available */
 
 /* #define MSDOS */	/* in case it's not auto-detected */
   
