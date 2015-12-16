@@ -30,3 +30,9 @@ Edit `include/config.h` and make sure `UNIX` is not defined.
 Finally, run `mingw32-make install`, be sure to include your MinGW and MSYS bin
 directories in `PATH`.
 
+# For lazy Windows users
+
+Simply download the zip file and you're done.
+
+The source compilation is too freaky and problematic on Windows.  It's true.
+
