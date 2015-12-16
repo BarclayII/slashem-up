@@ -774,9 +774,9 @@ void
 dragon_shuffle_init()
 {
 	int i;
-	for (i = 0; i < PM_YELLOW_DRAGON - PM_GRAY_DRAGON; ++i)
+	for (i = 0; i <= PM_YELLOW_DRAGON - PM_GRAY_DRAGON; ++i)
 		dragon_shuffle[i] =
-		    rn2(PM_YELLOW_DRAGON - PM_GRAY_DRAGON - i) + i;
+		    rn1(PM_YELLOW_DRAGON - PM_GRAY_DRAGON + 1 - i, i);
 }
 
 void
@@ -794,7 +794,7 @@ dragon_do_shuffle()
 	 */
 	int i, j;
 #define __swap(a, b, type) { type t = a; a = b; b = t; }
-	for (i = 0; i < PM_YELLOW_DRAGON - PM_GRAY_DRAGON; ++i) {
+	for (i = 0; i <= PM_YELLOW_DRAGON - PM_GRAY_DRAGON; ++i) {
 		j = dragon_shuffle[i];
 		__swap(mons[PM_GRAY_DRAGON + i].mname, mons[PM_GRAY_DRAGON + j].mname, const char *);
 		__swap(mons[PM_GRAY_DRAGON + i].mcolor, mons[PM_GRAY_DRAGON + j].mcolor, uchar);

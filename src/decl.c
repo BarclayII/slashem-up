@@ -137,7 +137,7 @@ NEARDATA boolean in_steed_dismounting = FALSE;
 
 /* quite ugly, but i can't think of a better way yet */
 NEARDATA short alchemy_table[28][28];	/* POT_WATER - POT_BOOZE */
-NEARDATA int dragon_shuffle[PM_YELLOW_DRAGON - PM_GRAY_DRAGON];
+NEARDATA int dragon_shuffle[PM_YELLOW_DRAGON - PM_GRAY_DRAGON + 1];
 
 NEARDATA coord bhitpos = DUMMY;
 NEARDATA struct door doors[DOORMAX] = {DUMMY};
