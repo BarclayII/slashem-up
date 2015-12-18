@@ -156,7 +156,7 @@ boolean seal;
     schedule_goto(dest, FALSE, FALSE, portal_flag, (char *)0, (char *)0);
     /* [BarclayII] never seals the portal, allow you to kill off the quest leader
      * if you're converted or such */
-    if (FALSE) {	/* remove the portal to the quest - sealing it off */
+    if (seal) {	/* remove the portal to the quest - sealing it off */
 	int reexpelled = u.uevent.qexpelled;
 	u.uevent.qexpelled = 1;
 	remdun_mapseen(quest_dnum);
@@ -253,12 +253,12 @@ chat_with_leader()
 	    expulsion(FALSE);
 	  } else if(is_pure(TRUE) < 0) {
 	    com_pager(QT_BANISHED);
-	    expulsion(TRUE);
+	    expulsion(FALSE);
 	  } else if(is_pure(TRUE) == 0) {
 	    qt_pager(QT_BADALIGN);
 	    if(Qstat(not_ready) == MAX_QUEST_TRIES) {
 	      qt_pager(QT_LASTLEADER);
-	      expulsion(TRUE);
+	      expulsion(FALSE);
 	    } else {
 	      Qstat(not_ready)++;
 	      exercise(A_WIS, TRUE);
@@ -287,7 +287,7 @@ leader_speaks(mtmp)
 
 	if(Qstat(pissed_off)) {
 	  qt_pager(QT_LASTLEADER);
-	  expulsion(TRUE);
+	  expulsion(FALSE);
 	} else chat_with_leader();
 }
 
