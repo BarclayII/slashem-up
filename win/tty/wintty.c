@@ -2738,28 +2738,24 @@ tty_print_glyph(window, x, y, glyph)
     }
 
 #ifdef TEXTCOLOR
-    if (!reverse_on && (special & (MG_STAIRS|MG_OBJPILE))) {
-	    if ((special & MG_STAIRS))
+    if (!reverse_on && (special & (MG_STAIRS|MG_OBJPILE|MG_TRAP))) {
+	    int bgc = 0;
+	    if (special & MG_STAIRS)
+		    bgc |= CLR_GREEN;
+	    if (special & MG_OBJPILE)
+		    bgc |= CLR_BLUE;
+	    if (special & MG_TRAP)
+		    bgc |= CLR_RED;
+
 #ifndef WIN32CON
-		    if (ttyDisplay->color != CLR_RED)
+	    if (ttyDisplay->color != bgc)
 #endif
-		    	term_start_bgcolor(CLR_RED);
+		    term_start_bgcolor(bgc);
 #ifndef WIN32CON
-		    else {
-			term_start_attr(ATR_INVERSE);
-			reverse_on = TRUE;
-		    }
-#endif
-	    else
-#ifndef WIN32CON
-		    if (ttyDisplay->color != CLR_BLUE)
-#endif
-		    	term_start_bgcolor(CLR_BLUE);
-#ifndef WIN32CON
-		    else {
-			term_start_attr(ATR_INVERSE);
-			reverse_on = TRUE;
-		    }
+	    else {
+		    term_start_attr(ATR_INVERSE);
+		    reverse_on = TRUE;
+	    }
 #endif
     }
 #endif
@@ -2783,7 +2779,7 @@ tty_print_glyph(window, x, y, glyph)
     }
 
 #ifdef TEXTCOLOR
-    if (!reverse_on && (special & (MG_STAIRS|MG_OBJPILE))) {
+    if (!reverse_on && (special & (MG_STAIRS|MG_OBJPILE|MG_TRAP))) {
 	    term_end_bgcolor();
 	    term_end_color();
 	    ttyDisplay->color = NO_COLOR;

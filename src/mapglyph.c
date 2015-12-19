@@ -164,6 +164,9 @@ unsigned *ospecial;
 			levl[x][y].mem_pile = 1;
 #endif
 	}
+#ifdef DISPLAY_LAYERS
+	if (levl[x][y].mem_trap) special |= MG_TRAP;
+#endif
     } else if ((offset = (glyph - GLYPH_RIDDEN_OFF)) >= 0) {	/* mon ridden */
 	ch = monsyms[(int)mons[offset].mlet];
 #ifdef ROGUE_COLOR
@@ -201,6 +204,9 @@ unsigned *ospecial;
 			levl[x][y].mem_pile = 1;
 #endif
 	}
+#ifdef DISPLAY_LAYERS
+	if (levl[x][y].mem_trap) special |= MG_TRAP;
+#endif
     } else if ((offset = (glyph - GLYPH_DETECT_OFF)) >= 0) {	/* mon detect */
 	ch = monsyms[(int)mons[offset].mlet];
 #ifdef ROGUE_COLOR
