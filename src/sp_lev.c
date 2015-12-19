@@ -788,7 +788,7 @@ xchar	rtype, rlit;
 			r2.lx = xabs-1; r2.ly = yabs-1;
 			r2.hx = xabs + wtmp;
 			r2.hy = yabs + htmp;
-			canbeshaped = TRUE;
+			canbeshaped = FALSE;
 		} else {	/* Only some parameters are random */
 			int rndpos = 0;
 			if (xtmp < 0 && ytmp < 0) { /* Position is RANDOM */
