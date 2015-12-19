@@ -9,7 +9,7 @@ STATIC_DCL void NDECL(stoned_dialogue);
 STATIC_DCL void NDECL(vomiting_dialogue);
 STATIC_DCL void NDECL(choke_dialogue);
 STATIC_DCL void NDECL(slime_dialogue);
-STATIC_DCL void NDECL(slime_dialogue);
+STATIC_DCL void NDECL(sick_dialogue);
 STATIC_DCL void NDECL(slip_or_trip);
 STATIC_DCL void FDECL(see_lamp_flicker, (struct obj *, const char *));
 STATIC_DCL void FDECL(lantern_message, (struct obj *));
@@ -121,6 +121,14 @@ static NEARDATA const char * const slime_texts[] = {
 	"You have become %s."             /* 1 */
 };
 
+static NEARDATA const char * const illness_texts[] = {
+	"You feel incredibly feverish.",
+	"You can hardly breathe.",
+	"Your body organs begin to fail.",
+	"Your heart suddenly stops beating.",
+	"You die from your illness."
+};
+
 STATIC_OVL void
 slime_dialogue()
 {
@@ -145,6 +153,23 @@ slime_dialogue()
 	    if (multi > 0) nomul(0);
 	}
 	exercise(A_DEX, FALSE);
+}
+
+STATIC_OVL void
+sick_dialogue()
+{
+	register long i = (Sick & TIMEOUT) / 2L;
+
+	if (((Sick & TIMEOUT) % 2L) && i >= 0L
+		&& i < SIZE(illness_texts)) {
+		const char *str = illness_texts[SIZE(illness_texts) - i - 1L];
+		pline(str);
+	}
+	if (i == 3L) {
+		stop_occupation();
+		if (multi > 0) nomul(0);
+	}
+	exercise(A_CON, FALSE);
 }
 
 void
@@ -199,6 +224,7 @@ nh_timeout()
 	if(Slimed) slime_dialogue();
 	if(Vomiting) vomiting_dialogue();
 	if(Strangled) choke_dialogue();
+	if(Sick) sick_dialogue();
 	if(u.mtimedone && !--u.mtimedone) {
 		if (Unchanging)
 			u.mtimedone = rnd(100*youmonst.data->mlevel + 1);
@@ -257,7 +283,6 @@ nh_timeout()
 			make_vomiting(0L, TRUE);
 			break;
 		case SICK:
-			You("die from your illness.");
 			killer_format = KILLED_BY_AN;
 			killer = u.usick_cause;
 			if ((m_idx = name_to_mon(killer)) >= LOW_PM) {
