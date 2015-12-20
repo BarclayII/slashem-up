@@ -1187,7 +1187,7 @@ u_init()
 			Rogue[R_DAGGERS].trotyp = PISTOL;
 			Rogue[R_DAGGERS].trquan = 1;
 			Rogue[R_DARTS].trotyp = BULLET;
-			Rogue[R_DARTS].trquan = rn1(30, 75);
+			Rogue[R_DARTS].trquan = rn1(40, 20);
 		}
 #endif
 #ifndef GOLDOBJ
@@ -1230,7 +1230,7 @@ u_init()
 #ifdef FIREARMS
 			UndeadSlayer[U_MINOR].trotyp = PISTOL;
 			UndeadSlayer[U_RANGE].trotyp = SILVER_BULLET;
-			UndeadSlayer[U_RANGE].trquan = rn1(30, 75);
+			UndeadSlayer[U_RANGE].trquan = rn1(40, 20);
 			break;
 #endif
 		    case 1:	/* Crossbow and bolts */
