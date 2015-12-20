@@ -4143,6 +4143,9 @@ register struct trap *trap;
 		for(ttmp = ftrap; ttmp->ntrap != trap; ttmp = ttmp->ntrap) ;
 		ttmp->ntrap = trap->ntrap;
 	}
+#ifdef DISPLAY_LAYERS
+	levl[trap->tx][trap->ty].mem_trap = NO_TRAP;
+#endif
 	dealloc_trap(trap);
 }
 
