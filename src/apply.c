@@ -3953,9 +3953,17 @@ doapply()
 	default:
 		/* KMH, balance patch -- polearms can strike at a distance */
 		if (is_pole(obj)) {
+			if (obj != uwep) {
+				pline("You must wield %s to use it.", yname(obj));
+				return 0;
+			}
 			res = use_pole(obj);
 			break;
 		} else if (is_pick(obj) || is_axe(obj)) {
+			if (obj != uwep) {
+				pline("You must wield %s to use it.", yname(obj));
+				return 0;
+			}
 			res = use_pick_axe(obj);
 			break;
 		}
