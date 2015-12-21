@@ -2298,11 +2298,12 @@ register struct obj	*obj;
 int min, range, skilldmg;
 {
 	boolean didblast = FALSE;
-	int failcheck;
+	int failcheck, sanitycheck = 0;
 	int sx, sy;
 	int type = ZT_SPELL(obj->otyp - SPE_MAGIC_MISSILE);
 	int expl_type;
 	int num = 2 + rn2(3);
+	int tx, ty;
 
 
 	if (tech_inuse(T_SIGIL_CONTROL)) {
@@ -2347,13 +2348,17 @@ int min, range, skilldmg;
 	    failcheck = 0;
 	    do {
 		confdir(); /* Random Dir */
-		u.dx *= (rn2(range) + min);
+		do {
+		    u.dx = (rn2(2 * (range + min) - 1) - (range + min - 1));
+		    u.dy = (rn2(2 * (range + min) - 1) - (range + min - 1));
+		    ++sanitycheck;
+		} while (abs(u.dx) < min && abs(u.dy) < min && sanitycheck < 100);
+		if (sanitycheck == 100) return;
 		u.dx += sx;
-		u.dy *= (rn2(range) + min);
 		u.dy += sy;
 		failcheck++;
-	    } while (failcheck < 3 &&
-		    (!cansee(u.dx, u.dy) || IS_STWALL(levl[u.dx][u.dy].typ)));
+	    } while (failcheck < 3 && inmap(u.dx, u.dy) &&
+		    (!couldsee(u.dx, u.dy) || IS_STWALL(levl[u.dx][u.dy].typ)));
 	    if (failcheck >= 3)
 		continue;
 	    if (abs(type) % 10 == ZT_LIGHTNING)
