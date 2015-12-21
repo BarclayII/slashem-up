@@ -80,7 +80,10 @@ STATIC_OVL NEARDATA const char *tech_names[] = {
 	"spirit bomb",
 	"draw blood",
 	"sleeping punch",
-	""
+	"paralyze",
+	"shield slam",
+	"armor block",
+	"shield pummel",
 };
 
 static const struct innate_tech 
@@ -108,6 +111,7 @@ static const struct innate_tech
 		       {   0, 0, 0} },
 	kni_tech[] = { {   1, T_TURN_UNDEAD, 1},
 		       {   1, T_HEAL_HANDS, 1},
+		       /* {  10, T_ARMOR_BLOCK, 1}, */
 		       {   0, 0, 0} },
 	mon_tech[] = { {   1, T_PUMMEL, 1},
 		       {   1, T_DASH, 1},
@@ -130,10 +134,14 @@ static const struct innate_tech
 		       {   0, 0, 0} },
 	pri_tech[] = { {   1, T_TURN_UNDEAD, 1},
 		       {   1, T_BLESSING, 1},
+		       /* {   5, T_SHIELD_PUMMEL, 1}, */
+		       {  10, T_HEAL_HANDS, 1},
+		       {  30, T_REVIVE, 1},
 		       {   0, 0, 0} },
 	ran_tech[] = { {   1, T_FLURRY, 1},
 		       {   0, 0, 0} },
 	rog_tech[] = { {   1, T_CRIT_STRIKE, 1},
+		       {   7, T_PARALYZE, 1},
 		       {  15, T_CUTTHROAT, 1},
 		       {   0, 0, 0} },
 	sam_tech[] = { {   1, T_KIII, 1},
@@ -144,6 +152,9 @@ static const struct innate_tech
 		       {   1, T_PRACTICE, 1},
 		       {   0, 0, 0} },
 	val_tech[] = { {   1, T_PRACTICE, 1},
+		       /* {   1, T_SHIELD_SLAM, 1}, */
+		       /* {   1, T_ARMOR_BLOCK, 1}, */
+		       /* {   1, T_SHIELD_PUMMEL, 1}, */
 		       {   0, 0, 0} },
 #ifdef YEOMAN
 	yeo_tech[] = {
@@ -631,10 +642,10 @@ int tech_no;
 		Your("fingernails extend into claws!");
 		aggravate();
 		techt_inuse(tech_no) = d(2,4) + techlev(tech_no)/5 + 2;
-		t_timeout = rn1(1000,1000);
+		t_timeout = rn1(500,500) / (techlev(tech_no) / 5);
 		break;
 	    case T_SLEEP_PUNCH:
-		if (Upolyd || uwep) {
+		if (Upolyd || uwep || uarmg) {
 		    You("must be %s to use your sleeping punch.",
 				Upolyd ? "in your original form" :
 				"bare-handed");
@@ -739,15 +750,15 @@ int tech_no;
 		if (Slimed) {
 		    Your("body is on fire!");
 		    burn_away_slime();
-		    t_timeout = 3000;
+		    t_timeout = rn1(1000, 500);
 		} else if (Sick) {
 		    You("lay your hands on the foul sickness...");
 		    make_sick(0L, (char*)0, TRUE, SICK_ALL);
-		    t_timeout = 3000;
+		    t_timeout = rn1(1000, 500);
 		} else if (Upolyd ? u.mh < u.mhmax : u.uhp < u.uhpmax) {
 		    pline("A warm glow spreads through your body!");
 		    healup(techlev(tech_no) * 4, 0, FALSE, FALSE);
-		    t_timeout = 3000;
+		    t_timeout = rn1(1000, 500);
 		} else
 		    pline(nothing_happens);
 		break;
@@ -819,7 +830,7 @@ int tech_no;
 			    tmp /= 2;
 			}
 			tmp += techlev(tech_no);
-			t_timeout = rn1(1000, 500);
+			t_timeout = rn1(1000, 500) / (techlev(tech_no) / 2);
 			hurtmon(mtmp, tmp);
 		    }
 		}
@@ -861,6 +872,28 @@ int tech_no;
 			    hurtmon(mtmp, tmp);
 			}
 		    }
+		}
+		break;
+	    case T_PARALYZE:
+		if (!getdir((char *)0)) return 0;
+		if (!u.dx && !u.dy) {
+			pline("");
+			return 0;
+		}
+		mtmp = m_at(u.ux + u.dx, u.uy + u.dy);
+		if (!mtmp) {
+			You("move against nothing.");
+			return 0;
+		} else {
+			int oldhp = mtmp->mhp;
+			if (!attack(mtmp)) return 0;
+			if (!DEADMONSTER(mtmp) && !mindless(mtmp->data) &&
+			    mtmp->mcanmove && mtmp->mhp < oldhp) {
+				Your("sudden move knocks %s out!", mon_nam(mtmp));
+				mtmp->mcanmove = 0;
+				mtmp->mfrozen = d(5, 3);
+				t_timeout = rn1(1000, 500) / (techlev(tech_no) / 2);
+			}
 		}
 		break;
 	    case T_BLESSING:
@@ -1390,7 +1423,7 @@ int tech_no;
                 	pline("..but %s has no eyes!", mon_nam(mtmp));
                 else if (!mtmp->mcansee)
                 	pline("..but %s cannot see you!", mon_nam(mtmp));
-                if ((rn2(6) + rn2(6) + (techlev(tech_no) - mtmp->m_lev)) > 10) {
+                if (d(2, 6) + (techlev(tech_no) - mtmp->m_lev) > 6) {
 			You("dazzle %s!", mon_nam(mtmp));
 			mtmp->mcanmove = 0;
 			mtmp->mfrozen = rnd(10);
@@ -1409,7 +1442,7 @@ int tech_no;
 	    	}
 	    	if (!doblitz()) return (0);		
 		
-                t_timeout = rn1(1000,500);
+                t_timeout = rn1(2000,1000);
 	    	break;
             case T_PUMMEL:
 	    	if (uwep || (u.twoweap && uswapwep)) {
@@ -1425,7 +1458,7 @@ int tech_no;
 			return(0);
 		}
             	if (!blitz_pummel()) return(0);
-                t_timeout = rn1(1000,500);
+                t_timeout = rn1(500,500);
 		break;
             case T_G_SLAM:
 	    	if (uwep || (u.twoweap && uswapwep)) {
