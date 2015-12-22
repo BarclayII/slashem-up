@@ -743,7 +743,7 @@ int trap_type;
 			if (trap_engravings[trap_type]) {
 			    make_engr_at(xx, yy-dy,
 				     trap_engravings[trap_type], 0L, DUST);
-			    wipe_engr_at(xx, yy-dy, 5); /* age it a little */
+			    wipe_engr_at(xx, yy-dy, 5, FALSE); /* age it a little */
 			}
 		    }
 		}
