@@ -649,7 +649,7 @@ E const char *FDECL(ceiling, (int,int));
 E struct engr *FDECL(engr_at, (XCHAR_P,XCHAR_P));
 E int FDECL(sengr_at, (const char *,XCHAR_P,XCHAR_P,BOOLEAN_P));
 E void FDECL(u_wipe_engr, (int));
-E void FDECL(wipe_engr_at, (XCHAR_P,XCHAR_P,XCHAR_P));
+E void FDECL(wipe_engr_at, (XCHAR_P,XCHAR_P,XCHAR_P,XCHAR_P));
 E boolean FDECL(sense_engr_at, (int,int,BOOLEAN_P));
 E void FDECL(make_engr_at, (int,int,const char *,long,XCHAR_P));
 E void FDECL(del_engr_at, (int,int));

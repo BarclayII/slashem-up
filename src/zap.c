@@ -3024,12 +3024,12 @@ struct obj *obj;	/* wand or spell */
 			pline_The(Hallucination ?
 			    "floor runs like butter!" :
 			    "edges on the floor get smoother.");
-			wipe_engr_at(x, y, d(2,4));
+			wipe_engr_at(x, y, d(2,4), TRUE);
 			}
 		    break;
 		case WAN_STRIKING:
 		case SPE_FORCE_BOLT:
-		    wipe_engr_at(x, y, d(2,4));
+		    wipe_engr_at(x, y, d(2,4), TRUE);
 		    break;
 		default:
 		    break;

@@ -319,6 +319,7 @@ register struct monst *mtmp;
 int *inrange, *nearby, *scared;
 {
 	int seescaryx, seescaryy;
+	boolean sawscary = FALSE;
 
 	*inrange = (dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <=
 							(BOLT_LIM * BOLT_LIM));
@@ -338,7 +339,8 @@ int *inrange, *nearby, *scared;
 		seescaryx = u.ux;
 		seescaryy = u.uy;
 	}
-	*scared = (*nearby && (onscary(seescaryx, seescaryy, mtmp) ||
+	sawscary = onscary(seescaryx, seescaryy, mtmp);
+	*scared = (*nearby && (sawscary ||
 			       (!mtmp->mpeaceful &&
 				    in_your_sanctuary(mtmp, 0, 0))));
 
@@ -347,6 +349,11 @@ int *inrange, *nearby, *scared;
 		    monflee(mtmp, rnd(10), TRUE, TRUE);
 		else
 		    monflee(mtmp, rnd(100), TRUE, TRUE);
+		/* magical protection won't last forever, so there'll be a
+		 * chance of the magic being used up regardless of type */
+		if (sawscary) {
+			wipe_engr_at(seescaryx, seescaryy, 1, TRUE);
+		}
 	}
 
 }
@@ -409,7 +416,7 @@ register struct monst *mtmp;
 	}
 
 	/* not frozen or sleeping: wipe out texts written in the dust */
-	wipe_engr_at(mtmp->mx, mtmp->my, 1);
+	wipe_engr_at(mtmp->mx, mtmp->my, 1, FALSE);
 
 	/* confused monsters get unconfused with small probability */
 	if (mtmp->mconf && !rn2(50)) mtmp->mconf = 0;
