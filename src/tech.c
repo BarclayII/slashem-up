@@ -91,6 +91,7 @@ static const struct innate_tech
 	arc_tech[] = { {   1, T_RESEARCH, 1},
 		       {   0, 0, 0} },
 	bar_tech[] = { {   1, T_BERSERK, 1},
+		       {   5, T_RAGE, 1},
 		       {   0, 0, 0} },
 	cav_tech[] = { {   1, T_PRIMAL_ROAR, 1},
 		       {   0, 0, 0} },
