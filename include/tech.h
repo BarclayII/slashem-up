@@ -91,7 +91,7 @@ struct blitz_tab {
 #define T_SLEEP_PUNCH	42
 #define T_PARALYZE	43
 #define T_SHIELD_SLAM	44
-#define T_ARMOR_BLOCK	45
+#define T_SHIELD_BLOCK	45
 #define T_SHIELD_PUMMEL 46
 
 #define MAXTECH 46

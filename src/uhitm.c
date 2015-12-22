@@ -1346,7 +1346,10 @@ int thrown;
                 (multi-hit, stun/freeze)..- WAC*/
 
 	if (tech_inuse(T_KIII)) tmp *= 2;
-	if (tech_inuse(T_BERSERK)) tmp += 4;
+	if (tech_inuse(T_BERSERK)) {
+		tmp += 4;
+		extend_tech_time(T_BERSERK, rnd(4));
+	}
 	if (tech_inuse(T_EVISCERATE)) {
 		tmp += rnd((int) (u.ulevel/2 + 1)) + (u.ulevel/2); /* [max] was only + u.ulevel */
                 You("slash %s!", mon_nam(mon));

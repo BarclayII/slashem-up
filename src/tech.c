@@ -82,7 +82,7 @@ STATIC_OVL NEARDATA const char *tech_names[] = {
 	"sleeping punch",
 	"paralyze",
 	"shield slam",
-	"armor block",
+	"shield block",
 	"shield pummel",
 };
 
@@ -111,7 +111,7 @@ static const struct innate_tech
 		       {   0, 0, 0} },
 	kni_tech[] = { {   1, T_TURN_UNDEAD, 1},
 		       {   1, T_HEAL_HANDS, 1},
-		       /* {  10, T_ARMOR_BLOCK, 1}, */
+		       /* {  10, T_SHIELD_SLAM, 1}, */
 		       {   0, 0, 0} },
 	mon_tech[] = { {   1, T_PUMMEL, 1},
 		       {   1, T_DASH, 1},
@@ -134,8 +134,8 @@ static const struct innate_tech
 		       {   0, 0, 0} },
 	pri_tech[] = { {   1, T_TURN_UNDEAD, 1},
 		       {   1, T_BLESSING, 1},
-		       /* {   5, T_SHIELD_PUMMEL, 1}, */
 		       {  10, T_HEAL_HANDS, 1},
+		       {  15, T_SHIELD_BLOCK, 1},
 		       {  30, T_REVIVE, 1},
 		       {   0, 0, 0} },
 	ran_tech[] = { {   1, T_FLURRY, 1},
@@ -150,10 +150,12 @@ static const struct innate_tech
 		       {   0, 0, 0} },
 	und_tech[] = { {   1, T_TURN_UNDEAD, 1},
 		       {   1, T_PRACTICE, 1},
+		       /* {   5, T_SHIELD_PUMMEL, 1}, */
+		       {  7, T_SHIELD_BLOCK, 1},
 		       {   0, 0, 0} },
 	val_tech[] = { {   1, T_PRACTICE, 1},
 		       /* {   1, T_SHIELD_SLAM, 1}, */
-		       /* {   1, T_ARMOR_BLOCK, 1}, */
+		       {   1, T_SHIELD_BLOCK, 1},
 		       /* {   1, T_SHIELD_PUMMEL, 1}, */
 		       {   0, 0, 0} },
 #ifdef YEOMAN
@@ -1538,6 +1540,15 @@ int tech_no;
 			(const char *)0);
 		t_timeout = rn1(1000, 500);
 		break;
+            case T_SHIELD_BLOCK:
+		if (!uarms) {
+		    You_cant("block attacks without a shield.");
+		    return 0;
+		}
+		You("inject your energy into your shield.");
+		techt_inuse(tech_no) = d(3,4) + techlev(tech_no);
+		t_timeout = rn1(1000,500);
+		break;
 	    default:
 	    	pline ("Error!  No such effect (%i)", tech_no);
 		break;
@@ -1547,6 +1558,55 @@ int tech_no;
 
 	/*By default,  action should take a turn*/
 	return(1);
+}
+
+void
+shield_block(dam)
+int dam;
+{
+	int i;
+	for (i = 0; i < MAXTECH; ++i)
+		if (techid(i) == T_SHIELD_BLOCK)
+			break;
+	if (i == MAXTECH) {
+		impossible("no shield block tech");
+		return;
+	}
+	if (tech_inuse(T_SHIELD_BLOCK)) {
+		u.uen -= dam;
+		if (u.uen <= 0) {
+			u.uen = 0;
+			You("can no longer block damage with your shield.");
+			for (i = 0; i < MAXTECH; ++i) {
+				if (techid(i) == T_SHIELD_BLOCK) {
+					techt_inuse(i) = 0;
+					break;
+				}
+			}
+		}
+		flags.botl = 1;
+	}
+}
+
+boolean
+shield_blockable(mattk)
+struct attack *mattk;
+{
+	if (!tech_inuse(T_SHIELD_BLOCK))
+		return FALSE;
+	switch(mattk->aatyp) {
+	case AT_CLAW:
+	case AT_KICK:
+	case AT_BITE:
+	case AT_STNG:
+	case AT_TUCH:
+	case AT_BUTT:
+	case AT_TENT:
+	case AT_WEAP:
+		return TRUE;
+	default:
+		return FALSE;
+	}
 }
 
 /* Whether or not a tech is in use.
@@ -1628,6 +1688,9 @@ tech_timeout()
 		    case T_CHI_HEALING:
 			You("feel the healing power dissipate.");
 			break;
+		    case T_SHIELD_BLOCK:
+			You("release your energy from your shield.");
+			break;
 	            default:
 	            	break;
 	        } else switch (techid(i)) {
@@ -1649,6 +1712,19 @@ tech_timeout()
 
 	    if (techtout(i) > 0) techtout(i)--;
         }
+}
+
+void
+extend_tech_time(tid, t)
+int tid;
+int t;
+{
+	int i;
+	for (i = 0; i < MAXTECH; ++i)
+		if (techid(i) == tid) {
+			techt_inuse(i) += t;
+			break;
+		}
 }
 
 void

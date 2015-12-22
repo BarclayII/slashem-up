@@ -65,6 +65,11 @@ const char *name;	/* if null, then format `obj' */
 		if(Blind || !flags.verbose) pline("It misses.");
 		else You("are almost hit by %s.", onm);
 		return(0);
+	} else if (tech_inuse(T_SHIELD_BLOCK)) {
+		if (Blind || !flags.verbose) pline ("You block it with your shield");
+		else You("block %s with your shield", onm);
+		shield_block(dam);
+		return (0);
 	} else {
 		if(Blind || !flags.verbose) You("are hit!");
 		else You("are hit by %s%s", onm, exclam(dam));
