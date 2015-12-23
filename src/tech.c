@@ -1593,7 +1593,24 @@ boolean
 shield_blockable(mattk)
 struct attack *mattk;
 {
-	if (!tech_inuse(T_SHIELD_BLOCK))
+	if (!tech_inuse(T_SHIELD_BLOCK) ||
+	    /* additional restriction - not weak */
+	    u.uhs <= 2 ||
+	    /* swallowed */
+	    u.uswallow ||
+	    /* Sleeping */
+	    u.usleep ||
+	    /* Fumbling */
+	    Fumbling ||
+	    /* Stunned */
+	    Stunned ||
+	    /* Confused */
+	    Confusion ||
+	    /* Blind */
+	    Blind ||
+	    /* Vomiting */
+	    Vomiting
+	    )
 		return FALSE;
 	switch(mattk->aatyp) {
 	case AT_CLAW:
