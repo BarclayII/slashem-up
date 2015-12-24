@@ -645,7 +645,7 @@ int tech_no;
 		Your("fingernails extend into claws!");
 		aggravate();
 		techt_inuse(tech_no) = d(2,4) + techlev(tech_no)/5 + 2;
-		t_timeout = rn1(500,500) / (techlev(tech_no) / 5);
+		t_timeout = rn1(500,500) / (techlev(tech_no) / 5 + 1);
 		break;
 	    case T_SLEEP_PUNCH:
 		if (Upolyd || uwep || uarmg) {
@@ -833,7 +833,7 @@ int tech_no;
 			    tmp /= 2;
 			}
 			tmp += techlev(tech_no);
-			t_timeout = rn1(1000, 500) / (techlev(tech_no) / 2);
+			t_timeout = rn1(1000, 500) / (techlev(tech_no) / 2 + 1);
 			hurtmon(mtmp, tmp);
 		    }
 		}
@@ -895,7 +895,7 @@ int tech_no;
 				Your("sudden move knocks %s out!", mon_nam(mtmp));
 				mtmp->mcanmove = 0;
 				mtmp->mfrozen = d(5, 3);
-				t_timeout = rn1(1000, 500) / (techlev(tech_no) / 2);
+				t_timeout = rn1(1000, 500) / (techlev(tech_no) / 2 + 1);
 			}
 		}
 		break;
