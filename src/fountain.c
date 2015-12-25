@@ -700,9 +700,12 @@ drinktoilet()
 			break;
 		case 2: pline("Something begins to crawl out of the toilet!");
 			if (mvitals[PM_BROWN_PUDDING].mvflags & G_GONE
+			    || levl[u.ux][u.uy].looted & S_LPUDDING
 			    || !makemon(&mons[PM_BROWN_PUDDING], u.ux, u.uy,
 					NO_MM_FLAGS))
 				pline("But it slithers back out of sight.");
+			else
+				levl[u.ux][u.uy].looted |= S_LPUDDING;
 			break;
 		case 3:
 		case 4: if (mvitals[PM_BABY_CROCODILE].mvflags & G_GONE)
