@@ -30,7 +30,7 @@
 #define hit_as_two(mon)         (((mon)->mintrinsics & MR_HITASTWO) != 0)
 #define hit_as_three(mon)       (((mon)->mintrinsics & MR_HITASTHREE) != 0)
 #define hit_as_four(mon)        (((mon)->mintrinsics & MR_HITASFOUR) != 0)
-
+#define hugemonst(mon)		((mon)->msize >= MZ_HUGE)
 #define is_lminion(mon)		(is_minion((mon)->data) && \
 				 (mon)->data->maligntyp >= A_COALIGNED && \
 				 ((mon)->data != &mons[PM_ANGEL] || \
