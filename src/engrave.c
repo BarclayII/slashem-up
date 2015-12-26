@@ -952,8 +952,6 @@ doengrave()
 	if (doknown) {
 	    makeknown(otmp->otyp);
 	    more_experienced(0,10);
-	} else if (bugeffect) {
-		docall(otmp);
 	}
 
 	if (teleengr) {
@@ -1217,6 +1215,10 @@ doengrave()
 	make_engr_at(u.ux, u.uy, buf, (moves - multi), type);
 
 	if (post_engr_text[0]) pline(post_engr_text);
+
+	if (bugeffect) {
+		docall(otmp);
+	}
 
 	if (doblind && !resists_blnd(&youmonst)) {
 	    You("are blinded by the flash!");
