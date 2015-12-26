@@ -481,6 +481,7 @@ doengrave()
 	boolean dengr = FALSE;	/* TRUE if we wipe out the current engraving */
 	boolean doblind = FALSE;/* TRUE if engraving blinds the player */
 	boolean doknown = FALSE;/* TRUE if we identify the stylus */
+	boolean bugeffect = TRUE; /* TRUE if we observed some effect of the stylus */
 	boolean eow = FALSE;	/* TRUE if we are overwriting oep */
 	boolean jello = FALSE;	/* TRUE if we are engraving in slime */
 	boolean ptext = TRUE;	/* TRUE if we must prompt for engrave text */
@@ -655,6 +656,7 @@ doengrave()
 		    switch (otmp->otyp) {
 		    /* DUST wands */
 		    default:
+		        bugeffect = FALSE;
 			break;
 
 			/* NODIR wands */
@@ -950,6 +952,8 @@ doengrave()
 	if (doknown) {
 	    makeknown(otmp->otyp);
 	    more_experienced(0,10);
+	} else if (bugeffect) {
+		docall(otmp);
 	}
 
 	if (teleengr) {

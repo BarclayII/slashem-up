@@ -202,12 +202,14 @@ struct obj *otmp;
 				pline("A huge hole opens up...");
 				expels(mtmp, mtmp->data, TRUE);
 			}
+			makeknown(otyp);
 		}
 		break;
 	case WAN_SPEED_MONSTER:
 		if (!resist(mtmp, otmp->oclass, 0, NOTELL)) {
 			mon_adjust_speed(mtmp, 1, otmp);
 			m_dowear(mtmp, FALSE); /* might want speed boots */
+			makeknown(otyp);
 		}
 		break;
 	case SPE_TURN_UNDEAD:
@@ -259,9 +261,13 @@ struct obj *otmp;
 	case WAN_CANCELLATION:
 	case SPE_CANCELLATION:
 		(void) cancel_monst(mtmp, otmp, TRUE, TRUE, FALSE);
+		if (canspotmon(mtmp))
+			makeknown(otyp);
 		break;
 	case WAN_TELEPORTATION:
 	case SPE_TELEPORT_AWAY:
+		if (canspotmon(mtmp))
+			makeknown(otyp);
 		reveal_invis = !u_teleport_mon(mtmp, TRUE);
 		break;
 	case WAN_MAKE_INVISIBLE:
@@ -288,8 +294,10 @@ struct obj *otmp;
 		if (!is_undead(mtmp->data) &&
 		    !resist(mtmp, otmp->oclass, 0, NOTELL) &&
 		    (!mtmp->mflee || mtmp->mfleetim)) {
-		     if (canseemon(mtmp))
+		     if (canseemon(mtmp)) {
 			 pline("%s suddenly panics!", Monnam(mtmp));
+			 makeknown(otyp);
+		     }
 		     monflee(mtmp, 0, FALSE, TRUE);
 		}
 		break;
@@ -308,6 +316,7 @@ struct obj *otmp;
 				else pline("%s opens its mouth!", Monnam(mtmp));
 			}
 			expels(mtmp, mtmp->data, TRUE);
+			makeknown(otyp);
 #ifdef STEED
 		} else if (!!(obj = which_armor(mtmp, W_SADDLE))) {
 			mtmp->misc_worn_check &= ~obj->owornmask;
@@ -317,6 +326,7 @@ struct obj *otmp;
 			place_object(obj, mtmp->mx, mtmp->my);
 			/* call stackobj() if we ever drop anything that can merge */
 			newsym(mtmp->mx, mtmp->my);
+			makeknown(otyp);
 #endif
 		}
 		break;
@@ -2515,6 +2525,7 @@ boolean ordinary;
 		    	polyself(FALSE);
 		    break;
 		case WAN_CANCELLATION:
+		    makeknown(WAN_CANCELLATION);
 		case SPE_CANCELLATION:
 		    (void) cancel_monst(&youmonst, obj, TRUE, FALSE, TRUE);
 		    break;
