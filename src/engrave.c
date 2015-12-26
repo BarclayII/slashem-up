@@ -744,6 +744,7 @@ doengrave()
 		    case WAN_OPENING:
 		    case WAN_LOCKING:
 		    case WAN_PROBING:
+			bugeffect = FALSE;
 			break;
 
 			/* RAY wands */
