@@ -1195,10 +1195,8 @@ violated_vegetarian()
     if (Role_if(PM_MONK)) {
 	You_feel("guilty.");
 	adjalign(-1);
-	if (!rn2(2)) {
-		Your("vegetarian stomach doesn\'t feel well.");
-		make_vomiting((long)rn1(15, 10), FALSE);
-	}
+	Your("vegetarian stomach doesn\'t feel well.");
+	make_vomiting((long)rn1(15, 10), FALSE);
     }
     return;
 }
