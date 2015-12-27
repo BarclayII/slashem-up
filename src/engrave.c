@@ -481,7 +481,7 @@ doengrave()
 	boolean dengr = FALSE;	/* TRUE if we wipe out the current engraving */
 	boolean doblind = FALSE;/* TRUE if engraving blinds the player */
 	boolean doknown = FALSE;/* TRUE if we identify the stylus */
-	boolean bugeffect = TRUE; /* TRUE if we observed some effect of the stylus */
+	boolean bugeffect = FALSE; /* TRUE if we observed some effect of the stylus */
 	boolean eow = FALSE;	/* TRUE if we are overwriting oep */
 	boolean jello = FALSE;	/* TRUE if we are engraving in slime */
 	boolean ptext = TRUE;	/* TRUE if we must prompt for engrave text */
@@ -677,12 +677,14 @@ doengrave()
 			Strcpy(post_engr_text,
 			"The wand unsuccessfully fights your attempt to write!"
 			);
+			bugeffect = TRUE;
 			break;
 		    case WAN_SLOW_MONSTER:
 			if (!Blind) {
 			   Sprintf(post_engr_text,
 				   "The bugs on the %s slow down!",
 				   surface(u.ux, u.uy));
+			   bugeffect = TRUE;
 			}
 			break;
 		    case WAN_SPEED_MONSTER:
@@ -690,6 +692,7 @@ doengrave()
 			   Sprintf(post_engr_text,
 				   "The bugs on the %s speed up!",
 				   surface(u.ux, u.uy));
+			   bugeffect = TRUE;
 			}
 			break;
 		    case WAN_HEALING:
@@ -698,6 +701,7 @@ doengrave()
 			   Sprintf(post_engr_text,
 				   "The bugs on the %s look healthier!",
 				   surface(u.ux, u.uy));
+			   bugeffect = TRUE;
 			}
 			break;
 		    case WAN_FEAR:
@@ -705,6 +709,7 @@ doengrave()
 			   Sprintf(post_engr_text,
 				   "The bugs on the %s run away!",
 				   surface(u.ux, u.uy));
+			   bugeffect = TRUE;
 			}
 			break;
 		    case WAN_POLYMORPH:
@@ -714,6 +719,7 @@ doengrave()
 				(void) random_engraving(buf);
 			    }
 			    dengr = TRUE;
+			    bugeffect = TRUE;
 			}
 			break;
 		    case WAN_DRAINING:	/* KMH */
@@ -736,6 +742,7 @@ doengrave()
 				    strcpy(buf, oep->engr_txt);
 				    dengr = TRUE;
 				}
+				bugeffect = TRUE;
 			    }
 			}
 			break;
@@ -754,6 +761,7 @@ doengrave()
 			   Sprintf(post_engr_text,
 				   "The %s is riddled by bullet holes!",
 				   surface(u.ux, u.uy));
+			   bugeffect = TRUE;
 			}
 			break;
 
@@ -764,6 +772,7 @@ doengrave()
 			   Sprintf(post_engr_text,
 				   "The bugs on the %s stop moving!",
 				   surface(u.ux, u.uy));
+			   bugeffect = TRUE;
 			}
 			break;
 
@@ -781,6 +790,7 @@ doengrave()
 					surface(u.ux,u.uy));
 			    dengr = TRUE;
 			}
+			bugeffect = TRUE;
 			break;
 		    case WAN_TELEPORTATION:
 			if (oep && oep->engr_type != HEADSTONE) {
@@ -788,6 +798,7 @@ doengrave()
 				pline_The("engraving on the %s vanishes!",
 					surface(u.ux,u.uy));
 			    teleengr = TRUE;
+			    bugeffect = TRUE;
 			}
 			break;
 
