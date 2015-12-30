@@ -516,6 +516,8 @@ typedef unsigned char	uchar;
 
 #define RANDOM_DRAGON_SCALES
 
+#define UNSAFE_WALLIFY
+
 
 /* End of Section 5 */
 

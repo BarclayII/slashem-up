@@ -131,13 +131,19 @@ int floortype;		/* The 'wall' floortype */
 	register int x,y;
 	struct rm *lev;
 
+#ifndef UNSAFE_WALLIFY
 	/* sanity check on incoming variables */
 	if (x1<0 || x2>=COLNO || x1>x2 || y1<0 || y2>=ROWNO || y1>y2)
 	    panic("wallify_fire: bad bounds (%d,%d) to (%d,%d)",x1,y1,x2,y2);
+#endif
 
 	/* Translate the maze... */
 	for(x = x1; x <= x2; x++)
 	    for(y = y1; y <= y2; y++) {
+#ifdef UNSAFE_WALLIFY
+	        if (x1<0 || x2>=COLNO || x1>x2 || y1<0 || y2>=ROWNO || y1>y2)
+		    continue;
+#endif
 		lev = &levl[x][y];
 		type = lev->typ;
 		if IS_WALL(type)
@@ -182,12 +188,18 @@ int x1, y1, x2, y2;
 	};*/
 
 	/* sanity check on incoming variables */
+#ifndef UNSAFE_WALLIFY
 	if (x1<0 || x2>=COLNO || x1>x2 || y1<0 || y2>=ROWNO || y1>y2)
 	    panic("wallify_stone: bad bounds (%d,%d) to (%d,%d)",x1,y1,x2,y2);
+#endif
 
 	/* Step 1: change walls surrounded by rock to rock. */
 	for(x = x1; x <= x2; x++)
 	    for(y = y1; y <= y2; y++) {
+#ifdef UNSAFE_WALLIFY
+	        if (x1<0 || x2>=COLNO || x1>x2 || y1<0 || y2>=ROWNO || y1>y2)
+		    continue;
+#endif
 		lev = &levl[x][y];
 		type = lev->typ;
 		if (IS_WALL(type) && type != DBWALL) {
@@ -229,11 +241,17 @@ int x1, y1, x2, y2;
 	};
 
 	/* sanity check on incoming variables */
+#ifndef UNSAFE_WALLIFY
 	if (x1<0 || x2>=COLNO || x1>x2 || y1<0 || y2>=ROWNO || y1>y2)
 	    panic("wall_extends: bad bounds (%d,%d) to (%d,%d)",x1,y1,x2,y2);
+#endif
 
 	for(x = x1; x <= x2; x++)
 	    for(y = y1; y <= y2; y++) {
+#ifdef UNSAFE_WALLIFY
+	        if (x1<0 || x2>=COLNO || x1>x2 || y1<0 || y2>=ROWNO || y1>y2)
+		    continue;
+#endif
 		lev = &levl[x][y];
 		type = lev->typ;
 		if ( !(IS_WALL(type) && type != DBWALL)) continue;
