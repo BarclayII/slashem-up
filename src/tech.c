@@ -1595,7 +1595,7 @@ struct attack *mattk;
 {
 	if (!tech_inuse(T_SHIELD_BLOCK) ||
 	    /* additional restriction - not weak */
-	    u.uhs <= 2 ||
+	    u.uhs > 2 ||
 	    /* swallowed */
 	    u.uswallow ||
 	    /* Sleeping */
