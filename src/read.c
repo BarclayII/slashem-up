@@ -2255,13 +2255,13 @@ create_particular()
 		if (monclass != MAXMCLASSES)
 		    whichpm = mkclass(monclass, 0);
 		if (maketame) {
-		    mtmp = makemon(whichpm, u.ux, u.uy, MM_EDOG);
+		    mtmp = makemon(whichpm, u.ux, u.uy, MM_EDOG | MM_IGNOREWATER);
 		    if (mtmp) {
 			initedog(mtmp);
 			set_malign(mtmp);
 		    }
 		} else {
-		    mtmp = makemon(whichpm, u.ux, u.uy, NO_MM_FLAGS);
+		    mtmp = makemon(whichpm, u.ux, u.uy, MM_IGNOREWATER);
 		    if ((makepeaceful || makehostile) && mtmp) {
 			mtmp->mtame = 0;        /* sanity precaution */
 			mtmp->mpeaceful = makepeaceful ? 1 : 0;

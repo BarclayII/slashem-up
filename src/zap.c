@@ -742,6 +742,11 @@ register struct obj *obj;
 			x = new_xy.x,  y = new_xy.y;
 		}
 
+		struct monst fakemon;
+		fakemon.data = &mons[montype];
+		if (!goodpos(x, y, &fakemon, 0))
+			return (struct monst *)0;
+
 		if(cant_create(&montype, TRUE)) {
 			/* make a zombie or worm instead */
 			mtmp = makemon(&mons[montype], x, y,
