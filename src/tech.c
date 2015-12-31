@@ -1590,25 +1590,28 @@ int dam;
 }
 
 boolean
-shield_blockable(mattk)
+shield_blockable(mtmp, mattk)
+struct monst *mtmp;
 struct attack *mattk;
 {
 	if (!tech_inuse(T_SHIELD_BLOCK) ||
+	    /* You know its presence */
+	    !canspotmon(mtmp) ||
 	    /* additional restriction - not weak */
 	    u.uhs > 2 ||
-	    /* swallowed */
+	    /* not swallowed */
 	    u.uswallow ||
-	    /* Sleeping */
+	    /* not sleeping */
 	    u.usleep ||
-	    /* Fumbling */
+	    /* not helpless */
+	    multi ||
+	    /* not fumbling */
 	    Fumbling ||
-	    /* Stunned */
+	    /* not stunned */
 	    Stunned ||
-	    /* Confused */
+	    /* not confused */
 	    Confusion ||
-	    /* Blind */
-	    Blind ||
-	    /* Vomiting */
+	    /* not vomiting */
 	    Vomiting
 	    )
 		return FALSE;

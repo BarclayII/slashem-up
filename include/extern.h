@@ -2106,7 +2106,7 @@ E void FDECL(adjtech, (int,int));
 E int NDECL(dotech);
 E void NDECL(docalm);
 E void FDECL(shield_block, (int));
-E boolean FDECL(shield_blockable, (struct attack *));
+E boolean FDECL(shield_blockable, (struct monst *, struct attack *));
 E int FDECL(tech_inuse, (int));
 E void NDECL(tech_timeout);
 E void FDECL(extend_tech_time, (int, int));

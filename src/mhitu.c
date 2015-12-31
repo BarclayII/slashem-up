@@ -1102,7 +1102,7 @@ hitmu(mtmp, mattk)
 			    dmg = 1;
 			    pline("%s hits you with the %s corpse.",
 				Monnam(mtmp), mons[otmp->corpsenm].mname);
-			    if (!Stoned && !shield_blockable(mattk)) goto do_stone;
+			    if (!Stoned && !shield_blockable(mtmp, mattk)) goto do_stone;
 			}
 
 			/* MRKR: If hit with a burning torch,     */
@@ -1152,7 +1152,7 @@ hitmu(mtmp, mattk)
 				 * [BarclayII]
 				 * strong monsters can also SHATTER YOUR WEAPON
 				 */
-				if (!shield_blockable(mattk) && dieroll == 2 &&
+				if (!shield_blockable(mtmp, mattk) && dieroll == 2 &&
 				    strongmonst(mtmp->data) &&
 				    otmp && otmp->oclass == WEAPON_CLASS &&
 				    bimanual(otmp) &&
@@ -1196,7 +1196,7 @@ hitmu(mtmp, mattk)
 
 			/* While blocking all side effects are ignored */
 
-			if (shield_blockable(mattk))
+			if (shield_blockable(mtmp, mattk))
 				break;
 
 			if (objects[otmp->otyp].oc_material == SILVER &&
@@ -1295,12 +1295,12 @@ hitmu(mtmp, mattk)
 		break;
 	    case AD_DISE:
 		hitmsg(mtmp, mattk);
-                if (!shield_blockable(mattk) && 
+                if (!shield_blockable(mtmp, mattk) && 
 		    !diseasemu(mdat) || Invulnerable) dmg = 0;
 		break;
 	    case AD_FIRE:
 		hitmsg(mtmp, mattk);
-		if (!shield_blockable(mattk) && uncancelled) {
+		if (!shield_blockable(mtmp, mattk) && uncancelled) {
 		    pline("You're %s!", on_fire(youmonst.data, mattk));
 		    if (youmonst.data == &mons[PM_STRAW_GOLEM] ||
 		        youmonst.data == &mons[PM_PAPER_GOLEM]) {
@@ -1341,7 +1341,7 @@ hitmu(mtmp, mattk)
 		break;
 	    case AD_COLD:
 		hitmsg(mtmp, mattk);
-		if (!shield_blockable(mattk) && uncancelled) {
+		if (!shield_blockable(mtmp, mattk) && uncancelled) {
 		    pline("You're covered in frost!");
 		    if (FCold_resistance) {
 			pline_The("frost doesn't seem cold!");
@@ -1356,7 +1356,7 @@ hitmu(mtmp, mattk)
 		break;
 	    case AD_ELEC:
 		hitmsg(mtmp, mattk);
-		if (!shield_blockable(mattk) && uncancelled) {
+		if (!shield_blockable(mtmp, mattk) && uncancelled) {
 		    You("get zapped!");
 		    if (FShock_resistance) {
 			pline_The("zap doesn't shock you!");
@@ -1371,7 +1371,7 @@ hitmu(mtmp, mattk)
 		break;
 	    case AD_SLEE:
 		hitmsg(mtmp, mattk);
-		if (!shield_blockable(mattk) && uncancelled && multi >= 0 && !rn2(5)) {
+		if (!shield_blockable(mtmp, mattk) && uncancelled && multi >= 0 && !rn2(5)) {
 		    if (FSleep_resistance) break;
 		    fall_asleep(-rnd(PSleep_resistance?5:10), TRUE);
 		    if (Blind) You("are put to sleep!");
@@ -1379,7 +1379,7 @@ hitmu(mtmp, mattk)
 		}
 		break;
 	    case AD_BLND:
-		if (!shield_blockable(mattk) &&
+		if (!shield_blockable(mtmp, mattk) &&
 		    can_blnd(mtmp, &youmonst, mattk->aatyp, (struct obj*)0)) {
 		    if (!Blind) pline("%s blinds you!", Monnam(mtmp));
 		    make_blinded(Blinded+(long)dmg,FALSE);
@@ -1397,7 +1397,7 @@ hitmu(mtmp, mattk)
 		ptmp = A_CON;
 dopois:
 		hitmsg(mtmp, mattk);
-		if (!shield_blockable(mattk) && uncancelled && !rn2(8)) {
+		if (!shield_blockable(mtmp, mattk) && uncancelled && !rn2(8)) {
 		    Sprintf(buf, "%s %s",
 			    s_suffix(Monnam(mtmp)), mpoisons_subj(mtmp, mattk));
 		    poisoned(buf, ptmp, mdat->mname, 30);
@@ -1405,7 +1405,7 @@ dopois:
 		break;
 	    case AD_DRIN:
 		hitmsg(mtmp, mattk);
-		if (shield_blockable(mattk))
+		if (shield_blockable(mtmp, mattk))
 			break;
 		if (defends(AD_DRIN, uwep) || !has_head(youmonst.data)) {
 		    You("don't seem harmed.");
@@ -1471,7 +1471,7 @@ dopois:
 		break;
 	    case AD_PLYS:
 		hitmsg(mtmp, mattk);
-		if (!shield_blockable(mattk) && uncancelled && multi >= 0 && !rn2(3)) {
+		if (!shield_blockable(mtmp, mattk) && uncancelled && multi >= 0 && !rn2(3)) {
 		    if (Free_action) {
 			You("momentarily stiffen.");            
 		    } else {
@@ -1485,7 +1485,7 @@ dopois:
 		break;
 	    case AD_TCKL:
 		hitmsg(mtmp, mattk);
-		if (!shield_blockable(mattk) && uncancelled && multi >= 0 && !rn2(3)) {
+		if (!shield_blockable(mtmp, mattk) && uncancelled && multi >= 0 && !rn2(3)) {
 		    if (Free_action)
 			You_feel("horrible tentacles probing your flesh!");
 		    else {
@@ -1500,7 +1500,7 @@ dopois:
 		break;
 	    case AD_DRLI:
 		hitmsg(mtmp, mattk);
-		if (shield_blockable(mattk))
+		if (shield_blockable(mtmp, mattk))
 			break;
 		/* if vampire biting (and also a pet) */
 		if (is_vampire(mtmp->data) && mattk->aatyp == AT_BITE &&
@@ -1524,7 +1524,7 @@ dopois:
 	    case AD_LEGS:
 		{ register long side = rn2(2) ? RIGHT_SIDE : LEFT_SIDE;
 		  const char *sidestr = (side == RIGHT_SIDE) ? "right" : "left";
-		  if (shield_blockable(mattk))
+		  if (shield_blockable(mtmp, mattk))
 			  break;
 
 		/* This case is too obvious to ignore, but Nethack is not in
@@ -1569,7 +1569,7 @@ dopois:
 		}
 	    case AD_STON:	/* cockatrice */
 		hitmsg(mtmp, mattk);
-		if (shield_blockable(mattk))
+		if (shield_blockable(mtmp, mattk))
 			break;
 		if(!rn2(3)) {
 		    if (mtmp->mcan) {
@@ -1606,13 +1606,13 @@ dopois:
 		break;
 	    case AD_STCK:
 		hitmsg(mtmp, mattk);
-		if (shield_blockable(mattk))
+		if (shield_blockable(mtmp, mattk))
 			break;
 		if (uncancelled && !u.ustuck && !sticks(youmonst.data))
 			setustuck(mtmp);
 		break;
 	    case AD_WRAP:
-		if (shield_blockable(mattk))
+		if (shield_blockable(mtmp, mattk))
 			break;
 		if ((!mtmp->mcan || u.ustuck == mtmp) && !sticks(youmonst.data)) {
 		    if (!u.ustuck && !rn2(10)) {
@@ -1651,7 +1651,7 @@ dopois:
 		break;
 	    case AD_WERE:
 		hitmsg(mtmp, mattk);
-		if (shield_blockable(mattk))
+		if (shield_blockable(mtmp, mattk))
 			break;
 		if (uncancelled && !rn2(4) && u.ulycn == NON_PM &&
 			!Protection_from_shape_changers &&
@@ -1665,7 +1665,7 @@ dopois:
 		break;
 	    case AD_SGLD:
 		hitmsg(mtmp, mattk);
-		if (shield_blockable(mattk))
+		if (shield_blockable(mtmp, mattk))
 			break;
 		if (youmonst.data->mlet == mdat->mlet) break;
 		if(!mtmp->mcan) stealgold(mtmp);
@@ -1963,7 +1963,7 @@ dopois:
 	    case AD_SLIM:    
 		hitmsg(mtmp, mattk);
 		if (!uncancelled) break;
-		if (shield_blockable(mattk))
+		if (shield_blockable(mtmp, mattk))
 			break;
 		if (flaming(youmonst.data)) {
 		    pline_The("slime burns away!");
@@ -2050,7 +2050,7 @@ dopois:
 		flags.botl = 1;
 	    }
 
-	    if (shield_blockable(mattk)) {
+	    if (shield_blockable(mtmp, mattk)) {
 		    You("block the attack with your shield.");
 		    shield_block(dmg);
 	    } else
