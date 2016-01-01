@@ -1867,7 +1867,7 @@ register struct attack *mattk;
 
 	armpro = magic_negation(mdef);
 	/* since hero can't be cancelled, only defender's armor applies */
-	negated = !((rn2(3) >= armpro) || !rn2(50));
+	negated = !(rn2(10) >= 3 * armpro);
 
 	if (hit_as_one(&youmonst))    enchantlvl = 1; 
 	if (hit_as_two(&youmonst))    enchantlvl = 2;         
