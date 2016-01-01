@@ -1195,8 +1195,6 @@ violated_vegetarian()
     if (Role_if(PM_MONK)) {
 	You_feel("guilty.");
 	adjalign(-1);
-	Your("vegetarian stomach doesn\'t feel well.");
-	make_vomiting((long)rn1(15, 10), FALSE);
     }
     return;
 }
@@ -1597,6 +1595,15 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 	/* delay is weight dependent */
 	victual.reqtime = 3 + (mons[mnum].cwt >> 6);
 	if (otmp->odrained) victual.reqtime = rounddiv(victual.reqtime, 5);
+
+	if (!vegan(&mons[mnum]) && Role_if(PM_MONK) && rn2(15)) {
+		You("stop as your stomach suddenly twitches.");
+		touchfood(otmp);
+		make_vomiting(Vomiting + rn1(15, 10), FALSE);
+		make_confused(HConfusion + rn1(15, 10), FALSE);
+		make_stunned(HStun + rn1(15, 10), FALSE);
+		return 3;
+	}
 
 	if (!tp && mnum != PM_LIZARD && mnum != PM_LICHEN &&
 			(otmp->orotten || !rn2(7))) {
@@ -2537,6 +2544,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 		u.uconduct.unvegan++;
 		if (otmp->otyp != EGG && otmp->otyp != CHEESE) {
 		    violated_vegetarian();
+		    /* Monk's won't throw up if eating "regular" meat */
 		}
 		break;
 
