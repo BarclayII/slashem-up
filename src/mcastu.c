@@ -11,14 +11,15 @@
 #define MGC_STUN_YOU	 3
 #define MGC_DISAPPEAR	 4
 #define MGC_WEAKEN_YOU	 5
-#define MGC_DESTRY_ARMR	 6
-#define MGC_CURSE_ITEMS	 7
-#define MGC_AGGRAVATION	 8
-#define MGC_SUMMON_MONS	 9
-#define MGC_CLONE_WIZ	10
-#define MGC_DEATH_TOUCH	11
-#define MGC_CREATE_POOL	12
-#define MGC_CALL_UNDEAD	13
+#define MGC_SUMMON_SPHR  6
+#define MGC_DESTRY_ARMR	 7
+#define MGC_CURSE_ITEMS	 8
+#define MGC_AGGRAVATION	 9
+#define MGC_SUMMON_MONS	10
+#define MGC_CLONE_WIZ	11
+#define MGC_DEATH_TOUCH	12
+#define MGC_CREATE_POOL	13
+#define MGC_CALL_UNDEAD	14
 
 /* monster cleric spells */
 #define CLC_OPEN_WOUNDS	 0
@@ -26,11 +27,12 @@
 #define CLC_CONFUSE_YOU	 2
 #define CLC_PARALYZE	 3
 #define CLC_BLIND_YOU	 4
-#define CLC_INSECTS	 5
-#define CLC_CURSE_ITEMS	 6
-#define CLC_LIGHTNING	 7
-#define CLC_FIRE_PILLAR	 8
-#define CLC_GEYSER	 9
+#define CLC_SUMMON_SPHR  5
+#define CLC_INSECTS	 6
+#define CLC_CURSE_ITEMS	 7
+#define CLC_LIGHTNING	 8
+#define CLC_FIRE_PILLAR	 9
+#define CLC_GEYSER	10
 
 STATIC_DCL void FDECL(cursetxt,(struct monst *,BOOLEAN_P));
 STATIC_DCL int FDECL(choose_magic_spell, (int));
@@ -107,6 +109,7 @@ int spellval;
     case 8:
 	return MGC_DESTRY_ARMR;
     case 7:
+	return MGC_SUMMON_SPHR;
     case 6:
 	return MGC_WEAKEN_YOU;
     case 5:
@@ -142,6 +145,7 @@ int spellnum;
     case 8:
 	return CLC_INSECTS;
     case 7:
+	return CLC_SUMMON_SPHR;
     case 6:
 	return CLC_BLIND_YOU;
     case 5:
@@ -506,6 +510,40 @@ int spellnum;
 	rndcurse();
 	dmg = 0;
 	break;
+    case MGC_SUMMON_SPHR:
+	/* Note: identical to clerical one. */
+	{
+		struct permonst *pm;
+		struct monst *mtmp2 = (struct monst *)0;
+		int quan = rnd(3);
+		coord bypos;
+		int i;
+		boolean success = FALSE;
+		for (i = 1; i <= quan; ++i) {
+			if (!enexto(&bypos, mtmp->mux, mtmp->muy, mtmp->data))
+				break;
+			/* pick among flaming, freezing and shocking spheres */
+			switch (rn2(3)) {
+				case 0: pm = &mons[PM_FREEZING_SPHERE]; break;
+				case 1: pm = &mons[PM_FLAMING_SPHERE]; break;
+				case 2: pm = &mons[PM_SHOCKING_SPHERE]; break;
+			}
+			if (mtmp2 = makemon(pm, bypos.x, bypos.y, NO_MM_FLAGS)) {
+				success = TRUE;
+				mtmp2->msleeping = mtmp2->mpeaceful = mtmp2->mtame = 0;
+				set_malign(mtmp2);
+			}
+		}
+		if (!success)
+			pline("%s directs some energy but nothing happens.", Monnam(mtmp));
+		else if (invis_mistake(mtmp))
+			pline("%s directs some energy around a spot near you!", Monnam(mtmp));
+		else if (displ_mistake(mtmp))
+			pline("%s directs some energy around your displaced image!", Monnam(mtmp));
+		else
+			pline("%s directs some energy around you!", Monnam(mtmp));
+	}
+	break;
     case MGC_DESTRY_ARMR:
 	if (Antimagic) {
 	    shieldeff(u.ux, u.uy);
@@ -659,6 +697,42 @@ int spellnum;
 	You_feel("as if you need some help.");
 	rndcurse();
 	dmg = 0;
+	break;
+    case CLC_SUMMON_SPHR:
+	/* Note: identical to arcane one */
+	{
+		struct permonst *pm;
+		struct monst *mtmp2 = (struct monst *)0;
+		boolean success;
+		int quan, i;
+		coord bypos;
+
+		quan = rnd(3);
+		success = FALSE;
+		for (i = 1; i <= quan; ++i) {
+			if (!enexto(&bypos, mtmp->mux, mtmp->muy, mtmp->data))
+				break;
+			/* pick among flaming, freezing and shocking spheres */
+			switch (rn2(3)) {
+				case 0: pm = &mons[PM_FREEZING_SPHERE]; break;
+				case 1: pm = &mons[PM_FLAMING_SPHERE]; break;
+				case 2: pm = &mons[PM_SHOCKING_SPHERE]; break;
+			}
+			if (mtmp2 = makemon(pm, bypos.x, bypos.y, NO_MM_FLAGS)) {
+				success = TRUE;
+				mtmp2->msleeping = mtmp2->mpeaceful = mtmp2->mtame = 0;
+				set_malign(mtmp2);
+			}
+		}
+		if (!success)
+			pline("%s directs some energy but nothing happens.", Monnam(mtmp));
+		else if (invis_mistake(mtmp))
+			pline("%s directs some energy around a spot near you!", Monnam(mtmp));
+		else if (displ_mistake(mtmp))
+			pline("%s directs some energy around your displaced image!", Monnam(mtmp));
+		else
+			pline("%s directs some energy around you!", Monnam(mtmp));
+	}
 	break;
     case CLC_INSECTS:
       {
