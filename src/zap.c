@@ -1236,13 +1236,16 @@ create_polymon(obj, okind)
 	case IRON:
 	case METAL:
 	case MITHRIL:
-	    pm_index = PM_IRON_GOLEM;
+	    pm_index = rn2(3) ? PM_IRON_GOLEM : PM_STEEL_GOLEM;
 	    material = "metal ";
+	    break;
+	case GEMSTONE:
+	    pm_index = !rn2(3) ? PM_RUBY_GOLEM :
+		    (!rn2(2) ? PM_SAPPHIRE_GOLEM : PM_DIAMOND_GOLEM);
 	    break;
 	case COPPER:
 	case SILVER:
 	case PLATINUM:
-	case GEMSTONE:
 	case MINERAL:
 	    pm_index = rn2(2) ? PM_STONE_GOLEM : PM_CLAY_GOLEM;
 	    material = "lithic ";
@@ -1282,7 +1285,7 @@ create_polymon(obj, okind)
 	    material = "gold ";
 	    break;
 	case GLASS:
-	    pm_index = PM_GLASS_GOLEM;
+	    pm_index = rn2(3) ? PM_GLASS_GOLEM : PM_CRYSTAL_GOLEM;
 	    material = "glassy ";
 	    break;
 	case PAPER:
@@ -1323,7 +1326,7 @@ struct obj *obj;
 	if(poly_zapped < 0) {
 	    /* some may metamorphosize */
 	    for(i=obj->quan; i; i--)
-		if (! rn2(Luck + 45)) {
+		if (! rn2(Luck + 30)) {
 		    poly_zapped = objects[obj->otyp].oc_material;
 		    break;
 		}
