@@ -1861,7 +1861,7 @@ arti_invoke(obj)
 	    if ((mtmp2 = tamedog(mtmp, (struct obj *)0)) != 0)
 			mtmp = mtmp2;
 	    mtmp->mtame = 30;
-	    obj->age += rnz(2000);
+	    obj->age += 3000 + rnz(3000);
 	    break;
 	case SUMMON_WATER_ELEMENTAL:
 #ifdef ENHANCED_MAGE_ARTI
@@ -1882,7 +1882,7 @@ arti_invoke(obj)
 	    if ((mtmp2 = tamedog(mtmp, (struct obj *)0)) != 0)
 			mtmp = mtmp2;
 	    mtmp->mtame = 30;
-	    obj->age += rnz(2000);
+	    obj->age += 3000 + rnz(3000);
 	    break;
 	case OBJ_DETECTION:
 		(void)object_detect(obj, 0);
