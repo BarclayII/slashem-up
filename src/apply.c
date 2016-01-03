@@ -169,7 +169,7 @@ int rx, ry, *resp;
 	struct obj *otmp;
 	struct trap *ttmp;
 
-	if (!can_reach_floor()) return FALSE;
+	if (!can_reach_floor(TRUE)) return FALSE;
 
 	/* additional stethoscope messages from jyoung@apanix.apana.org.au */
 	if (Hallucination && sobj_at(CORPSE, rx, ry)) {
@@ -250,7 +250,7 @@ use_stethoscope(obj)
 	} else if (u.dz) {
 		if (Underwater)
 		    You_hear("faint splashing.");
-		else if (u.dz < 0 || !can_reach_floor())
+		else if (u.dz < 0 || !can_reach_floor(TRUE))
 		    You_cant("reach the %s.",
 			(u.dz > 0) ? surface(u.ux,u.uy) : ceiling(u.ux,u.uy));
 		else if (its_dead(u.ux, u.uy, &res))

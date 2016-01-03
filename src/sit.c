@@ -50,8 +50,10 @@ dosit()
 	}
 #endif
 
-	if(!can_reach_floor())	{
-	    if (Levitation)
+	if(!can_reach_floor(FALSE))	{
+            if (u.uswallow)
+                pline("There are no seats in here!");
+	    else if (Levitation)
 		You("tumble in place.");
 	    else
 		You("are sitting on air.");

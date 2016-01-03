@@ -594,7 +594,7 @@ register struct obj *obj;
 		return(1);
 	    }
 #endif
-	    if (!can_reach_floor()) {
+	    if (!can_reach_floor(TRUE)) {
 		if(flags.verbose) You("drop %s.", doname(obj));
 #ifndef GOLDOBJ
 		if (obj->oclass != COIN_CLASS || obj == invent) freeinv(obj);

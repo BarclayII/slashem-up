@@ -2352,14 +2352,19 @@ dopickup()
 		There("is nothing here to pick up.");
 		return(0);
 	}
-	if (!can_reach_floor()) {
+	if (!can_reach_floor(TRUE)) {
 #ifdef STEED
 		if (u.usteed && P_SKILL(P_RIDING) < P_BASIC)
 		    You("aren't skilled enough to reach from %s.",
 			y_monnam(u.usteed));
 		else
 #endif
-		You("cannot reach the %s.", surface(u.ux,u.uy));
+		if (traphere && uteetering_at_seen_pit(traphere))
+			You("cannot reach the bottom of the pit.");
+		else if (Blind && !can_reach_floor(TRUE))
+			You("cannot reach anything here.");
+		else
+			You("cannot reach the %s.", surface(u.ux,u.uy));
 		return(0);
 	}
 

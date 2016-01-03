@@ -412,8 +412,9 @@ int what;		/* should be a long */
 		}
 
 		/* no pickup if levitating & not on air or water level */
-		if (!can_reach_floor()) {
-		    if ((multi && !flags.run) || (autopickup && !flags.pickup))
+		if (!can_reach_floor(TRUE)) {
+		    if ((multi && !flags.run) || (autopickup && !flags.pickup)
+                        || (ttmp && uteetering_at_seen_pit(ttmp)))
 			sense_engr_at(u.ux, u.uy, FALSE);
 		    return (0);
 		}
@@ -1504,7 +1505,7 @@ STATIC_OVL boolean
 able_to_loot(x, y)
 int x, y;
 {
-	if (!can_reach_floor()) {
+	if (!can_reach_floor(TRUE)) {
 #ifdef STEED
 		if (u.usteed && P_SKILL(P_RIDING) < P_BASIC)
 			rider_cant_reach(); /* not skilled enough to reach */

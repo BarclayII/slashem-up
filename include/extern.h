@@ -282,6 +282,7 @@ E void FDECL(bury_objs, (int,int));
 E void FDECL(unearth_objs, (int,int));
 E void FDECL(rot_organic, (genericptr_t, long));
 E void FDECL(rot_corpse, (genericptr_t, long));
+E boolean FDECL(conjoined_pits, (struct trap *, struct trap *, BOOLEAN_P));
 #if 0
 E void FDECL(bury_monst, (struct monst *));
 E void NDECL(bury_you);
@@ -643,7 +644,8 @@ E int NDECL(doethics);
 
 E char *FDECL(random_engraving, (char *));
 E void FDECL(wipeout_text, (char *,int,unsigned));
-E boolean NDECL(can_reach_floor);
+E boolean FDECL(can_reach_floor, (BOOLEAN_P));
+E void FDECL(cant_reach_floor, (int, int, BOOLEAN_P, BOOLEAN_P));
 E const char *FDECL(surface, (int,int));
 E const char *FDECL(ceiling, (int,int));
 E struct engr *FDECL(engr_at, (XCHAR_P,XCHAR_P));
@@ -2242,6 +2244,7 @@ E boolean NDECL(unconscious);
 E boolean NDECL(lava_effects);
 E void FDECL(blow_up_landmine, (struct trap *));
 E int FDECL(launch_obj,(SHORT_P,int,int,int,int,int));
+E boolean FDECL(uteetering_at_seen_pit, (struct trap *));
 /* KMH, balance patch -- new function */
 E int NDECL(uunstone);
 

@@ -154,17 +154,40 @@ unsigned seed;		/* for semi-controlled randomization */
 }
 
 boolean
-can_reach_floor()
+can_reach_floor(check_pit)
+boolean check_pit;
 {
-	return (boolean)(!u.uswallow &&
-#ifdef STEED
-			/* Restricted/unskilled riders can't reach the floor */
-			!(u.usteed && P_SKILL(P_RIDING) < P_BASIC) &&
-#endif
-			 (!Levitation ||
-			  Is_airlevel(&u.uz) || Is_waterlevel(&u.uz)));
+    struct trap *t;
+
+    if (u.uswallow)
+        return FALSE;
+    /* Restricted/unskilled riders can't reach the floor */
+    if (u.usteed && P_SKILL(P_RIDING) < P_BASIC)
+        return FALSE;
+    if (check_pit && !Flying
+        && (t = t_at(u.ux, u.uy)) != 0 && uteetering_at_seen_pit(t))
+        return FALSE;
+
+    return (boolean) ((!Levitation || Is_airlevel(&u.uz)
+                       || Is_waterlevel(&u.uz))
+                      && (!u.uundetected || !is_hider(youmonst.data)
+                          || u.umonnum == PM_TRAPPER));
 }
 #endif /* OVLB */
+
+/* give a message after caller has determined that hero can't reach */
+void
+cant_reach_floor(x, y, up, check_pit)
+int x, y;
+boolean up, check_pit;
+{
+    You("can't reach the %s.",
+        up ? ceiling(x, y)
+           : (check_pit && can_reach_floor(FALSE))
+               ? "bottom of the pit"
+               : surface(x, y));
+}
+
 #ifdef OVL0
 
 const char *
@@ -272,7 +295,7 @@ void
 u_wipe_engr(cnt)
 register int cnt;
 {
-	if (can_reach_floor())
+	if (can_reach_floor(TRUE))
 		wipe_engr_at(u.ux, u.uy, cnt, FALSE);
 }
 
@@ -326,7 +349,7 @@ boolean read_it; /* Read any sensed engraving */
 		break;
 	    case ENGRAVE:
 	    case HEADSTONE:
-		if (!Blind || can_reach_floor()) {
+		if (!Blind || can_reach_floor(TRUE)) {
 			sensed = 1;
 			pline("%s is engraved here on the %s.",
 				Something,
@@ -334,7 +357,7 @@ boolean read_it; /* Read any sensed engraving */
 		}
 		break;
 	    case BURN:
-		if (!Blind || can_reach_floor()) {
+		if (!Blind || can_reach_floor(TRUE)) {
 			sensed = 1;
 			pline("Some text has been %s into the %s here.",
 				is_ice(x,y) ? "melted" : "burned",
@@ -563,8 +586,8 @@ doengrave()
 		Your("message dissolves...");
 		return(0);
 	}
-	if (otmp->oclass != WAND_CLASS && !can_reach_floor()) {
-		You_cant("reach the %s!", surface(u.ux,u.uy));
+	if (otmp->oclass != WAND_CLASS && !can_reach_floor(TRUE)) {
+		cant_reach_floor(u.ux, u.uy, FALSE, TRUE);
 		return(0);
 	}
 	if (IS_ALTAR(levl[u.ux][u.uy].typ)) {
@@ -651,7 +674,7 @@ doengrave()
 		    }
 		    check_unpaid(otmp);
 		    zapwand = TRUE;
-		    if (Levitation) ptext = FALSE;
+		    if (!can_reach_floor(TRUE)) ptext = FALSE;
 
 		    switch (otmp->otyp) {
 		    /* DUST wands */
@@ -869,7 +892,7 @@ doengrave()
 		    /* type = ENGR_BLOOD wands */
 		    }
 		} else /* end if zappable */
-		    if (!can_reach_floor()) {
+		    if (!can_reach_floor(TRUE)) {
 			You_cant("reach the %s!", surface(u.ux,u.uy));
 			if (wrestable(otmp))
 				return 1;
@@ -994,7 +1017,7 @@ doengrave()
 	}
 
 	if (!ptext) {		/* Early exit for some implements. */
-	    if (otmp->oclass == WAND_CLASS && !can_reach_floor())
+	    if (otmp->oclass == WAND_CLASS && !can_reach_floor(TRUE))
 		You_cant("reach the %s!", surface(u.ux,u.uy));
 	    return(1);
 	}
@@ -1045,7 +1068,7 @@ doengrave()
 			return(1);
 		    } else
 			if ( (type != oep->engr_type) || (c == 'n') ) {
-			    if (!Blind || can_reach_floor())
+			    if (!Blind || can_reach_floor(TRUE))
 				You("will overwrite the current message.");
 			    eow = TRUE;
 			}

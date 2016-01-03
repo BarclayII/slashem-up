@@ -881,7 +881,7 @@ struct obj *obj;
 	char dirsyms[12];
 	char qbuf[QBUFSZ];
 	register char *dsp = dirsyms;
-	register int rx, ry;
+	register int rx, ry, downok = !!can_reach_floor(FALSE);
 	int res = 0;
 	register const char *sdp, *verb;
 
@@ -908,7 +908,7 @@ struct obj *obj;
 		rx = u.ux + u.dx;
 		ry = u.uy + u.dy;
 		/* Include down even with axe, so we have at least one direction */
-		if (u.dz > 0 ||
+		if (((u.dz > 0) ^ downok) ||
 		    (u.dz == 0 && isok(rx, ry) &&
 		     dig_typ(obj, rx, ry) != DIGTYP_UNDIGGABLE))
 			*dsp++ = *sdp;
@@ -936,6 +936,7 @@ struct obj *obj;
 {
 	register int rx, ry;
 	register struct rm *lev;
+	struct trap *trap, *trap_with_u;
 	int dig_target, digtyp;
 	boolean ispick = is_pick(obj);
 	const char *verbing = ispick ? "digging" :
@@ -993,7 +994,7 @@ struct obj *obj;
 		dig_target = dig_typ(obj, rx, ry);
 		if (dig_target == DIGTYP_UNDIGGABLE) {
 			/* ACCESSIBLE or POOL */
-			struct trap *trap = t_at(rx, ry);
+			trap = t_at(rx, ry);
 
 			if (trap && trap->ttyp == WEB) {
 			    if (!trap->tseen) {
@@ -1020,8 +1021,27 @@ struct obj *obj;
 				sobj_at(STATUE, rx, ry) ? "statue" : "boulder",
 				vibrate ? " The axe-handle vibrates violently!" : "");
 			    if (vibrate) losehp(2, "axing a hard object", KILLED_BY);
-			}
-			else
+			} else if (u.utrap && u.utraptype == TT_PIT && trap
+				&& (trap_with_u = t_at(u.ux, u.uy))
+				&& (trap->ttyp == PIT || trap->ttyp == SPIKED_PIT)
+				&& !conjoined_pits(trap, trap_with_u, FALSE)) {
+			    int idx;
+			    for (idx = 0; idx < 8; idx++) {
+				if (xdir[idx] == u.dx && ydir[idx] == u.dy)
+				    break;
+			    }
+			    /* idx is valid if < 8 */
+			    if (idx < 8) {
+				int adjidx = (idx + 4) % 8;
+				trap_with_u->conjoined |= (1 << idx);
+				trap->conjoined |= (1 << adjidx);
+				pline("You clear some debris from between the pits.");
+			    }
+			} else if (u.utrap && u.utraptype == TT_PIT
+				&& (trap_with_u = t_at(u.ux, u.uy))) {
+			    You("swing your %s, but the rubble has no place to go.",
+				    aobjnam(obj, (char *) 0));
+			} else
 			    You("swing your %s through thin air.",
 				aobjnam(obj, (char *)0));
 		} else {
@@ -1065,15 +1085,25 @@ struct obj *obj;
 	} else if (Is_airlevel(&u.uz) || Is_waterlevel(&u.uz)) {
 		/* it must be air -- water checked above */
 		You("swing your %s through thin air.", aobjnam(obj, (char *)0));
-	} else if (!can_reach_floor()) {
-		You_cant("reach the %s.", surface(u.ux,u.uy));
+	} else if (!can_reach_floor(FALSE)) {
+        	cant_reach_floor(u.ux, u.uy, FALSE, FALSE);
 	} else if (is_pool(u.ux, u.uy) || is_lava(u.ux, u.uy)) {
 		/* Monsters which swim also happen not to be able to dig */
 		You("cannot stay under%s long enough.",
 				is_pool(u.ux, u.uy) ? "water" : " the lava");
-	} else if (digtyp == 2) {
-		Your("%s merely scratches the %s.",
-				aobjnam(obj, (char *)0), surface(u.ux,u.uy));
+	} else if ((trap = t_at(u.ux, u.uy)) != 0
+			&& uteetering_at_seen_pit(trap)) {
+		dotrap(trap, FORCEBUNGLE);
+		/* might escape trap and still be teetering at brink */
+		if (!u.utrap)
+			cant_reach_floor(u.ux, u.uy, FALSE, TRUE);
+	} else if (!ispick
+			/* can only dig down with an axe when doing so will
+			   trigger or disarm a trap here */
+			&& (!trap || (trap->ttyp != LANDMINE
+					&& trap->ttyp != BEAR_TRAP))) {
+		Your("%s merely scratches the %s.", aobjnam(obj, (char *) 0),
+				surface(u.ux, u.uy));
 		u_wipe_engr(3);
 	} else {
 		if (digging.pos.x != u.ux || digging.pos.y != u.uy ||
