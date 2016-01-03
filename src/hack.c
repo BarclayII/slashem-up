@@ -2368,22 +2368,6 @@ dopickup()
 		return(0);
 	}
 
- 	if (traphere && traphere->tseen) {
-		/* Allow pickup from holes and trap doors that you escaped from
-		 * because that stuff is teetering on the edge just like you, but
-		 * not pits, because there is an elevation discrepancy with stuff
-		 * in pits.
-		 */
-		/* [BarclayII] phasing or flying players can phase/fly into
-		 * the pit */
-		if ((traphere->ttyp == PIT || traphere->ttyp == SPIKED_PIT) &&
-		     (!u.utrap || (u.utrap && u.utraptype != TT_PIT)) &&
-		     !Passes_walls && !Flying) {
-			You("cannot reach the bottom of the pit.");
-			return(0);
-		}
-	}
-
 	return (pickup(-count));
 }
 

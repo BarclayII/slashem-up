@@ -597,6 +597,8 @@ unsigned trflags;
 	boolean already_seen = trap->tseen;
 	boolean webmsgok = (!(trflags & NOWEBMSG));
 	boolean forcebungle = (trflags & FORCEBUNGLE);
+	boolean plunged = (trflags & TOOKPLUNGE);
+	int oldumort;
 
 	nomul(0);
 
@@ -614,7 +616,7 @@ unsigned trflags;
 	    	defsyms[trap_to_defsym(ttype)].explanation);
 	    /* then proceed to normal trap effect */
 	} else if (already_seen) {
-	    if ((Levitation || Flying) &&
+	    if ((Levitation || (Flying && !plunged)) &&
 		    (ttype == PIT || ttype == SPIKED_PIT || ttype == HOLE ||
 		    ttype == BEAR_TRAP)) {
 		You("%s over %s %s.",
@@ -624,7 +626,7 @@ unsigned trflags;
 		return;
 	    }
 	    if(!Fumbling && ttype != MAGIC_PORTAL &&
-		ttype != ANTI_MAGIC && !forcebungle &&
+		ttype != ANTI_MAGIC && !forcebungle && !plunged &&
 		(!rn2(5) ||
 	    ((ttype == PIT || ttype == SPIKED_PIT) && is_clinger(youmonst.data)))) {
 		You("escape %s %s.",
@@ -880,9 +882,9 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 	    case PIT:
 	    case SPIKED_PIT:
 		/* KMH -- You can't escape the Sokoban level traps */
-		if (!In_sokoban(&u.uz) && (Levitation || Flying)) break;
+		if (!In_sokoban(&u.uz) && (Levitation || (Flying && !plunged))) break;
 		seetrap(trap);
-		if (!In_sokoban(&u.uz) && is_clinger(youmonst.data)) {
+		if (!In_sokoban(&u.uz) && is_clinger(youmonst.data) && !plunged) {
 		    if(trap->tseen) {
 			You("see %s %spit below you.", a_your[trap->madeby_u],
 			    ttype == SPIKED_PIT ? "spiked " : "");
@@ -910,7 +912,8 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 				 	 "poor", SUPPRESS_SADDLE, FALSE));
 		    } else
 #endif
-		    Strcpy(verbbuf,"fall");
+                   Strcpy(verbbuf,
+                       !plunged ? "fall" : (Flying ? "dive" : "plunge"));
 		   You("%s into %s pit!", verbbuf, a_your[trap->madeby_u]);
 		}
 		/* wumpus reference */
@@ -941,13 +944,27 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 #ifdef STEED
 		if (!steedintrap(trap, (struct obj *)0)) {
 #endif
-		if (ttype == SPIKED_PIT) {
-		    losehp(rnd(10),"fell into a pit of iron spikes",
-			NO_KILLER_PREFIX);
-		    if (!rn2(6))
-			poisoned("spikes", A_STR, "fall onto poison spikes", 8);
-		} else
-		    losehp(rnd(6),"fell into a pit", NO_KILLER_PREFIX);
+		    if (ttype == SPIKED_PIT) {
+			oldumort = u.umortality;
+			losehp(Maybe_Half_Phys(rnd(10)),
+				plunged
+				? "deliberately plunged into a pit of iron spikes"
+				: "fell into a pit of iron spikes",
+				NO_KILLER_PREFIX);
+			if (!rn2(6))
+			    poisoned("spikes", A_STR,
+				    "fall onto poison spikes",
+				    /* if damage triggered life-saving,
+				       poison is limited to attrib loss */
+				    (u.umortality > oldumort) ? 0 : 8);
+		    } else {
+			/* plunging flyers take spike damage but not pit damage */
+			if (!(plunged && (Flying || is_clinger(youmonst.data))))
+			    losehp(Maybe_Half_Phys(rnd(6)),
+				    plunged ? "deliberately plunged into a pit"
+				    : "fell into a pit",
+				    NO_KILLER_PREFIX);
+		    }
 		if (Punished && !carried(uball)) {
 		    unplacebc();
 		    ballfall();
@@ -4214,7 +4231,8 @@ boolean
 uteetering_at_seen_pit(trap)
 struct trap *trap;
 {
-    if (trap && trap->tseen && (!u.utrap || u.utraptype != TT_PIT)
+    if (trap && trap->tseen && (!u.utrap || u.utraptype != TT_PIT
+        || Passes_walls)
         && (trap->ttyp == PIT || trap->ttyp == SPIKED_PIT))
         return TRUE;
     else

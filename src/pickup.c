@@ -418,19 +418,6 @@ int what;		/* should be a long */
 			sense_engr_at(u.ux, u.uy, FALSE);
 		    return (0);
 		}
-		if (ttmp && ttmp->tseen) {
-		    /* Allow pickup from holes and trap doors that you escaped
-		     * from because that stuff is teetering on the edge just
-		     * like you, but not pits, because there is an elevation
-		     * discrepancy with stuff in pits.
-		     */
-		    if ((ttmp->ttyp == PIT || ttmp->ttyp == SPIKED_PIT) &&
-			(!u.utrap || (u.utrap && u.utraptype != TT_PIT)) &&
-			!Passes_walls && !Flying) {
-			sense_engr_at(u.ux, u.uy, FALSE);
-			return(0);
-		    }
-		}
 		/* multi && !flags.run means they are in the middle of some other
 		 * action, or possibly paralyzed, sleeping, etc.... and they just
 		 * teleported onto the object.  They shouldn't pick it up.
