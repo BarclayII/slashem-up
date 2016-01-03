@@ -149,6 +149,14 @@ NEARDATA extern coord bhitpos;	/* place where throw or zap hits or stops */
 /* special mhpmax value when loading bones monster to flag as extinct or genocided */
 #define DEFUNCT_MONSTER	(-100)
 
+/* macro form of adjustments of physical damage based on Half_physical_damage.
+ * Can be used on-the-fly with the 1st parameter to losehp() if you don't
+ * need to retain the dmg value beyond that call scope.
+ * Take care to ensure it doesn't get used more than once in other instances.
+ */
+#define Maybe_Half_Phys(dmg) \
+    ((Half_physical_damage) ? (((dmg) + 1) / 2) : (dmg))
+
 /* flags for special ggetobj status returns */
 #define ALL_FINISHED	  0x01  /* called routine already finished the job */
 
@@ -190,6 +198,7 @@ NEARDATA extern coord bhitpos;	/* place where throw or zap hits or stops */
 #define NOWEBMSG	0x01	/* suppress stumble into web message */
 #define FORCEBUNGLE	0x02	/* adjustments appropriate for bungling */
 #define RECURSIVETRAP	0x04	/* trap changed into another type this same turn */
+#define TOOKPLUNGE	0x10    /* used '>' to enter pit below you */
 
 /* Flags to control test_move in hack.c */
 #define DO_MOVE		0	/* really doing the move */

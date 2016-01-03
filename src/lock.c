@@ -331,7 +331,7 @@ pick_lock(pickp) /* pick a lock with a given object */
 		pline(no_longer, "hold the", what);
 		reset_pick();
 		return 0;
-	    } else if (xlock.box && !can_reach_floor()) {
+	    } else if (xlock.box && !can_reach_floor(TRUE)) {
 		pline(no_longer, "reach the", "lock");
 		reset_pick();
 		return 0;
@@ -382,7 +382,7 @@ pick_lock(pickp) /* pick a lock with a given object */
 	    for(otmp = level.objects[cc.x][cc.y]; otmp; otmp = otmp->nexthere)
 		if (Is_box(otmp)) {
 		    ++count;
-		    if (!can_reach_floor()) {
+		    if (!can_reach_floor(TRUE)) {
 			You_cant("reach %s from up here.", the(xname(otmp)));
 			return 0;
 		    }
@@ -630,7 +630,7 @@ doforce()		/* try to force a chest with your weapon */
 	picktyp = is_blade(uwep) ? 1 : 0;
 	if(xlock.usedtime && picktyp == xlock.picktyp) {
 	    if (xlock.box) {
-		if (!can_reach_floor()) {
+		if (!can_reach_floor(TRUE)) {
 		    pline("Unfortunately, you can no longer reach the lock.");
 		    return 0;
 		}
@@ -667,7 +667,7 @@ doforce()		/* try to force a chest with your weapon */
 
 	    for(otmp = level.objects[u.ux][u.uy]; otmp; otmp = otmp->nexthere)
 		if(Is_box(otmp)) {
-		    if (!can_reach_floor()) {
+		    if (!can_reach_floor(TRUE)) {
 			You_cant("reach %s from up here.", the(xname(otmp)));
 		    return 0;
 		    }

@@ -2523,13 +2523,19 @@ boolean picked_some;
 		    /* don't say "altar" twice, dfeature has more info */
 		    You("try to feel what is here.");
 		} else {
-		    You("try to feel what is %s%s.",
-			drift ? "floating here" : "lying here on the ",
-			drift ? ""		: surface(u.ux, u.uy));
+		    const char *where = (Blind && !can_reach_floor(TRUE))
+			? "lying beneath you"
+			: "lying here on the ",
+			*onwhat = (Blind && !can_reach_floor(TRUE))
+			    ? ""
+			    : surface(u.ux, u.uy);
+
+		    You("try to feel what is %s%s.", drift ? "floating here" : where,
+			    drift ? "" : onwhat);
 		}
 		if (dfeature && !drift && !strcmp(dfeature, surface(u.ux,u.uy)))
 			dfeature = 0;		/* ice already identifed */
-		if (!can_reach_floor()) {
+		if (!can_reach_floor(TRUE)) {
 			pline("But you can't reach it!");
 			return(0);
 		}

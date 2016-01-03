@@ -26,6 +26,7 @@ STATIC_DCL boolean FDECL(thitm, (int,struct monst *,struct obj *,int,BOOLEAN_P))
 STATIC_DCL int FDECL(mkroll_launch,
 			(struct trap *,XCHAR_P,XCHAR_P,SHORT_P,long));
 STATIC_DCL boolean FDECL(isclearpath,(coord *, int, SCHAR_P, SCHAR_P));
+STATIC_DCL void FDECL(clear_conjoined_pits, (struct trap *));
 #ifdef STEED
 STATIC_OVL int FDECL(steedintrap, (struct trap *, struct obj *));
 STATIC_OVL boolean FDECL(keep_saddle_with_steedcorpse,
@@ -596,6 +597,8 @@ unsigned trflags;
 	boolean already_seen = trap->tseen;
 	boolean webmsgok = (!(trflags & NOWEBMSG));
 	boolean forcebungle = (trflags & FORCEBUNGLE);
+	boolean plunged = (trflags & TOOKPLUNGE);
+	int oldumort;
 
 	nomul(0);
 
@@ -613,7 +616,7 @@ unsigned trflags;
 	    	defsyms[trap_to_defsym(ttype)].explanation);
 	    /* then proceed to normal trap effect */
 	} else if (already_seen) {
-	    if ((Levitation || Flying) &&
+	    if ((Levitation || (Flying && !plunged)) &&
 		    (ttype == PIT || ttype == SPIKED_PIT || ttype == HOLE ||
 		    ttype == BEAR_TRAP)) {
 		You("%s over %s %s.",
@@ -623,7 +626,7 @@ unsigned trflags;
 		return;
 	    }
 	    if(!Fumbling && ttype != MAGIC_PORTAL &&
-		ttype != ANTI_MAGIC && !forcebungle &&
+		ttype != ANTI_MAGIC && !forcebungle && !plunged &&
 		(!rn2(5) ||
 	    ((ttype == PIT || ttype == SPIKED_PIT) && is_clinger(youmonst.data)))) {
 		You("escape %s %s.",
@@ -879,9 +882,9 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 	    case PIT:
 	    case SPIKED_PIT:
 		/* KMH -- You can't escape the Sokoban level traps */
-		if (!In_sokoban(&u.uz) && (Levitation || Flying)) break;
+		if (!In_sokoban(&u.uz) && (Levitation || (Flying && !plunged))) break;
 		seetrap(trap);
-		if (!In_sokoban(&u.uz) && is_clinger(youmonst.data)) {
+		if (!In_sokoban(&u.uz) && is_clinger(youmonst.data) && !plunged) {
 		    if(trap->tseen) {
 			You("see %s %spit below you.", a_your[trap->madeby_u],
 			    ttype == SPIKED_PIT ? "spiked " : "");
@@ -909,7 +912,8 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 				 	 "poor", SUPPRESS_SADDLE, FALSE));
 		    } else
 #endif
-		    Strcpy(verbbuf,"fall");
+                   Strcpy(verbbuf,
+                       !plunged ? "fall" : (Flying ? "dive" : "plunge"));
 		   You("%s into %s pit!", verbbuf, a_your[trap->madeby_u]);
 		}
 		/* wumpus reference */
@@ -940,13 +944,27 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 #ifdef STEED
 		if (!steedintrap(trap, (struct obj *)0)) {
 #endif
-		if (ttype == SPIKED_PIT) {
-		    losehp(rnd(10),"fell into a pit of iron spikes",
-			NO_KILLER_PREFIX);
-		    if (!rn2(6))
-			poisoned("spikes", A_STR, "fall onto poison spikes", 8);
-		} else
-		    losehp(rnd(6),"fell into a pit", NO_KILLER_PREFIX);
+		    if (ttype == SPIKED_PIT) {
+			oldumort = u.umortality;
+			losehp(Maybe_Half_Phys(rnd(10)),
+				plunged
+				? "deliberately plunged into a pit of iron spikes"
+				: "fell into a pit of iron spikes",
+				NO_KILLER_PREFIX);
+			if (!rn2(6))
+			    poisoned("spikes", A_STR,
+				    "fall onto poison spikes",
+				    /* if damage triggered life-saving,
+				       poison is limited to attrib loss */
+				    (u.umortality > oldumort) ? 0 : 8);
+		    } else {
+			/* plunging flyers take spike damage but not pit damage */
+			if (!(plunged && (Flying || is_clinger(youmonst.data))))
+			    losehp(Maybe_Half_Phys(rnd(6)),
+				    plunged ? "deliberately plunged into a pit"
+				    : "fell into a pit",
+				    NO_KILLER_PREFIX);
+		    }
 		if (Punished && !carried(uball)) {
 		    unplacebc();
 		    ballfall();
@@ -3380,7 +3398,7 @@ boolean force_failure;
 	    }
 	}
 	/* untrappable traps are located on the ground. */
-	if (!can_reach_floor()) {
+	if (!can_reach_floor(TRUE)) {
 #ifdef STEED
 		if (u.usteed && P_SKILL(P_RIDING) < P_BASIC)
 			You("aren't skilled enough to reach from %s.",
@@ -3742,6 +3760,10 @@ boolean force;
 	if(!getdir((char *)0)) return(0);
 	x = u.ux + u.dx;
 	y = u.uy + u.dy;
+	if (!isok(x, y)) {
+		pline_The("perils lurking there are beyond your grasp.");
+		return 0;
+	}
 
 	for(otmp = level.objects[x][y]; otmp; otmp = otmp->nexthere) {
 		if(Is_box(otmp) && !u.dx && !u.dy) {
@@ -3752,7 +3774,7 @@ boolean force;
 	}
 
 	if ((ttmp = t_at(x,y)) && ttmp->tseen) {
-		deal_with_floor_trap = TRUE;
+		deal_with_floor_trap = can_reach_floor(FALSE);
 		Strcpy(the_trap, the(defsyms[trap_to_defsym(ttmp->ttyp)].explanation));
 		if (box_here) {
 			if (ttmp->ttyp == PIT || ttmp->ttyp == SPIKED_PIT) {
@@ -4147,6 +4169,74 @@ register struct trap *trap;
 	levl[trap->tx][trap->ty].mem_trap = NO_TRAP;
 #endif
 	dealloc_trap(trap);
+}
+
+boolean
+conjoined_pits(trap2, trap1, u_entering_trap2)
+struct trap *trap2, *trap1;
+boolean u_entering_trap2;
+{
+    int dx, dy, diridx, adjidx;
+
+    if (!trap1 || !trap2)
+        return FALSE;
+    if (!isok(trap2->tx, trap2->ty) || !isok(trap1->tx, trap1->ty)
+        || !(trap2->ttyp == PIT || trap2->ttyp == SPIKED_PIT)
+        || !(trap1->ttyp == PIT || trap1->ttyp == SPIKED_PIT)
+        || (u_entering_trap2 && !(u.utrap && u.utraptype == TT_PIT)))
+        return FALSE;
+    dx = sgn(trap2->tx - trap1->tx);
+    dy = sgn(trap2->ty - trap1->ty);
+    for (diridx = 0; diridx < 8; diridx++)
+        if (xdir[diridx] == dx && ydir[diridx] == dy)
+            break;
+    /* diridx is valid if < 8 */
+    if (diridx < 8) {
+        adjidx = (diridx + 4) % 8;
+        if ((trap1->conjoined & (1 << diridx))
+            && (trap2->conjoined & (1 << adjidx)))
+            return TRUE;
+    }
+    return FALSE;
+}
+
+void
+clear_conjoined_pits(trap)
+struct trap *trap;
+{
+    int diridx, adjidx, x, y;
+    struct trap *t;
+
+    if (trap && (trap->ttyp == PIT || trap->ttyp == SPIKED_PIT)) {
+        for (diridx = 0; diridx < 8; ++diridx) {
+            if (trap->conjoined & (1 << diridx)) {
+                x = trap->tx + xdir[diridx];
+                y = trap->ty + ydir[diridx];
+                if (isok(x, y)
+                    && (t = t_at(x, y)) != 0
+                    && (t->ttyp == PIT || t->ttyp == SPIKED_PIT)) {
+                    adjidx = (diridx + 4) % 8;
+                    t->conjoined &= ~(1 << adjidx);
+                }
+                trap->conjoined &= ~(1 << diridx);
+            }
+        }
+    }
+}
+
+/*
+ * Returns TRUE if you escaped a pit and are standing on the precipice.
+ */
+boolean
+uteetering_at_seen_pit(trap)
+struct trap *trap;
+{
+    if (trap && trap->tseen && (!u.utrap || u.utraptype != TT_PIT
+        || Passes_walls)
+        && (trap->ttyp == PIT || trap->ttyp == SPIKED_PIT))
+        return TRUE;
+    else
+        return FALSE;
 }
 
 boolean

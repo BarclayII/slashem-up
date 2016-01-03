@@ -215,10 +215,8 @@ const char *verb;
 		    newsym(x, y);
 		}
 		return water_damage(obj, FALSE, FALSE);
-	} else if (u.ux == x && u.uy == y &&
-		(!u.utrap || u.utraptype != TT_PIT) &&
-		(t = t_at(x,y)) != 0 && t->tseen &&
-			(t->ttyp==PIT || t->ttyp==SPIKED_PIT)) {
+	} else if (u.ux == x && u.uy == y && (t = t_at(x,y))
+		&& uteetering_at_seen_pit(t)) {
 		/* you escaped a pit and are standing on the precipice */
 		if (Blind && flags.soundok)
 			You_hear("%s tumble downwards.",
@@ -594,7 +592,7 @@ register struct obj *obj;
 		return(1);
 	    }
 #endif
-	    if (!can_reach_floor()) {
+	    if (!can_reach_floor(TRUE)) {
 		if(flags.verbose) You("drop %s.", doname(obj));
 #ifndef GOLDOBJ
 		if (obj->oclass != COIN_CLASS || obj == invent) freeinv(obj);
@@ -895,8 +893,11 @@ dodown()
 	    return (0);   /* didn't move */
 	}
 	if (!stairs_down && !ladder_down) {
-		if (!(trap = t_at(u.ux,u.uy)) ||
-			(trap->ttyp != TRAPDOOR && trap->ttyp != HOLE)
+		trap = t_at(u.ux, u.uy);
+        	if (trap && uteetering_at_seen_pit(trap)) {
+        		dotrap(trap, TOOKPLUNGE);
+        		return 1;
+		} else if (!trap || (trap->ttyp != TRAPDOOR && trap->ttyp != HOLE)
 			|| !Can_fall_thru(&u.uz) || !trap->tseen) {
 
 			if (flags.autodig && !flags.nopick &&

@@ -2352,31 +2352,20 @@ dopickup()
 		There("is nothing here to pick up.");
 		return(0);
 	}
-	if (!can_reach_floor()) {
+	if (!can_reach_floor(TRUE)) {
 #ifdef STEED
 		if (u.usteed && P_SKILL(P_RIDING) < P_BASIC)
 		    You("aren't skilled enough to reach from %s.",
 			y_monnam(u.usteed));
 		else
 #endif
-		You("cannot reach the %s.", surface(u.ux,u.uy));
-		return(0);
-	}
-
- 	if (traphere && traphere->tseen) {
-		/* Allow pickup from holes and trap doors that you escaped from
-		 * because that stuff is teetering on the edge just like you, but
-		 * not pits, because there is an elevation discrepancy with stuff
-		 * in pits.
-		 */
-		/* [BarclayII] phasing or flying players can phase/fly into
-		 * the pit */
-		if ((traphere->ttyp == PIT || traphere->ttyp == SPIKED_PIT) &&
-		     (!u.utrap || (u.utrap && u.utraptype != TT_PIT)) &&
-		     !Passes_walls && !Flying) {
+		if (traphere && uteetering_at_seen_pit(traphere))
 			You("cannot reach the bottom of the pit.");
-			return(0);
-		}
+		else if (Blind && !can_reach_floor(TRUE))
+			You("cannot reach anything here.");
+		else
+			You("cannot reach the %s.", surface(u.ux,u.uy));
+		return(0);
 	}
 
 	return (pickup(-count));

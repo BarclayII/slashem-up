@@ -2918,7 +2918,7 @@ boolean incr;
 boolean can_reach_floorobj()
 {
     struct trap *ttmp = t_at(u.ux, u.uy);
-    return can_reach_floor() &&
+    return can_reach_floor(TRUE) &&
 	  !((is_pool(u.ux, u.uy) || is_lava(u.ux, u.uy)) &&
 	    (Wwalking || is_clinger(youmonst.data) || (Flying && !Breathless))
 	    || (ttmp && ttmp->tseen &&
