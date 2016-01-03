@@ -417,7 +417,8 @@ d_level *lev;
 	       It might still fail if there's a dungeon feature here. */
 	    struct trap *t = t_at(x,y);
 
-	    if (t && t->ttyp != MAGIC_PORTAL) deltrap(t);
+	    if (t && t->ttyp != MAGIC_PORTAL && t->ttyp != VIBRATING_SQUARE)
+		deltrap(t);
 	    if (bad_location(x, y, nlx, nly, nhx, nhy)) return FALSE;
 	}
     }
@@ -803,6 +804,7 @@ register const char *s;
 		     !SPACE_POS(levl[x][y].typ) || occupied(x, y));
 	    inv_pos.x = x;
 	    inv_pos.y = y;
+	    maketrap(inv_pos.x, inv_pos.y, VIBRATING_SQUARE);
 #undef INVPOS_X_MARGIN
 #undef INVPOS_Y_MARGIN
 #undef INVPOS_DISTANCE

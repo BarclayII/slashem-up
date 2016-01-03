@@ -243,7 +243,8 @@ register int x, y, typ;
 	register boolean oldplace;
 
 	if ((ttmp = t_at(x,y)) != 0) {
-	    if (ttmp->ttyp == MAGIC_PORTAL) return (struct trap *)0;
+	    if (ttmp->ttyp == MAGIC_PORTAL || ttmp->ttyp == VIBRATING_SQUARE)
+		return (struct trap *)0;
 	    oldplace = TRUE;
 	    if (u.utrap && (x == u.ux) && (y == u.uy) &&
 	      ((u.utraptype == TT_BEARTRAP && typ != BEAR_TRAP) ||
@@ -596,8 +597,8 @@ unsigned trflags;
 	register struct obj *otmp;
 	boolean already_seen = trap->tseen;
 	boolean webmsgok = (!(trflags & NOWEBMSG));
-	boolean forcebungle = (trflags & FORCEBUNGLE);
-	boolean plunged = (trflags & TOOKPLUNGE);
+	boolean forcebungle = (!!(trflags & FORCEBUNGLE));
+	boolean plunged = (!!(trflags & TOOKPLUNGE));
 	int oldumort;
 
 	nomul(0);
@@ -625,8 +626,8 @@ unsigned trflags;
 		    defsyms[trap_to_defsym(ttype)].explanation);
 		return;
 	    }
-	    if(!Fumbling && ttype != MAGIC_PORTAL &&
-		ttype != ANTI_MAGIC && !forcebungle && !plunged &&
+	    if(!Fumbling && ttype != MAGIC_PORTAL && ttype != VIBRATING_SQUARE
+		&& ttype != ANTI_MAGIC && !forcebungle && !plunged &&
 		(!rn2(5) ||
 	    ((ttype == PIT || ttype == SPIKED_PIT) && is_clinger(youmonst.data)))) {
 		You("escape %s %s.",
@@ -1223,6 +1224,9 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 #endif
 		domagicportal(trap);
 		break;
+	    case VIBRATING_SQUARE:
+		seetrap(trap);
+		break;
 
 	    default:
 		seetrap(trap);
@@ -1597,6 +1601,17 @@ seetrap(trap)
 	    trap->tseen = 1;
 	    newsym(trap->tx, trap->ty);
 	}
+}
+
+/* like seetrap() but overrides vision */
+void
+feeltrap(trap)
+struct trap *trap;
+{
+    trap->tseen = 1;
+    map_trap(trap, 1);
+    /* in case it's beneath something, redisplay the something */
+    newsym(trap->tx, trap->ty);
 }
 
 #endif /* OVLB */
@@ -2257,6 +2272,17 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 			    deltrap(trap);
 			    newsym(mtmp->mx,mtmp->my);
 			}
+		    }
+		    break;
+		case VIBRATING_SQUARE:
+		    if (see_it && !Blind) {
+			if (in_sight)
+			    pline("You see a strange vibration beneath %s %s.",
+				    s_suffix(mon_nam(mtmp)),
+				    makeplural(mbodypart(mtmp, FOOT)));
+			else
+			    pline("You see the ground vibrate in the distance.");
+			seetrap(trap);
 		    }
 		    break;
 

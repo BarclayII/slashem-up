@@ -402,25 +402,33 @@ rnddoor()
 STATIC_OVL int
 rndtrap()
 {
-	int rtrap;
+    int rtrap;
 
-	do {
-	    rtrap = rnd(TRAPNUM-1);
-	    switch (rtrap) {
-	     case HOLE:		/* no random holes on special levels */
-	     case MAGIC_PORTAL:	rtrap = NO_TRAP;
-				break;
-	     case TRAPDOOR:	if (!Can_dig_down(&u.uz)) rtrap = NO_TRAP;
-				break;
-	     case LEVEL_TELEP:
-	     case TELEP_TRAP:	if (level.flags.noteleport) rtrap = NO_TRAP;
-				break;
-	     case ROLLING_BOULDER_TRAP:
-	     case ROCKTRAP:	if (In_endgame(&u.uz)) rtrap = NO_TRAP;
-				break;
-	    }
-	} while (rtrap == NO_TRAP);
-	return rtrap;
+    do {
+        rtrap = rnd(TRAPNUM - 1);
+        switch (rtrap) {
+        case HOLE: /* no random holes on special levels */
+        case VIBRATING_SQUARE:
+        case MAGIC_PORTAL:
+            rtrap = NO_TRAP;
+            break;
+        case TRAPDOOR:
+            if (!Can_dig_down(&u.uz))
+                rtrap = NO_TRAP;
+            break;
+        case LEVEL_TELEP:
+        case TELEP_TRAP:
+            if (level.flags.noteleport)
+                rtrap = NO_TRAP;
+            break;
+        case ROLLING_BOULDER_TRAP:
+        case ROCKTRAP:
+            if (In_endgame(&u.uz))
+                rtrap = NO_TRAP;
+            break;
+        }
+    } while (rtrap == NO_TRAP);
+    return rtrap;
 }
 
 /*

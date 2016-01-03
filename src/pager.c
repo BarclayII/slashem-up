@@ -494,6 +494,7 @@ do_look(quick)
     boolean need_to_look;	/* need to get explan. from glyph */
     boolean hit_trap;		/* true if found trap explanation */
     int skipped_venom;		/* non-zero if we ignored "splash of venom" */
+    int glyph = NO_GLYPH;	/* glyph at selected position */
     static const char *mon_interior = "the interior of a monster";
 
     if (quick) {
@@ -535,8 +536,6 @@ do_look(quick)
 	out_str[0] = '\0';
 
 	if (from_screen) {
-	    int glyph;	/* glyph at selected position */
-
 	    if (flags.verbose)
 		pline("Please move the cursor to %s.",
 		       what_is_an_unknown_object);
@@ -674,7 +673,12 @@ do_look(quick)
 		    firstmatch = x_str;
 		    found++;
 		} else if (!u.uswallow && !(hit_trap && is_cmap_trap(i)) &&
-			   !(found >= 3 && is_cmap_drawbridge(i))) {
+			   !(found >= 3 && is_cmap_drawbridge(i))
+			   /* don't mention vibrating square outside of gehennom
+			      unless this happens to be one (hallucination?) */
+                           && (i != S_vibrating_square || Inhell
+                               || (glyph != NO_GLYPH && glyph_is_trap(glyph)
+                                   && glyph_to_trap(glyph) == VIBRATING_SQUARE))) {
 		    if (level.flags.lethe && !strcmp(x_str, "water"))
 			found += append_str(out_str, "sparkling water");
 		    else

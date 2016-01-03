@@ -1526,6 +1526,7 @@ coord *tm;
 		/* reject "too hard" traps */
 		switch (kind) {
 		    case MAGIC_PORTAL:
+		    case VIBRATING_SQUARE:
 			kind = NO_TRAP; break;
 		    case ROLLING_BOULDER_TRAP:
 		    case SLP_GAS_TRAP:

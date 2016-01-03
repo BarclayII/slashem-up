@@ -199,7 +199,9 @@ dig_check(madeby, verbose, x, y)
 	} else if ((IS_ROCK(levl[x][y].typ) && levl[x][y].typ != SDOOR &&
 		      (levl[x][y].wall_info & W_NONDIGGABLE) != 0)
 		|| (ttmp &&
-		      (ttmp->ttyp == MAGIC_PORTAL || !Can_dig_down(&u.uz)))) {
+		      (ttmp->ttyp == MAGIC_PORTAL ||
+		       ttmp->ttyp == VIBRATING_SQUARE ||
+		       !Can_dig_down(&u.uz)))) {
 	    if(verbose) pline_The("%s here is too hard to %s.",
 				  surface(x,y), verb);
 	    return(FALSE);
@@ -705,7 +707,8 @@ boolean pit_only;
 	schar typ;
 	boolean nohole = !Can_dig_down(&u.uz);
 
-	if ((ttmp && (ttmp->ttyp == MAGIC_PORTAL || nohole)) ||
+	if ((ttmp && (ttmp->ttyp == MAGIC_PORTAL ||
+	    ttmp->ttyp == VIBRATING_SQUARE || nohole)) ||
 	   /* ALI - artifact doors */
 	   IS_DOOR(levl[u.ux][u.uy].typ) && artifact_door(u.ux, u.uy) ||
 	   (IS_ROCK(lev->typ) && lev->typ != SDOOR &&
