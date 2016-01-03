@@ -1496,7 +1496,7 @@ Optional Features:
                           (default=yes)
   --enable-easier-vampire Easier player-vampires (default=yes)
   --enable-wizmode=USER   enable wizard mode for the specified user
-                          (default=wizard)
+                          (default=root)
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -6819,7 +6819,7 @@ if test "${enable_wizmode+set}" = set; then :
   enableval=$enable_wizmode; if test "$enableval" != no; then enable_wizmode=yes; wizard=$enableval;
 	else enable_wizmode=no; fi
 else
-  enable_wizmode=yes; wizard="wizard"
+  enable_wizmode=yes; wizard="root"
 fi
 
 if test "$enable_wizmode" != "no" ; then

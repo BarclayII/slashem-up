@@ -364,9 +364,9 @@ NETHACK_ARG(easier-vampire,[Easier player-vampires],EASIER_VAMPIRE,yes)
 
 AC_MSG_CHECKING([whether to enable wizmode])
 AC_ARG_ENABLE([wizmode], AC_HELP_STRING([--enable-wizmode=USER],
-	[enable wizard mode for the specified user (default=wizard)]),
+	[enable wizard mode for the specified user (default=root)]),
 	if test "$enableval" != no; then enable_wizmode=yes; wizard=$enableval;
-	else enable_wizmode=no; fi, enable_wizmode=yes; wizard="wizard")
+	else enable_wizmode=no; fi, enable_wizmode=yes; wizard="root")
 if test "$enable_wizmode" != "no" ; then
 	AC_MSG_RESULT([yes (user $wizard)])
 	AC_DEFINE_UNQUOTED([WIZARD], ["$wizard"], [The person allowed to use the -D option])
