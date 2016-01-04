@@ -3354,16 +3354,43 @@ wand_explode(obj, hero_broke)
 	bill_dummy_object(obj);
     }
 
+    switch (obj->where) {
+    case OBJ_MIGRATING:
+    case OBJ_BURIED:
+	impossible("wand_explode: exploding wand at %d", obj->where);
+	return 1;
+    case OBJ_FREE:
+	/* FIXME: the caller must set ox and oy in this case */
+    case OBJ_FLOOR:
+	break;
+    case OBJ_INVENT:
+    case OBJ_ONBILL:
+	obj->ox = u.ux;
+	obj->oy = u.uy;
+	break;
+    case OBJ_MINVENT:
+	obj->ox = obj->ocarry->mx;
+	obj->oy = obj->ocarry->my;
+	break;
+    case OBJ_CONTAINED:
+	obj->ox = obj->ocontainer->ox;
+	obj->oy = obj->ocontainer->oy;
+	break;
+    }
+
     current_wand = obj;		/* destroy_item might reset this */
-    freeinv(obj);		/* hide it from destroy_item instead... */
-    setnotworn(obj);		/* so we need to do this ourselves */
+    if (carried(obj)) {
+	freeinv(obj);		/* hide it from destroy_item instead... */
+	setnotworn(obj);		/* so we need to do this ourselves */
+    } else if (obj->where != OBJ_FREE) {
+	obj_extract_self(obj);
+    }
 
     if (obj->spe <= 0) {
 	pline(nothing_else_happens);
 	goto discard_broken_wand;
     }
-    obj->ox = u.ux;
-    obj->oy = u.uy;
+
     dmg = obj->spe * 4;
     affects_objects = FALSE;
 
@@ -3378,15 +3405,26 @@ wand_explode(obj, hero_broke)
 	pline(nothing_else_happens);
 	goto discard_broken_wand;
     case WAN_DEATH:
-    case WAN_LIGHTNING:
+	expltype = EXPL_DARK;
 	dmg *= 4;
-	goto wanexpl;
+	explode(obj->ox, obj->oy, ZT_DEATH, dmg, WAND_CLASS, expltype);
+	makeknown(obj->otyp);
+	goto discard_broken_wand;
+    case WAN_LIGHTNING:
+	expltype = EXPL_SHOCK;
+	dmg *= 4;
+	explode(obj->ox, obj->oy, ZT_LIGHTNING, dmg, WAND_CLASS, expltype);
+	makeknown(obj->otyp);
+	goto discard_broken_wand;
     case WAN_COLD:
 	expltype = EXPL_FROSTY;
 	dmg *= 2;
+	explode(obj->ox, obj->oy, ZT_COLD, dmg, WAND_CLASS, expltype);
+	makeknown(obj->otyp);
+	goto discard_broken_wand;
     case WAN_MAGIC_MISSILE:
     wanexpl:
-	explode(u.ux, u.uy, ZT_MAGIC_MISSILE, dmg, WAND_CLASS, expltype);
+	explode(obj->ox, obj->oy, ZT_MAGIC_MISSILE, dmg, WAND_CLASS, expltype);
 	makeknown(obj->otyp);	/* explode described the effect */
 	goto discard_broken_wand;
 /*WAC for wands of fireball- no double damage
@@ -3396,14 +3434,14 @@ wand_explode(obj, hero_broke)
 	dmg *= 2;
     case WAN_FIREBALL:
 	expltype = EXPL_FIERY;
-        explode(u.ux, u.uy, ZT_FIRE, dmg, WAND_CLASS, expltype);
+        explode(obj->ox, obj->oy, ZT_FIRE, dmg, WAND_CLASS, expltype);
 	if (obj->dknown && !objects[obj->otyp].oc_name_known &&
 		!objects[obj->otyp].oc_uname)
         docall(obj);
 	goto discard_broken_wand;
     case WAN_STRIKING:
 	/* we want this before the explosion instead of at the very end */
-	pline("A wall of force smashes down around you!");
+	pline("A wall of force smashes down!");
 	dmg = d(1 + obj->spe,6);	/* normally 2d12 */
     case WAN_CANCELLATION:
     case WAN_POLYMORPH:
@@ -3415,19 +3453,19 @@ wand_explode(obj, hero_broke)
 		/* WAC make tele trap if you broke a wand of teleport */
 		/* But make sure the spot is valid! */
 	    if ((obj->spe > 2) && rn2(obj->spe - 2) && !level.flags.noteleport &&
-		    !u.uswallow && !On_stairs(u.ux, u.uy) && (!IS_FURNITURE(levl[u.ux][u.uy].typ) &&
-		    !IS_ROCK(levl[u.ux][u.uy].typ) &&
-		    !closed_door(u.ux, u.uy) && !t_at(u.ux, u.uy))) {
+		    !u.uswallow && !On_stairs(obj->ox, obj->oy) && (!IS_FURNITURE(levl[obj->ox][obj->oy].typ) &&
+		    !IS_ROCK(levl[obj->ox][obj->oy].typ) &&
+		    !closed_door(obj->ox, obj->oy) && !t_at(obj->ox, obj->oy))) {
 
 			struct trap *ttmp;
 
-			ttmp = maketrap(u.ux, u.uy, TELEP_TRAP);
+			ttmp = maketrap(obj->ox, obj->oy, TELEP_TRAP);
 			if (ttmp) {
 				ttmp->madeby_u = 1;
-				newsym(u.ux, u.uy); /* if our hero happens to be invisible */
-				if (*in_rooms(u.ux,u.uy,SHOPBASE)) {
+				newsym(obj->ox, obj->oy); /* if our hero happens to be invisible */
+				if (*in_rooms(obj->ox,obj->oy,SHOPBASE)) {
 					/* shopkeeper will remove it */
-					add_damage(u.ux, u.uy, 0L);             
+					add_damage(obj->ox, obj->oy, 0L);             
 				}
 			}
 		}
