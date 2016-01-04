@@ -946,6 +946,11 @@ dodown()
 int
 doup()
 {
+	/* "up" to get out of a pit... */
+	if (u.utrap && u.utraptype == TT_PIT) {
+		climb_pit();
+		return 1;
+	}
 	if( (u.ux != xupstair || u.uy != yupstair)
 	     && (!xupladder || u.ux != xupladder || u.uy != yupladder)
 	     && (!sstairs.sx || u.ux != sstairs.sx || u.uy != sstairs.sy

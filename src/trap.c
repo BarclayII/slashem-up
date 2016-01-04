@@ -10,7 +10,6 @@ STATIC_DCL void FDECL(dofiretrap, (struct obj *));
 STATIC_DCL void NDECL(domagictrap);
 STATIC_DCL boolean FDECL(emergency_disrobe,(boolean *));
 STATIC_DCL int FDECL(untrap_prob, (struct trap *ttmp));
-STATIC_DCL void FDECL(cnv_trap_obj, (int, int, struct trap *));
 STATIC_DCL void FDECL(move_into_trap, (struct trap *));
 STATIC_DCL int FDECL(try_disarm, (struct trap *,BOOLEAN_P));
 STATIC_DCL void FDECL(reward_untrap, (struct trap *, struct monst *));
@@ -32,6 +31,7 @@ STATIC_OVL int FDECL(steedintrap, (struct trap *, struct obj *));
 STATIC_OVL boolean FDECL(keep_saddle_with_steedcorpse,
 			(unsigned, struct obj *, struct obj *));
 #endif
+STATIC_DCL void NDECL(maybe_finish_sokoban);
 
 #ifndef OVLB
 STATIC_VAR const char *a_your[2];
@@ -282,9 +282,11 @@ register int x, y, typ;
 	    case ROLLING_BOULDER_TRAP:	/* boulder will roll towards trigger */
 		(void) mkroll_launch(ttmp, x, y, BOULDER, 1L);
 		break;
-	    case HOLE:
 	    case PIT:
 	    case SPIKED_PIT:
+        	ttmp->conjoined = 0;
+        	/*FALLTHRU*/
+	    case HOLE:
 	    case TRAPDOOR:
 		lev = &levl[x][y];
 		if (*in_rooms(x, y, SHOPBASE) &&
@@ -599,6 +601,7 @@ unsigned trflags;
 	boolean webmsgok = (!(trflags & NOWEBMSG));
 	boolean forcebungle = (!!(trflags & FORCEBUNGLE));
 	boolean plunged = (!!(trflags & TOOKPLUNGE));
+	boolean adj_pit = conjoined_pits(trap, t_at(u.ux0, u.uy0), TRUE);
 	int oldumort;
 
 	nomul(0);
@@ -627,8 +630,8 @@ unsigned trflags;
 		return;
 	    }
 	    if(!Fumbling && ttype != MAGIC_PORTAL && ttype != VIBRATING_SQUARE
-		&& ttype != ANTI_MAGIC && !forcebungle && !plunged &&
-		(!rn2(5) ||
+		&& ttype != ANTI_MAGIC && !forcebungle && !plunged && !adj_pit
+		&& (!rn2(5) ||
 	    ((ttype == PIT || ttype == SPIKED_PIT) && is_clinger(youmonst.data)))) {
 		You("escape %s %s.",
 		    (ttype == ARROW_TRAP && !trap->madeby_u) ? "an" :
@@ -913,9 +916,13 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 				 	 "poor", SUPPRESS_SADDLE, FALSE));
 		    } else
 #endif
-                   Strcpy(verbbuf,
-                       !plunged ? "fall" : (Flying ? "dive" : "plunge"));
-		   You("%s into %s pit!", verbbuf, a_your[trap->madeby_u]);
+		   if (adj_pit) {
+			   You("move into an adjacent pit.");
+		   } else {
+			   Strcpy(verbbuf,
+				!plunged ? "fall" : (Flying ? "dive" : "plunge"));
+			   You("%s into %s pit!", verbbuf, a_your[trap->madeby_u]);
+		   }
 		}
 		/* wumpus reference */
 		if (Role_if(PM_RANGER) && !trap->madeby_u && !trap->once &&
@@ -929,38 +936,40 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 		    const char *predicament = "on a set of sharp iron spikes";
 #ifdef STEED
 		    if (u.usteed) {
-			pline("%s lands %s!",
+			pline("%s %s %s!",
 				upstart(x_monnam(u.usteed,
 					 u.usteed->mnamelth ? ARTICLE_NONE : ARTICLE_THE,
 					 "poor", SUPPRESS_SADDLE, FALSE)),
+			      adj_pit ? "steps" : "lands",
 			      predicament);
 		    } else
 #endif
-		    You("land %s!", predicament);
+		    You("%s %s!", adj_pit ? "step" : "land", predicament);
 		}
-		if (!Passes_walls) {
-		    u.utrap = rn1(6,2);
-		    u.utraptype = TT_PIT;
-		}
+		u.utrap = rn1(6,2);
+		u.utraptype = TT_PIT;
 #ifdef STEED
 		if (!steedintrap(trap, (struct obj *)0)) {
 #endif
 		    if (ttype == SPIKED_PIT) {
 			oldumort = u.umortality;
-			losehp(Maybe_Half_Phys(rnd(10)),
+			losehp(Maybe_Half_Phys(rnd(adj_pit ? 6 : 10)),
 				plunged
 				? "deliberately plunged into a pit of iron spikes"
+				: adj_pit ? "stepped into a pit of iron spikes"
 				: "fell into a pit of iron spikes",
 				NO_KILLER_PREFIX);
 			if (!rn2(6))
 			    poisoned("spikes", A_STR,
-				    "fall onto poison spikes",
+				    adj_pit ? "stepping on poison spikes"
+				    : "fall onto poison spikes",
 				    /* if damage triggered life-saving,
 				       poison is limited to attrib loss */
 				    (u.umortality > oldumort) ? 0 : 8);
 		    } else {
 			/* plunging flyers take spike damage but not pit damage */
-			if (!(plunged && (Flying || is_clinger(youmonst.data))))
+			if (!adj_pit &&
+			    !(plunged && (Flying || is_clinger(youmonst.data))))
 			    losehp(Maybe_Half_Phys(rnd(6)),
 				    plunged ? "deliberately plunged into a pit"
 				    : "fell into a pit",
@@ -971,7 +980,8 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 		    ballfall();
 		    placebc();
 		}
-		selftouch("Falling, you");
+		if (!adj_pit)
+		    selftouch("Falling, you");
 		vision_full_recalc = 1;	/* vision limits change */
 		exercise(A_STR, FALSE);
 		exercise(A_DEX, FALSE);
@@ -2585,6 +2595,48 @@ long hmask, emask;     /* might cancel timeout */
 	return 1;
 }
 
+/* shared code for climbing out of a pit */
+void
+climb_pit()
+{
+    if (!u.utrap || u.utraptype != TT_PIT)
+        return;
+
+    if (Passes_walls) {
+        /* marked as trapped so they can pick things up */
+        You("ascend from the pit.");
+        u.utrap = 0;
+        fill_pit(u.ux, u.uy);
+        vision_full_recalc = 1; /* vision limits change */
+    } else if (!rn2(2) && sobj_at(BOULDER, u.ux, u.uy)) {
+        Your("%s gets stuck in a crevice.", body_part(LEG));
+        display_nhwindow(WIN_MESSAGE, FALSE);
+        clear_nhwindow(WIN_MESSAGE);
+        You("free your %s.", body_part(LEG));
+    } else if ((Flying || is_clinger(youmonst.data)) && !In_sokoban(&u.uz)) {
+        /* eg fell in pit, then poly'd to a flying monster;
+           or used '>' to deliberately enter it */
+        You("%s from the pit.", Flying ? "fly" : "climb");
+        u.utrap = 0;
+        fill_pit(u.ux, u.uy);
+        vision_full_recalc = 1; /* vision limits change */
+    } else if (!(--u.utrap)) {
+        You("%s to the edge of the pit.",
+            (In_sokoban(&u.uz) && Levitation)
+                ? "struggle against the air currents and float"
+                : u.usteed ? "ride" : "crawl");
+        fill_pit(u.ux, u.uy);
+        vision_full_recalc = 1; /* vision limits change */
+    } else if (u.dz || flags.verbose) {
+        if (u.usteed)
+            Norep("%s is still in a pit.", upstart(y_monnam(u.usteed)));
+        else
+            Norep((Hallucination && !rn2(5))
+                      ? "You've fallen, and you can't get up."
+                      : "You are still in a pit.");
+    }
+}
+
 STATIC_OVL void
 dofiretrap(box)
 struct obj *box;	/* null for floor trap */
@@ -3339,11 +3391,12 @@ struct trap *ttmp;
 }
 
 /* Replace trap with object(s).  Helge Hafting */
-STATIC_OVL void
-cnv_trap_obj(otyp, cnt, ttmp)
+void
+cnv_trap_obj(otyp, cnt, ttmp, bury_it)
 int otyp;
 int cnt;
 struct trap *ttmp;
+boolean bury_it;
 {
 	struct obj *otmp = mksobj(otyp, TRUE, FALSE);
 	/* [ALI] Only dart traps are capable of being poisonous */
@@ -3355,10 +3408,18 @@ struct trap *ttmp;
 	if (otyp != DART)
 	    otmp->opoisoned = 0;
 	place_object(otmp, ttmp->tx, ttmp->ty);
-	/* Sell your own traps only... */
-	if (ttmp->madeby_u) sellobj(otmp, ttmp->tx, ttmp->ty);
-	stackobj(otmp);
+	if (bury_it) {
+		/* magical digging first disarms this trap, then will unearth it */
+		(void) bury_an_obj(otmp, (boolean *) 0);
+	} else {
+		/* Sell your own traps only... */
+		if (ttmp->madeby_u)
+			sellobj(otmp, ttmp->tx, ttmp->ty);
+		stackobj(otmp);
+	}
 	newsym(ttmp->tx, ttmp->ty);
+	if (u.utrap && ttmp->tx == u.ux && ttmp->ty == u.uy)
+		u.utrap = 0;
 	deltrap(ttmp);
 }
 
@@ -3521,7 +3582,7 @@ struct trap *ttmp;
 	} else {
 		if (ttmp->ttyp == BEAR_TRAP) {
 			You("disarm %s bear trap.", the_your[ttmp->madeby_u]);
-			cnv_trap_obj(BEARTRAP, 1, ttmp);
+			cnv_trap_obj(BEARTRAP, 1, ttmp, FALSE);
 		} else /* if (ttmp->ttyp == WEB) */ {
 			You("succeed in removing %s web.", the_your[ttmp->madeby_u]);
 			deltrap(ttmp);
@@ -3539,7 +3600,7 @@ struct trap *ttmp;
 
 	if (fails < 2) return fails;
 	You("disarm %s land mine.", the_your[ttmp->madeby_u]);
-	cnv_trap_obj(LAND_MINE, 1, ttmp);
+	cnv_trap_obj(LAND_MINE, 1, ttmp, FALSE);
 	return 1;
 }
 
@@ -3592,7 +3653,7 @@ struct trap *ttmp;
 	useup(obj);
 	makeknown(POT_WATER);
 	You("manage to extinguish the pilot light!");
-	cnv_trap_obj(POT_OIL, 4 - rnl(4), ttmp);
+	cnv_trap_obj(POT_OIL, 4 - rnl(4), ttmp, FALSE);
 	more_experienced(1, 5);
 	newexplevel();
 	return 1;
@@ -3641,7 +3702,7 @@ int otyp;
 
 	if (fails < 2) return fails;
 	You("disarm %s trap.", the_your[ttmp->madeby_u]);
-	cnv_trap_obj(otyp, 50-rnl(50), ttmp);
+	cnv_trap_obj(otyp, 50-rnl(50), ttmp, FALSE);
 	return 1;
 }
 
@@ -4185,12 +4246,18 @@ register struct trap *trap;
 {
 	register struct trap *ttmp;
 
+	clear_conjoined_pits(trap);
 	if(trap == ftrap)
 		ftrap = ftrap->ntrap;
 	else {
-		for(ttmp = ftrap; ttmp->ntrap != trap; ttmp = ttmp->ntrap) ;
+		for(ttmp = ftrap; ttmp; ttmp = ttmp->ntrap)
+			if (ttmp->ntrap == trap)
+				break;
+		if (!ttmp)
+			panic("deltrap: no preceding trap!");
 		ttmp->ntrap = trap->ntrap;
 	}
+	maybe_finish_sokoban();
 #ifdef DISPLAY_LAYERS
 	levl[trap->tx][trap->ty].mem_trap = NO_TRAP;
 #endif
@@ -4257,8 +4324,7 @@ boolean
 uteetering_at_seen_pit(trap)
 struct trap *trap;
 {
-    if (trap && trap->tseen && (!u.utrap || u.utraptype != TT_PIT
-        || Passes_walls)
+    if (trap && trap->tseen && (!u.utrap || u.utraptype != TT_PIT)
         && (trap->ttyp == PIT || trap->ttyp == SPIKED_PIT))
         return TRUE;
     else
@@ -4467,6 +4533,13 @@ sink_in:
     destroy_item(SPBOOK_CLASS, AD_FIRE);
     destroy_item(POTION_CLASS, AD_FIRE);
     return(FALSE);
+}
+
+/* called when a trap has been deleted or had its ttyp replaced */
+STATIC_OVL void
+maybe_finish_sokoban()
+{
+	/* nothing now */
 }
 
 #endif /* OVLB */

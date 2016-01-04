@@ -1434,7 +1434,7 @@ random_object:
 	if (o->oflags & OBJF_LIT)
 	    begin_burn(otmp, FALSE);
 	if (o->oflags & OBJF_BURIED)
-	    otmp = bury_an_obj(otmp);
+	    otmp = bury_an_obj(otmp, (boolean *)0);	/* FIXME */
 
     }		/* if (rn2(100) < o->chance) */
  o_done:

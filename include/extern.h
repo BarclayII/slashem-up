@@ -271,17 +271,20 @@ E int NDECL(dig);
 E int NDECL(holetime);
 E boolean FDECL(dig_check, (struct monst *, BOOLEAN_P, int, int));
 E void FDECL(digactualhole, (int,int,struct monst *,int));
-E boolean FDECL(dighole, (BOOLEAN_P));
+E boolean FDECL(dighole, (BOOLEAN_P, BOOLEAN_P, coord *));
 E int FDECL(use_pick_axe, (struct obj *));
 E int FDECL(use_pick_axe2, (struct obj *));
 E boolean FDECL(mdig_tunnel, (struct monst *));
 E void FDECL(watch_dig, (struct monst *,XCHAR_P,XCHAR_P,BOOLEAN_P));
 E void NDECL(zap_dig);
-E struct obj *FDECL(bury_an_obj, (struct obj *));
+E struct obj *FDECL(bury_an_obj, (struct obj *, boolean *));
 E void FDECL(bury_objs, (int,int));
 E void FDECL(unearth_objs, (int,int));
 E void FDECL(rot_organic, (genericptr_t, long));
 E void FDECL(rot_corpse, (genericptr_t, long));
+E schar FDECL(fillholetyp, (int, int, BOOLEAN_P));
+E void FDECL(liquid_flow,
+             (XCHAR_P, XCHAR_P, SCHAR_P, struct trap *, const char *));
 E boolean FDECL(conjoined_pits, (struct trap *, struct trap *, BOOLEAN_P));
 #if 0
 E void FDECL(bury_monst, (struct monst *));
@@ -2228,6 +2231,7 @@ E void FDECL(mselftouch, (struct monst *,const char *,BOOLEAN_P));
 E void NDECL(float_up);
 E void FDECL(fill_pit, (int,int));
 E int FDECL(float_down, (long, long));
+E void NDECL(climb_pit);
 E int FDECL(fire_damage, (struct obj *,BOOLEAN_P,BOOLEAN_P,XCHAR_P,XCHAR_P));
 /*E void FDECL(water_damage, (struct obj *,BOOLEAN_P,BOOLEAN_P));*/
 E boolean FDECL(water_damage, (struct obj *,BOOLEAN_P,BOOLEAN_P));
@@ -2235,6 +2239,7 @@ E boolean NDECL(drown);
 E void FDECL(mon_drain_en, (struct monst *, int));
 E void FDECL(drain_en, (int));
 E int NDECL(dountrap);
+E void FDECL(cnv_trap_obj, (int, int, struct trap *, BOOLEAN_P));
 E int FDECL(untrap, (BOOLEAN_P));
 E boolean FDECL(chest_trap, (struct obj *,int,BOOLEAN_P));
 E void FDECL(deltrap, (struct trap *));
