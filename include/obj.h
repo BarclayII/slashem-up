@@ -152,7 +152,9 @@ struct obj {
 			(otmp)->otyp == SPE_BOOK_OF_THE_DEAD || \
 			(otmp)->oartifact == ART_KEY_OF_LAW || \
 			(otmp)->oartifact == ART_KEY_OF_NEUTRALITY || \
-			(otmp)->oartifact == ART_KEY_OF_CHAOS)
+			(otmp)->oartifact == ART_KEY_OF_CHAOS || \
+			(otmp)->oartifact == ART_CLAVIS_SOLIS || \
+			(otmp)->oartifact == ART_CLAVIS_LUNAE)
 #ifdef INVISIBLE_OBJECTS
 #define always_visible(otmp) ( \
 			(otmp)->otyp == MUMMY_WRAPPING || \

@@ -4951,9 +4951,14 @@ int osym, dmgtyp;
 			    break;
 			case WAND_CLASS:
 			    if(obj->otyp == WAN_LIGHTNING) { skip++; break; }
+			    wand_explode(obj, FALSE);
+			    skip++;
+			    break;
+#if 0			    /* NOTREACHED */
 			    dindx = 5;
 			    tmp++;
 			    break;
+#endif
 			default:
 			    skip++;
 			    break;

@@ -194,11 +194,21 @@ forcelock()	/* try to force a locked chest */
 		        loss += stolen_value(otmp, u.ux, u.uy,
 					     (boolean)shkp->mpeaceful, TRUE,
 					     TRUE);
-		    if (otmp->quan == 1L) {
-			obfree(otmp, (struct obj *) 0);
+		    if (otmp->oclass == WAND_CLASS) {
+			/* Assumes that wands never stack */
+			/* FIXME: really dirty kludge... see wand_explode() */
+			otmp->ox = u.ux;
+			otmp->oy = u.uy;
+			otmp->where = OBJ_FREE;
+			wand_explode(otmp, FALSE);
 			continue;
+		    } else {
+		        if (otmp->quan == 1L) {
+			    obfree(otmp, (struct obj *) 0);
+			    continue;
+		        }
+		        useup(otmp);
 		    }
-		    useup(otmp);
 		}
 		if (xlock.box->otyp == ICE_BOX && otmp->otyp == CORPSE) {
 		    otmp->age = monstermoves - otmp->age; /* actual age */
