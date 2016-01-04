@@ -1521,8 +1521,11 @@ domove()
 			/* [BarclayII] 3.6.0 is a REALLY MASS REFACTOR against
 			 * 3.4.3... */
 			struct trap *desttrap = t_at(x, y);
+			struct trap *curtrap = t_at(u.ux, u.uy);
 			if ((desttrap && desttrap->tseen
-			    && (desttrap->ttyp == PIT || desttrap->ttyp == SPIKED_PIT)))
+			    && (desttrap->ttyp == PIT || desttrap->ttyp == SPIKED_PIT))
+			    /* redundant... vanilla 3.6.0 also have this bug though */
+			    && conjoined_pits(desttrap, curtrap, TRUE))
 				goto regardless_move;
 			/* try to escape; position stays same regardless of success */
 			climb_pit();
