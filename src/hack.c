@@ -1517,42 +1517,18 @@ domove()
 		return;
 	}
 	if(u.utrap) {
-		if(u.utraptype == TT_PIT && Passes_walls) {
-			You("phase through the walls and escape from the pit.");
-			u.utrap = 0;
-		}else if (u.utraptype == TT_PIT) {
-		    if (!rn2(2) && sobj_at(BOULDER, u.ux, u.uy)) {
-			Your("%s gets stuck in a crevice.", body_part(LEG));
-			display_nhwindow(WIN_MESSAGE, FALSE);
-			clear_nhwindow(WIN_MESSAGE);
-			You("free your %s.", body_part(LEG));
-		    } else if (Flying && !In_sokoban(&u.uz)) {
-			/* eg fell in pit, poly'd to a flying monster */
-			You("fly from the pit.");
-			u.utrap = 0;
-			fill_pit(u.ux, u.uy);
-			vision_full_recalc = 1;	/* vision limits change */
-		    } else if (!(--u.utrap)) {
-			You("%s to the edge of the pit.",
-				(In_sokoban(&u.uz) && Levitation) ?
-				"struggle against the air currents and float" :
-#ifdef STEED
-				u.usteed ? "ride" :
-#endif
-				"crawl");
-			fill_pit(u.ux, u.uy);
-			vision_full_recalc = 1;	/* vision limits change */
-		    } else if (flags.verbose) {
-#ifdef STEED
-			if (u.usteed)
-			    Norep("%s is still in a pit.",
-				  upstart(y_monnam(u.usteed)));
-			else
-#endif
-			Norep( (Hallucination && !rn2(5)) ?
-				"You've fallen, and you can't get up." :
-				"You are still in a pit." );
-		    }
+		if (u.utraptype == TT_PIT) {
+			/* [BarclayII] 3.6.0 is a REALLY MASS REFACTOR against
+			 * 3.4.3... */
+			struct trap *desttrap = t_at(x, y);
+			struct trap *curtrap = t_at(u.ux, u.uy);
+			if ((desttrap && desttrap->tseen
+			    && (desttrap->ttyp == PIT || desttrap->ttyp == SPIKED_PIT))
+			    /* redundant... vanilla 3.6.0 also have this bug though */
+			    && conjoined_pits(desttrap, curtrap, TRUE))
+				goto regardless_move;
+			/* try to escape; position stays same regardless of success */
+			climb_pit();
 		} else if (u.utraptype == TT_LAVA) {
 		    if(flags.verbose) {
 			predicament = "stuck in the lava";
@@ -1642,6 +1618,7 @@ domove()
 		}
 		return;
 	}
+regardless_move:
 
 	if (!test_move(u.ux, u.uy, x-u.ux, y-u.uy, DO_MOVE)) {
 	    flags.move = 0;

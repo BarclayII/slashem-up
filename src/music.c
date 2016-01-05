@@ -220,6 +220,7 @@ int force;
 	struct monst *mtmp;
 	struct obj *otmp;
 	struct trap *chasm;
+	schar filltype;
 	int start_x, start_y, end_x, end_y;
 
 	start_x = u.ux - (force * 2);
@@ -282,6 +283,16 @@ do_pit:		    chasm = maketrap(x,y,PIT);
 		    chasm->tseen = 1;
 
 		    levl[x][y].doormask = 0;
+                    /*
+                     * Let liquid flow into the newly created chasm.
+                     * Adjust corresponding code in apply.c for
+                     * exploding wand of digging if you alter this sequence.
+                     */
+                    filltype = fillholetyp(x, y, FALSE);
+                    if (filltype != ROOM) {
+                        levl[x][y].typ = filltype;
+                        liquid_flow(x, y, filltype, chasm, (char *) 0);
+                    }
 
 		    mtmp = m_at(x,y);
 
