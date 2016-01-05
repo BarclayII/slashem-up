@@ -44,9 +44,6 @@ static const char *random_mesg[] = {
 	"All you need is love.", /* The Beatles */
 	"Please don't feed the animals.", /* Various zoos around the world */
 	"....TCELES B HSUP   A magic spell?", /* Final Fantasy I (US) */
-	"Madam, in Eden, I'm Adam.", /* A palindrome */
-	"Two thumbs up!", /* Siskel & Ebert */
-	"Hello, World!", /* The First Program line */
 	"Turn around.", /* Various people at various times in history */
 	"You've got mail!", /* AOL */
 	"UY WUZ HERE", /* :] */
@@ -56,6 +53,46 @@ static const char *random_mesg[] = {
 	"Silly rabbit, Trix are for kids!", /* Trix */
  	"I'll be back!", /* Terminator */
  	"That is not dead which can eternal lie.", /* HPL */
+	/* NetHack 3.6.0 new ones */
+	/* helpful guidances */
+	"Don't go this way",
+	"Go left --->",
+	"<--- Go right",
+	"X marks the spot",
+	"X <--- You are here.",
+	"Here be dragons",
+	"Save now, and do your homework!",
+	"There was a hole here.  It's gone now.",
+	"The Vibrating Square",
+	"This is a pit!",
+	"This is not the dungeon you are looking for.",
+	"Watch out, there's a gnome with a wand of death behind that door!",
+	/* misc fun */
+	"This square deliberately left blank.",
+	/* Viking graffiti */
+	"Haermund Hardaxe carved these runes",
+	/* Advertising */
+	"Need a light?  Come visit the Minetown branch of Izchak's Lighting Store!",
+	"Snakes on the Astral Plane - Soon in a dungeon near you",
+	"You are the one millionth visitor to this place!  Please wait 200 turns for your wand of wishing.",
+	/* DnD */
+	"Warning, Exploding runes!",
+	/* "Whispers Underground" Ben Aaronovitch */
+	"If you can read these words then you are not only a nerd but probably dead."
+	/* [BarclayII] added these */
+	"My pet ferret can play better than you!", /* sudo */
+	"sudo make me a sandwich", /* xkcd */
+	"Citation needed", /* Wikipedia */
+	"Halt and Catch Fire", /* an instruction */
+	"Make love, not war.", /* an old slogan */
+	"I put on my robe and wizard hat...", /* bash.org */
+	"Lorem ipsum dolor sit amet", /* placeholder */
+	"There are no Easter Eggs in this dungeon.", /* aptitude */
+	"Because We Are Mean (TM)", /* Cygwin motto */
+	"All Your Base Are Belong To Us.", /* Zero Wing */
+	"But the princess is in another dungeon!", /* Super Mario Bros. */
+	"Here's a nickel, kid. Get yourself a better computer.", /* Dilbert */
+	"THIS! IS! SPARTA!", /* 300 */
 };
 
 char *

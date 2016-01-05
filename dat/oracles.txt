@@ -1,6 +1,6 @@
 -----
 If thy wand hath run out of charges, thou mayst zap it again and again; though
-naught will happen at first, verily, thy persistence shall be rewarded, as
+naught will happen at first, verily, thy persistence may be rewarded, as
 one last charge may yet be wrested from it!
 -----
 Though the shopkeepers be wary, thieves have nevertheless stolen much by using
@@ -92,10 +92,10 @@ it only the gods know, but a musical mastermind may yet succeed by witful
 improvisation.  However, the less perspicacious are not without recourse,
 should they be prepared to circumambulate the castle to the postern.
 -----
-Upon a level before all maze
-There lies a woman who kills with gaze.
-Should she be killed, not petrified,
-You will receive a magical ride.
+The gods are said to be pleased when offerings are given to the
+priests who attend their temples, and they may grant various favors to
+those who do so.  But beware!  To be young and frugal is better than to
+be old and miserly.
 ----- ELBERETH
 The name of Elbereth may strike fear into the hearts of thine enemies, if
 thou dost write it upon the ground at thy feet.  If thou maintainest the
