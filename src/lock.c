@@ -793,7 +793,14 @@ doforce()		/* try to force a chest with your weapon */
 }
 
 int
-doopen()		/* try to open a door */
+doopen()
+{
+	return doopen_indir(0, 0);
+}
+
+int
+doopen_indir(x, y)		/* try to open a door */
+int x, y;
 {
 	coord cc;
 	register struct rm *door;
@@ -809,7 +816,11 @@ doopen()		/* try to open a door */
 	    return 0;
 	}
 
-	if(!get_adjacent_loc((char *)0, (char *)0, u.ux, u.uy, &cc)) return(0);
+	if (x > 0 && y > 0) {
+		cc.x = x;
+		cc.y = y;
+	} else if(!get_adjacent_loc((char *)0, (char *)0, u.ux, u.uy, &cc))
+		return(0);
 
 	if((cc.x == u.ux) && (cc.y == u.uy)) return(0);
 

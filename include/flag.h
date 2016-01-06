@@ -23,6 +23,7 @@ struct flag {
 	boolean  asksavedisk;
 #endif
 	boolean  autodig;       /* MRKR: Automatically dig */
+	boolean  autoopen;	/* Automatically open doors if possible */
 	boolean  autoquiver;	/* Automatically fill quiver */
 	boolean  beginner;
 #ifdef MAIL
@@ -63,6 +64,7 @@ struct flag {
 	boolean  menu_on_esc;	/* show menu when hitting esc */
 	boolean  mon_moving;	/* monsters' turn to move */
 	boolean  move;
+	boolean  door_opened;
 	boolean  mv;
 	boolean  bypasses;	/* bypass flag is set on at least one fobj */
 	boolean  nap;		/* `timed_delay' option for display effects */

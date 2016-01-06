@@ -898,6 +898,9 @@ int mode;
     register struct rm *tmpr = &levl[x][y];
     register struct rm *ust;
 
+    /* FIXME: introduce the context structure from NetHack 3.6.0 */
+    flags.door_opened = FALSE;
+
     /*
      *  Check for physical obstacles.  First, the place we are going.
      */
@@ -960,7 +963,10 @@ int mode;
 		if (mode == DO_MOVE) {
 		    if (amorphous(youmonst.data))
 			You("try to ooze under the door, but can't squeeze your possessions through.");
-		    else if (x == ux || y == uy) {
+                    if (flags.autoopen && !flags.run && !Confusion
+                        && !Stunned && !Fumbling) {
+                            flags.door_opened = flags.move = doopen_indir(x, y);
+                    } else if (x == ux || y == uy) {
 			if (Blind || Stunned || ACURR(A_DEX) < 10 || Fumbling) {
 #ifdef STEED
 			    if (u.usteed) {
@@ -1621,8 +1627,10 @@ domove()
 regardless_move:
 
 	if (!test_move(u.ux, u.uy, x-u.ux, y-u.uy, DO_MOVE)) {
-	    flags.move = 0;
-	    nomul(0);
+	    if (!flags.door_opened) {
+	        flags.move = 0;
+	        nomul(0);
+	    }
 	    return;
 	}
 
