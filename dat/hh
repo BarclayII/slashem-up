@@ -35,6 +35,8 @@ X       explore switch the game to explore (discovery) mode
 Game commands:
 ^B      bereave steal
 ^D      kick    kick (a door, or something else)
+^N      'notate annotate a level
+^O      o'view  dungeon overview
 ^T      'port   teleport (if you can)
 ^X      show    show your attributes
 ^Y	poly'	polymorph (if possible)
@@ -105,6 +107,7 @@ M-o     offer   offer a sacrifice to the gods
 M-p     pray    pray to the gods for help
 M-q	quit	quit the game
 M-r     rub     rub a lamp or a stone
+M-R     ride    ride (or stop riding) a monster
 M-s     sit     sit down
 M-t     tech    use a class specific technique
 M-u     untrap  untrap something

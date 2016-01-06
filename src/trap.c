@@ -914,7 +914,7 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 				x_monnam(u.usteed,
 					 u.usteed->mnamelth ? ARTICLE_NONE : ARTICLE_THE,
 				 	 "poor", SUPPRESS_SADDLE, FALSE));
-		    } else
+		    }
 #endif
 		   if (adj_pit) {
 			   You("move into an adjacent pit.");

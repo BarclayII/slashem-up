@@ -2604,6 +2604,7 @@ static const struct func_tab cmdlist[] = {
 	{'r', FALSE, doread},
 	{'R', FALSE, doremring},
 	{M('r'), FALSE, dorub},
+	{M('R'), FALSE, doride},
 	{'s', TRUE, dosearch, "searching"},
 	{'S', TRUE, dosave},
 	{M('s'), FALSE, dosit},

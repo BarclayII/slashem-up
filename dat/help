@@ -121,6 +121,7 @@ Commands:
                 I$ - count your money.
 	n#      repeat next command             
 	N       name or classify an item
+        ^N      Annotate a level
         o       Open a door.
         O       Review current options and possibly change them.
                 A menu displaying the option settings will be displayed
@@ -129,6 +130,7 @@ Commands:
                 environment variable, or via a config file (defaults.nh,
                 Slash'EM Defaults, nethack.cnf, .nethackrc, etc.), not with 
                 the 'O' command.
+        ^O      Dungeon overview
         p       Pay your shopping bill/Shopkeeper services.
         P       Put on an accessory (ring, amulet, etc).
         ^P      Repeat last message (subsequent ^P's repeat earlier messages).

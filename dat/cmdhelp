@@ -8,7 +8,8 @@
 ^G      Create a monster (available in wizard mode only)
 ^I      Identify all items (available in wizard mode only)
 ^J      go up an experience level (available in wizard mode only)
-^O      Show location of special levels (available in wizard mode only)
+^N	Annotate a dungeon level
+^O      Overview of dungeon
 ^P      Toggle through previously displayed game messages
 ^R      Redraw screen
 ^T      Teleport around level
@@ -119,6 +120,7 @@ M-o     Offer a sacrifice to the gods
 M-p     Pray to the gods for help
 M-q     Quit
 M-r     Rub a lamp
+M-R	Ride
 M-s     Sit down
 M-t     Use techniques
 M-u     Untrap something (trap, door, or chest)
