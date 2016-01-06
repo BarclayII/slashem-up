@@ -914,13 +914,13 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 				x_monnam(u.usteed,
 					 u.usteed->mnamelth ? ARTICLE_NONE : ARTICLE_THE,
 				 	 "poor", SUPPRESS_SADDLE, FALSE));
-		    }
+		    } else
 #endif
+		   Strcpy(verbbuf,
+			!plunged ? "fall" : (Flying ? "dive" : "plunge"));
 		   if (adj_pit) {
 			   You("move into an adjacent pit.");
 		   } else {
-			   Strcpy(verbbuf,
-				!plunged ? "fall" : (Flying ? "dive" : "plunge"));
 			   You("%s into %s pit!", verbbuf, a_your[trap->madeby_u]);
 		   }
 		}
