@@ -264,9 +264,6 @@ register struct obj *food;
 	if (u.uhs != SATIATED) {
 		if (!food || food->otyp != AMULET_OF_STRANGULATION)
 			return;
-	} else if (Role_if(PM_KNIGHT) && u.ualign.type == A_LAWFUL) {
-			adjalign(-1);		/* gluttony is unchivalrous */
-		You("feel like a glutton!");        
 	}
 
 	exercise(A_CON, FALSE);
@@ -1669,6 +1666,13 @@ start_eating(otmp)		/* called as you start to eat */
 	}
 
 	if (bite()) return;
+
+	if (u.uhs == SATIATED) {
+		if (Role_if(PM_KNIGHT) && u.ualign.type == A_LAWFUL) {
+			adjalign(-5);		/* gluttony is unchivalrous */
+			You("feel like a glutton!");
+		}
+	}
 
 	if (++victual.usedtime >= victual.reqtime) {
 	    /* print "finish eating" message if they just resumed -dlc */

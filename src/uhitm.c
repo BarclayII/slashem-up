@@ -260,7 +260,7 @@ struct monst *mtmp;
 	     (mtmp->mflee && !mtmp->mavenge)) &&
 	    u.ualign.record > -10) {
 	    You("caitiff!");
-	    adjalign(-1);
+	    adjalign(-10);
 	}
 }
 
