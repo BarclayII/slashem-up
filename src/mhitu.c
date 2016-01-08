@@ -2378,7 +2378,7 @@ common:
 	    ugolemeffects((int)mattk->adtyp, tmp);
 	}
 	/* [BarclayII] if you didn't dodge, your item would be harmed */
-	if (dodged) {
+	if (!dodged) {
 		switch (mattk->adtyp) {
 		case AD_FIRE:
 			if (mtmp->m_lev > rn2(20))
