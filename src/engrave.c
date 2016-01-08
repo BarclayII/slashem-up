@@ -364,6 +364,33 @@ register xchar x,y,cnt,magical;
 #ifdef OVL2
 
 boolean
+check_illiterate(txt, write)
+char *txt;
+boolean write;
+{
+	/* [BarclayII] allow illiterate players read and write
+	 * multiple X, O, spaces, and read ?s*/
+	int len = strlen(txt), i;
+	for (i = 0; i < len; ++i) {
+		switch (txt[0]) {
+		case 'x':
+		case 'X':
+		case 'o':
+		case 'O':
+		case ' ':
+			break;
+		case '?':
+			if (!write)
+				break;
+			/* else fallthru */
+		default:
+			return FALSE;
+		}
+	}
+	return TRUE;
+}
+
+boolean
 sense_engr_at(x,y,read_it)
 register int x,y;
 boolean read_it; /* Read any sensed engraving */
@@ -438,7 +465,7 @@ boolean read_it; /* Read any sensed engraving */
 			et = ep->engr_txt;
 
 		/* If you can engrave an 'x', you can "read" it --ALI */
-		if (len != 1 || (!index(et, 'x') && !index(et, 'X')))
+		if (!check_illiterate(et, FALSE))
 			u.uconduct.literate++;
 
 		You("%s: \"%s\".",
@@ -1177,7 +1204,7 @@ doengrave()
 	}
 
 	/* A single `x' is the traditional signature of an illiterate person */
-	if (len != 1 || (!index(ebuf, 'x') && !index(ebuf, 'X')))
+	if (!check_illiterate(ebuf, TRUE))
 	    u.uconduct.literate++;
 
 	/* Mix up engraving if surface or state of mind is unsound.
