@@ -2303,6 +2303,7 @@ register struct attack  *mattk;
 boolean ufound;
 {
     if (mtmp->mcan) return(0);
+    boolean dodged = (ACURR(A_DEX) > rnd(20));
 
     if (!ufound)
 	pline("%s explodes at a spot in %s!",
@@ -2330,7 +2331,7 @@ boolean ufound;
 common:
 
 		if (!not_affected) {
-		    if (ACURR(A_DEX) > rnd(20)) {
+		    if (dodged) {
 			You("duck some of the blast.");
 			tmp = (tmp+1) / 2;
 		    } else {
@@ -2375,6 +2376,31 @@ common:
 	if (not_affected) {
 	    You("seem unaffected by it.");
 	    ugolemeffects((int)mattk->adtyp, tmp);
+	}
+	/* [BarclayII] if you didn't dodge, your item would be harmed */
+	if (dodged) {
+		switch (mattk->adtyp) {
+		case AD_FIRE:
+			if (mtmp->m_lev > rn2(20))
+				destroy_item(SCROLL_CLASS, AD_FIRE);
+			if (mtmp->m_lev > rn2(20))
+				destroy_item(POTION_CLASS, AD_FIRE);
+			if (mtmp->m_lev > rn2(25))
+				destroy_item(SPBOOK_CLASS, AD_FIRE);
+			break;
+		case AD_COLD:
+			if (mtmp->m_lev > rn2(20))
+				destroy_item(POTION_CLASS, AD_COLD);
+			break;
+		case AD_ELEC:
+			if (mtmp->m_lev > rn2(20))
+				destroy_item(RING_CLASS, AD_ELEC);
+			if (mtmp->m_lev > rn2(20))
+				destroy_item(WAND_CLASS, AD_ELEC);
+			break;
+		default:
+			break;
+		}
 	}
     }
     mondead(mtmp);
