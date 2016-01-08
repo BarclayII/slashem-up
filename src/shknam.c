@@ -523,6 +523,7 @@ struct mkroom	*sroom;
 /* black marketeer's equipment */
 	  otmp = mksobj(BROADSWORD, FALSE, FALSE);
 	  otmp = oname(otmp, artiname(ART_THIEFBANE));
+	  otmp->cursed = 0;
 	  mpickobj(shk, otmp);
 	  if (otmp->spe < 5) otmp->spe += rnd(5);
 	  otmp = mksobj(SHIELD_OF_REFLECTION, FALSE, FALSE);
@@ -540,6 +541,16 @@ struct mkroom	*sroom;
 	  m_dowear(shk, TRUE);
 	  otmp = mksobj(SKELETON_KEY, FALSE, FALSE);
 	  mpickobj(shk, otmp);
+#ifdef FIREARMS
+	  otmp = mksobj(HEAVY_MACHINE_GUN, FALSE, FALSE);
+	  if (otmp->spe < 5) otmp->spe += rnd(5);
+	  mpickobj(shk, otmp);
+	  otmp = mksobj(SILVER_BULLET, FALSE, FALSE);
+	  otmp->quan = rn1(50, 200);
+	  if (otmp->spe < 5) otmp->spe += rnd(5);
+	  otmp->owt = weight(otmp);
+	  mpickobj(shk, otmp);
+#endif
 	}
 #endif /* BLACKMARKET */
 
