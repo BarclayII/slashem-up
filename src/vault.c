@@ -84,7 +84,9 @@ xchar *ry;
 				CORR
 #endif
 		  /* better not send our hero into (possibly locked) shops */
-		      && !*in_rooms(x, y, SHOPBASE)) {
+		      && !*in_rooms(x, y, SHOPBASE)
+		  /* [BarclayII] and not send into vaults */
+		      && !*in_rooms(x, y, VAULT)) {
                     if (x < u.ux) lx = x + 1; 
                     else if (x > u.ux) lx = x - 1; 
                     else lx = x; 
