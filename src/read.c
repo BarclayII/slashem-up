@@ -1529,6 +1529,9 @@ try_tame:	    if (mtmp)
 #ifdef REINCARNATION
 		!Is_rogue_level(&u.uz) && 
 #endif
+#ifdef BLACKMARKET
+		!Is_blackmarket(&u.uz) &&
+#endif
 	    	 (!In_endgame(&u.uz) || Is_earthlevel(&u.uz))) {
 	    	register int x, y;
 
@@ -1637,7 +1640,8 @@ try_tame:	    if (mtmp)
 		    }
 		    if (dmg) losehp(dmg, "scroll of earth", KILLED_BY_AN);
 		}
-	    }
+	    } else
+		    pline("The rocks on the ceiling shake for a moment and calm down.");
 	    break;
 	case SCR_PUNISHMENT:
 		known = TRUE;
