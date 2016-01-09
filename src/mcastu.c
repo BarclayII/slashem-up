@@ -515,7 +515,7 @@ int spellnum;
 	{
 		struct permonst *pm;
 		struct monst *mtmp2 = (struct monst *)0;
-		int quan = rnd(3);
+		int quan = rnd(3 + mtmp->m_lev / 10);
 		coord bypos;
 		int i;
 		boolean success = FALSE;
@@ -707,7 +707,7 @@ int spellnum;
 		int quan, i;
 		coord bypos;
 
-		quan = rnd(3);
+		quan = rnd(3 + mtmp->m_lev / 10);
 		success = FALSE;
 		for (i = 1; i <= quan; ++i) {
 			if (!enexto(&bypos, mtmp->mux, mtmp->muy, mtmp->data))
