@@ -890,7 +890,7 @@ register int after;	/* this is extra fast monster movement */
 			 mtmp->mcansee && haseyes(mtmp->data) && mtmp2->mcansee
 			 && (perceives(mtmp->data) || !mtmp2->minvis)) ||
 			(mtmp2->data==&mons[PM_GELATINOUS_CUBE] && rn2(10)) ||
-			(mtmp2->data==&mons[PM_GAS_SPORE] && rn2(16)) ||
+			(is_boomer(mtmp2->data)) ||
 			(!attacktype(mtmp->data, AT_EXPL) &&
 			 max_passive_dmg(mtmp2, mtmp) >= mtmp->mhp) ||
 			/* Minions/Angels don't attack

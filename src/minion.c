@@ -234,9 +234,20 @@ int neutral_minion(int difficulty)
    difficulty = difficulty + rn2(9) - 4;
    if (difficulty < 0) difficulty = 0;
    if (difficulty > 30) difficulty = 30;
-   if (difficulty < 6) return PM_GRAY_UNICORN;
-   if (difficulty < 15) return (PM_AIR_ELEMENTAL+rn2(4));
-   return (PM_DJINNI /* +rn2(4) */);
+   switch (difficulty / 3) {
+      case 0:
+      case 1: return PM_GRAY_UNICORN;
+      case 2: return rn2(PM_BABY_YELLOW_DRAGON - PM_BABY_GRAY_DRAGON)
+	      + PM_BABY_GRAY_DRAGON;
+      case 3:
+      case 4:
+	      return PM_AIR_ELEMENTAL+rn2(4);
+      case 5:
+      case 6:
+      case 7: return PM_DJINNI;
+      case 8: return PM_MIST_WOLF;
+      case 9: return PM_SANDESTIN;
+   }
 }
 
 int chaotic_minion(int difficulty)

@@ -168,6 +168,9 @@
 #define is_reviver(ptr)		(is_rider(ptr) || (ptr)->mlet == S_FUNGUS && \
 				 (ptr) != &mons[PM_LICHEN] || \
 				 (ptr)->mlet == S_TROLL)
+#define is_boomer(ptr)		((ptr) == &mons[PM_ANCIENT_OF_ICE] || \
+				 (ptr) == &mons[PM_ANCIENT_OF_DEATH] || \
+				 (ptr) == &mons[PM_GAS_SPORE])
 
 /* this returns the light's range, or 0 if none; if we add more light emitting
    monsters, we'll likely have to add a new light range field to mons[] */
@@ -176,6 +179,8 @@
 				 ((ptr) == &mons[PM_FIRE_ELEMENTAL]) ? 2 : \
 				 ((ptr) == &mons[PM_FIRE_VAMPIRE])? 2 : \
 				 ((ptr) == &mons[PM_FLAMING_SPHERE]) ? 1 : \
+				 ((ptr) == &mons[PM_FALLEN_ANGEL]) ? 1 : \
+				 ((ptr) == &mons[PM_NESSIAN_PIT_FIEND]) ? 1 : \
 				 ((ptr) == &mons[PM_SHOCKING_SPHERE]) ? 1 : \
 				 ((ptr) == &mons[PM_WAX_GOLEM]) ? 1 : 0)
 /*	[note: the light ranges above were reduced to 1 for performance...] */
