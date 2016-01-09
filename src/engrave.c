@@ -78,7 +78,7 @@ static const char *random_mesg[] = {
 	/* DnD */
 	"Warning, Exploding runes!",
 	/* "Whispers Underground" Ben Aaronovitch */
-	"If you can read these words then you are not only a nerd but probably dead."
+	"If you can read these words then you are not only a nerd but probably dead.",
 	/* [BarclayII] added these */
 	"My pet ferret can play better than you!", /* sudo */
 	"sudo make me a sandwich", /* xkcd */
