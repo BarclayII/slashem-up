@@ -280,7 +280,7 @@ int chaotic_minion(int difficulty)
       case 16: return PM_MARILITH;
       case 17: return PM_NABASSU;
       case 18: return PM_BONE_DEVIL;
-      case 19: return PM_ICE_DEVIL;
+      case 19: return rn2(2) ? PM_ICE_DEVIL : PM_LAVA_DEVIL;
       case 20: return PM_PIT_FIEND;
    }
    return PM_GREMLIN;
