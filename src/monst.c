@@ -4456,7 +4456,7 @@ struct permonst _mons2[] = {
 #endif
 
     MON("sandestin", S_DEMON,
-	LVL(13, 12, 4, 60, -5), (G_HELL|G_NOCORPSE|1),
+	LVL(13, 12, 4, 60, 0), (G_HELL|G_NOCORPSE|1),
 	A(ATTK(AT_WEAP, AD_PHYS, 2, 6), ATTK(AT_WEAP, AD_PHYS, 2, 6),
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(1500, 400, 0, MS_CUSS, MZ_HUMAN), MR_STONE, 0,
