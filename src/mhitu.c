@@ -2531,6 +2531,26 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		    if (dmg) mdamageu(mtmp, dmg);
 		}
 		break;
+	    case AD_COLD:
+		if (!mtmp->mcan && canseemon(mtmp) &&
+			couldsee(mtmp->mx, mtmp->my) &&
+			mtmp->mcansee && !mtmp->mspec_used && rn2(5)) {
+		    int dmg = d(2,6);
+
+		    pline("%s attacks you with a freezing gaze!", Monnam(mtmp));
+		    stop_occupation();
+		    if (FCold_resistance) {
+			pline_The("fire doesn't feel hot!");
+			dmg = 0;
+		    } else if (PCold_resistance) {
+			    shieldeff(u.ux, u.uy);
+			    dmg = (dmg + 1) / 2;
+		    }
+		    if ((int) mtmp->m_lev > rn2(20))
+			destroy_item(POTION_CLASS, AD_FIRE);
+		    if (dmg) mdamageu(mtmp, dmg);
+		}
+		break;
 #ifdef PM_BEHOLDER /* work in progress */
 #if 0
 	    case AD_SLEE:
