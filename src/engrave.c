@@ -380,6 +380,10 @@ boolean write;
 		case ' ':
 			break;
 		case '?':
+			/* and decays from O, o, X, x */
+		case 'C':
+		case 'c':
+		case '(':
 			if (!write)
 				break;
 			/* else fallthru */
