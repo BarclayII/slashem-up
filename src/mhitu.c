@@ -2510,7 +2510,11 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		if (!mtmp->mcan && canseemon(mtmp) &&
 			couldsee(mtmp->mx, mtmp->my) &&
 			mtmp->mcansee && !mtmp->mspec_used && rn2(5)) {
-		    int dmg = d(2,6);
+		    int dmg;
+		    if (mattk->damn && mattk->damd)
+		        dmg = d((int)mattk->damn,(int)mattk->damd);
+		    else
+			dmg = d(2,6);
 
 		    pline("%s attacks you with a fiery gaze!", Monnam(mtmp));
 		    stop_occupation();
@@ -2535,7 +2539,11 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		if (!mtmp->mcan && canseemon(mtmp) &&
 			couldsee(mtmp->mx, mtmp->my) &&
 			mtmp->mcansee && !mtmp->mspec_used && rn2(5)) {
-		    int dmg = d(2,6);
+		    int dmg;
+		    if (mattk->damn && mattk->damd)
+		        dmg = d((int)mattk->damn,(int)mattk->damd);
+		    else
+			dmg = d(2,6);
 
 		    pline("%s attacks you with a freezing gaze!", Monnam(mtmp));
 		    stop_occupation();
