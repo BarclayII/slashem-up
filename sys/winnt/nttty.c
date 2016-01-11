@@ -817,13 +817,14 @@ term_start_color(int color)
 void 
 term_start_bgcolor(int color)
 {
-#ifdef TEXTCOLOR
-	background = ttybgcolors(color);
-	/* avoid same foreground and background color */
-	if (foreground == (background >> 4))
-		foreground = DEFTEXTCOLOR;
-#else
 	background = 0;
+#ifdef TEXTCOLOR
+	if (iflags.wc_color) {
+		background = ttybgcolors(color);
+		/* avoid same foreground and background color */
+		if (foreground == (background >> 4))
+			foreground = DEFTEXTCOLOR;
+	}
 #endif
 	attr = (foreground | background);
 }

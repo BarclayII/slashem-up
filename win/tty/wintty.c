@@ -2747,16 +2747,16 @@ tty_print_glyph(window, x, y, glyph)
 	    if (special & MG_TRAP)
 		    bgc |= CLR_RED;
 
+	    if (iflags.wc_color
 #ifndef WIN32CON
-	    if (ttyDisplay->color != bgc)
+		&& ttyDisplay->color != bgc
 #endif
+		)
 		    term_start_bgcolor(bgc);
-#ifndef WIN32CON
 	    else {
 		    term_start_attr(ATR_INVERSE);
 		    reverse_on = TRUE;
 	    }
-#endif
     }
 #endif
 
