@@ -8,9 +8,6 @@
 #include "lev.h"
 
 #ifdef SINKS
-# ifdef OVLB
-STATIC_DCL void FDECL(trycall, (struct obj *));
-# endif /* OVLB */
 STATIC_DCL void FDECL(dosinkring, (struct obj *));
 #endif /* SINKS */
 
@@ -261,8 +258,6 @@ doaltarobj(obj)  /* obj is an object dropped on an altar */
 	}
 }
 
-#ifdef SINKS
-STATIC_OVL
 void
 trycall(obj)
 register struct obj *obj;
@@ -272,6 +267,7 @@ register struct obj *obj;
 	   docall(obj);
 }
 
+#ifdef SINKS
 STATIC_OVL
 void
 dosinkring(obj)  /* obj is a ring being dropped over a kitchen sink */
@@ -414,6 +410,8 @@ giveback:
 		    break;
 		case RIN_WARNING:
 		    pline_The("sink glows %s for a moment.", hcolor(NH_RED));
+		    if (Hallucination)
+			You_hear("an alarm!");
 		    break;
 		case RIN_MOOD:
 			pline_The("sink looks %s.", Hallucination ? "happy" : "groovy");

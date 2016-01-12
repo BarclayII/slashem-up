@@ -348,6 +348,7 @@ E int NDECL(dodrop);
 E boolean FDECL(boulder_hits_pool, (struct obj *,int,int,BOOLEAN_P));
 E boolean FDECL(flooreffects, (struct obj *,int,int,const char *));
 E void FDECL(doaltarobj, (struct obj *));
+E void FDECL(trycall, (struct obj *));
 E boolean FDECL(canletgo, (struct obj *,const char *));
 E void FDECL(dropx, (struct obj *));
 E void FDECL(dropy, (struct obj *));

@@ -1322,7 +1322,7 @@ doengrave()
 	if (post_engr_text[0]) pline(post_engr_text);
 
 	if (bugeffect) {
-		docall(otmp);
+		trycall(otmp);
 	}
 
 	if (doblind && !resists_blnd(&youmonst)) {
