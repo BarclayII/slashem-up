@@ -374,7 +374,7 @@ boolean forcecontrol;
 			else if (!mvitals[mntmp].eaten) {
 				You("attempt an unfamiliar polymorph.");
 				/* [BarclayII] always have 1/3 chance of failing */
-				if (((rn2(5) + u.ulevel) < mons[mntmp].mlevel) && !rn2(3))
+				if (((rn2(5) + u.ulevel - 2) < mons[mntmp].mlevel) && !rn2(3))
 				    mntmp = LOW_PM - 1; /* Didn't work for sure */
 				/* Either way, give it a shot */
 				break;
