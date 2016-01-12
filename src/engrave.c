@@ -81,7 +81,6 @@ static const char *random_mesg[] = {
 	"If you can read these words then you are not only a nerd but probably dead.",
 	/* [BarclayII] added these */
 	"My pet ferret can play better than you!", /* sudo */
-	"sudo make me a sandwich", /* xkcd */
 	"Citation needed", /* Wikipedia */
 	"Halt and Catch Fire", /* an instruction */
 	"Make love, not war.", /* an old slogan */
@@ -1454,7 +1453,11 @@ static const char *epitaphs[] = {
 	"Here lies the body of Jonathan Blake. Stepped on the gas instead of the brake.",
 	"Go away!",
 	/* From SLASH'EM */
-	"This old man, he played one, he played knick-knack on my thumb."
+	"This old man, he played one, he played knick-knack on my thumb.",
+	/* [BarclayII] more epitaphs */
+	"This place intentionally left blank.",
+#define SUDO_SANDWICH	31
+	"sudo make me a sandwich",
 };
 
 /* Create a headstone at the given location.
@@ -1465,16 +1468,21 @@ make_grave(x, y, str)
 int x, y;
 const char *str;
 {
+	int i = rn2(SIZE(epitaphs));
 	/* Can we put a grave here? */
 	if ((levl[x][y].typ != ROOM && levl[x][y].typ != GRAVE) || t_at(x,y)) return;
 
 	/* Make the grave */
 	levl[x][y].typ = GRAVE;
 
+	if (i == SUDO_SANDWICH && !str) {
+		mksobj_at(SANDWICH, x, y, TRUE, FALSE);
+	}
 	/* Engrave the headstone */
-	if (!str) str = epitaphs[rn2(SIZE(epitaphs))];
+	if (!str) str = epitaphs[i];
 	del_engr_at(x, y);
 	make_engr_at(x, y, str, 0L, HEADSTONE);
+
 	return;
 }
 
