@@ -160,22 +160,13 @@ static const struct { const char *txt; int nut; } tintxts[] = {
 	{"rotten",	-50},
 #define HOMEMADE_TIN 5
 	{"homemade",	 50},
-	{"stir fried",   80},
-	{"candied",      100},
-	{"boiled",       50},
-	{"dried",        55},
-	{"szechuan",     70},
-#define FRENCH_FRIED_TIN 11
-	{"french fried", 40},
-	{"sauteed",      95},
-	{"broiled",      80},
-	{"smoked",       50},
 	/* [Tom] added a few new styles */        
 	{"stir fried",   80},
 	{"candied",      100},
 	{"boiled",       50},
 	{"dried",        55},
 	{"szechuan",     70},
+#define FRENCH_FRIED_TIN 11
 	{"french fried", 40},
 	{"sauteed",      95},
 	{"broiled",      80},
