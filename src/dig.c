@@ -865,6 +865,7 @@ dig_up_grave(cc)
 coord *cc;
 {
 	struct obj *otmp;
+	struct monst *mtmp = (struct monst *)0;
 	xchar dig_x, dig_y;
 
 	if (!cc) {
@@ -878,7 +879,7 @@ coord *cc;
 	}
 
 	/* Grave-robbing is frowned upon... */
-	exercise(A_WIS, FALSE);
+	exercise(A_WIS, Role_if(PM_NECROMANCER));
 	if (Role_if(PM_ARCHEOLOGIST)) {
 	    adjalign(-sgn(u.ualign.type)*3);
 	    You_feel("like a despicable grave-robber!");
@@ -909,12 +910,12 @@ coord *cc;
 	case 2:
 	    if (!Blind) pline(Hallucination ? "Dude!  The living dead!" :
  			"The grave's owner is very upset!");
- 	    (void) makemon(mkclass(S_ZOMBIE,0), dig_x, dig_y, NO_MM_FLAGS);
+ 	    mtmp = makemon(mkclass(S_ZOMBIE,0), dig_x, dig_y, NO_MM_FLAGS);
 	    break;
 	case 3:
 	    if (!Blind) pline(Hallucination ? "I want my mummy!" :
  			"You've disturbed a tomb!");
- 	    (void) makemon(mkclass(S_MUMMY,0), dig_x, dig_y, NO_MM_FLAGS);
+ 	    mtmp = makemon(mkclass(S_MUMMY,0), dig_x, dig_y, NO_MM_FLAGS);
 	    break;
 	default:
 	    /* No corpse */
@@ -923,6 +924,13 @@ coord *cc;
 	}
 	levl[dig_x][dig_y].typ = ROOM;
 	del_engr_at(dig_x, dig_y);
+	if (Role_if(PM_NECROMANCER) && rnl(u.ulevel + mtmp->m_lev) < u.ulevel) {
+		mtmp = tamedog(mtmp, (struct obj *)0);
+		if (mtmp->mtame || mtmp->mpeaceful)
+			pline("However you %s %s!",
+			    mtmp->mtame ? "dominate" : "pacify",
+			    mon_nam(mtmp));
+	}
 	newsym(dig_x, dig_y);
 	return;
 }
