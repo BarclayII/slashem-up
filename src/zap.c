@@ -2827,7 +2827,7 @@ boolean			youattack, allow_cancel_kill, self_cancel;
 				"Some writing vanishes from %s head!";
 	static const char your[] = "your";	/* should be extern */
 
-	if (youdefend) 
+	if (youdefend && !Blind)
 	    You(!Hallucination? "are covered in sparkling lights!"
 			      : "are enveloped by psychedelic fireworks!");
 
