@@ -2995,6 +2995,9 @@ register struct obj *obj;
 	    uneaten_amt = full_amount;
 	}
 
+	if (base == 0)
+		return 0;
+
 	base = (int)(full_amount ? (long)base * uneaten_amt / full_amount : 0L);
 	return (base < 1) ? 1 : base;
 }
