@@ -924,7 +924,8 @@ coord *cc;
 	}
 	levl[dig_x][dig_y].typ = ROOM;
 	del_engr_at(dig_x, dig_y);
-	if (Role_if(PM_NECROMANCER) && rnl(u.ulevel + mtmp->m_lev) < u.ulevel) {
+	if (mtmp != (struct monst *)0 && Role_if(PM_NECROMANCER) &&
+	    rnl(u.ulevel + mtmp->m_lev) < u.ulevel) {
 		mtmp = tamedog(mtmp, (struct obj *)0);
 		if (mtmp->mtame || mtmp->mpeaceful)
 			pline("However you %s %s!",
