@@ -5,25 +5,26 @@
 #include "hack.h"
 
 
-int ud_dwarf[] = {PM_GHOUL, PM_GHAST, PM_WIGHT, PM_WRAITH, PM_GHOST, PM_GUG,
+int ud_dwarf[] = {PM_GHOUL, PM_GHAST, PM_WIGHT, PM_WRAITH, PM_GHOST,
 		  NON_PM};
 int ud_gnome[] = {PM_GHOUL, PM_GHAST, PM_GHOST, PM_GHOUL_MAGE, PM_BARROW_WIGHT,
 		  PM_WIGHT, PM_WRAITH, NON_PM};
-int ud_human[] = {PM_GHOUL, PM_GHAST, PM_WRAITH, PM_GHOUL_MAGE, PM_VAMPIRE,
-		  PM_GHOST, NON_PM};
-int ud_orc[]   = {PM_GHOUL, PM_GHAST, PM_WIGHT, PM_WRAITH, PM_GHOST, PM_GUG,
+int ud_human[] = {PM_WRAITH, PM_VAMPIRE, PM_GHOST, NON_PM};
+int ud_orc[]   = {PM_GHOUL, PM_GHAST, PM_WIGHT, PM_WRAITH, PM_GHOST,
 		  PM_GHOUL_MAGE, NON_PM};
 int ud_hbbt[]  = {PM_BARROW_WIGHT, PM_WIGHT, PM_WRAITH, PM_GHOST, NON_PM};
 int ud_elf[]   = {PM_WRAITH, PM_GHOST, NON_PM};
-int ud_ettin[] = {PM_GHOUL, PM_GHAST, PM_GUG, PM_WRAITH, PM_GHOST, NON_PM};
+int ud_ettin[] = {PM_GHOUL, PM_GHAST, PM_WRAITH, PM_GHOST, NON_PM};
 #define ud_giant ud_ettin
-int ud_troll[] = {PM_GUG, PM_WRAITH, PM_GHOST, PM_WIGHT, NON_PM};
-int ud_gnoll[] = {PM_WIGHT, PM_WRAITH, PM_GHOST, PM_GHOUL_MAGE, PM_GUG, NON_PM};
+int ud_troll[] = {PM_WRAITH, PM_GHOST, PM_WIGHT, NON_PM};
+int ud_gnoll[] = {PM_WIGHT, PM_WRAITH, PM_GHOST, PM_GHOUL_MAGE, NON_PM};
 int ud_kbld[]  = {PM_GHOUL, PM_GHAST, PM_BARROW_WIGHT, PM_WIGHT, PM_GHOUL_MAGE,
 		  PM_GHOST, NON_PM};
-int ud_ogre[]  = {PM_GUG, PM_GHOUL_MAGE, PM_WRAITH, PM_GHOST, NON_PM};
-int ud_cent[]  = {PM_WRAITH, PM_WIGHT, PM_GUG, PM_GHOST, NON_PM};
+int ud_ogre[]  = {PM_GHOUL_MAGE, PM_WRAITH, PM_GHOST, NON_PM};
+int ud_cent[]  = {PM_WRAITH, PM_WIGHT, PM_GHOST, NON_PM};
 int ud_deep[]  = {PM_GUG, NON_PM};
+int ud_other[] = {PM_GHOUL, PM_GHAST, PM_GHOST, PM_BARROW_WIGHT, PM_WIGHT,
+		  PM_WRAITH, NON_PM};
 
 int
 random_pick_mon(monlist)
@@ -126,6 +127,7 @@ struct obj *obj;
 			else if (ogre) arr = ud_ogre;
 			else if (centaur) arr = ud_cent;
 			else if (deep) arr = ud_deep;
+			else if (humanoid(&mons[corpsenm])) arr = ud_other;
 			if (arr) pm_undead = random_pick_mon(arr);
 		}
 	}
