@@ -328,8 +328,8 @@ A("The Key of Neutrality", SKELETON_KEY,
 	0,      A_NEUTRAL, NON_PM, NON_PM, 1000L ),
 
 A("The Hand of Vecna",       SEVERED_HAND,
-	(SPFX_NOGEN|SPFX_RESTR), (SPFX_REGEN|SPFX_HPHDAM), 0,
-	NO_ATTK,        DRLI(0,0),      CARY(AD_COLD),
+	(SPFX_NOGEN|SPFX_RESTR), (SPFX_HPHDAM), 0,
+	NO_ATTK,        DRLI(0,0),      NO_CARY,
 	SUMMON_UNDEAD,          A_CHAOTIC, NON_PM, NON_PM, 700L ),
 
 A("The Key of Chaos", SKELETON_KEY,
