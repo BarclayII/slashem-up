@@ -333,10 +333,10 @@ giveback:
 			((obj->spe<0) ? "duller" : "quicker"));
 		break;
 	    case RIN_GAIN_DEXTERITY:
-		pline("The water flow seems %ser now.",
+		pline("The water flow seems %s now.",
 			Hallucination ?
 			((obj->spe<0) ? "clumsy" : "agile") :
-			((obj->spe<0) ? "slow" : "fast"));
+			((obj->spe<0) ? "slower" : "faster"));
 		break;
 	    case RIN_INCREASE_ACCURACY:	/* KMH */
 		pline_The("water flow %s the drain.",
