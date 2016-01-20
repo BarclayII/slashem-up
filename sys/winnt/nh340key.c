@@ -149,6 +149,7 @@ int portdebug;
         }
         else if (altseq > 0) { /* ALT sequence */
 		if (vk == 0xBF) ch = M('?');
+		else if (shiftstate & SHIFT_PRESSED) ch = M(toupper(keycode));
 		else ch = M(tolower(keycode));
         }
 	if (ch == '\r') ch = '\n';

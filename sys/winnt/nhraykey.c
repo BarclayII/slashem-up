@@ -345,6 +345,7 @@ int portdebug;
         else if (altseq > 0) { /* ALT sequence */
 		ReadConsoleInput(hConIn,ir,1,&count);
 		if (vk == 0xBF) ch = M('?');
+		else if (shiftstate & SHIFT_PRESSED) ch = M(toupper(keycode));
 		else ch = M(tolower(keycode));
         }
 	else if (ch < 32 && !isnumkeypad(scan)) {
