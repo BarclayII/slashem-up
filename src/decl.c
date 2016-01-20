@@ -20,6 +20,8 @@ char *catmore = 0;		/* default pager */
 NEARDATA int bases[MAXOCLASSES] = DUMMY;
 
 NEARDATA int multi = 0;
+NEARDATA const char *default_nomulmsg = "helpless";
+NEARDATA char nomulmsg[BUFSZ] = DUMMY;
 NEARDATA boolean multi_one = FALSE;	/* used by dofire() and throw_the_obj() */
 #if 0
 NEARDATA int warnlevel = 0;		/* used by movemon and dochugw */

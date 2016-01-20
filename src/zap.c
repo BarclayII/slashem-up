@@ -4268,7 +4268,7 @@ register int dx,dy;
 		miss(fltxt,mon);
 	    }
 	} else if (sx == u.ux && sy == u.uy && range >= 0) {
-	    nomul(0);
+	    nomul(0, NULL);
 #ifdef STEED
 	    if (u.usteed && !rn2(3) && !mon_reflects(u.usteed, (char *)0)) {
 		    mon = u.usteed;
@@ -4306,7 +4306,7 @@ register int dx,dy;
 		if (!Blind) Your(vision_clears);
 	    }
 	    stop_occupation();
-	    nomul(0);
+	    nomul(0, NULL);
 	}
 
 	if(!ZAP_POS(lev->typ) || (closed_door(sx, sy) && (range >= 0))) {

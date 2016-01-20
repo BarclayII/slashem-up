@@ -402,7 +402,7 @@ gotobj:
 				  equipname(otmp));
 			named++;
 			/* the following is to set multi for later on */
-			nomul(-armordelay);
+			nomul(-armordelay, "taking off clothes");
 			nomovemsg = 0;
 			remove_worn_item(otmp, TRUE);
 			otmp->cursed = curssv;

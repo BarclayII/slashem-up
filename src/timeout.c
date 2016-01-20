@@ -37,7 +37,7 @@ stoned_dialogue()
 	if (i == 5L)
 		HFast = 0L;
 	if (i == 3L) {
-		nomul(-3);
+		nomul(-3, "turning into stone");
 		nomovemsg = 0;
 	}
 	exercise(A_DEX, FALSE);
@@ -150,7 +150,7 @@ slime_dialogue()
 	if (i == 3L) {	/* limbs becoming oozy */
 	    HFast = 0L;	/* lose intrinsic speed */
 	    stop_occupation();
-	    if (multi > 0) nomul(0);
+	    if (multi > 0) nomul(0, NULL);
 	}
 	exercise(A_DEX, FALSE);
 }
@@ -167,7 +167,7 @@ sick_dialogue()
 	}
 	if (i == 3L) {
 		stop_occupation();
-		if (multi > 0) nomul(0);
+		if (multi > 0) nomul(0, NULL);
 	}
 	exercise(A_CON, FALSE);
 }
@@ -412,7 +412,7 @@ nh_timeout()
 			/* otherwise handle fumbling msgs locally. */
 			if (u.umoved && !Levitation) {
 			    slip_or_trip();
-			    nomul(-2);
+			    nomul(-2, "while fumbling");
 			    nomovemsg = "";
 			    /* The more you are carrying the more likely you
 			     * are to make noise when you fumble.  Adjustments
@@ -447,7 +447,7 @@ int how_long;
 boolean wakeup_msg;
 {
 	stop_occupation();
-	nomul(how_long);
+	nomul(how_long, "asleep");
 	/* generally don't notice sounds while sleeping */
 	if (wakeup_msg && multi == how_long) {
 	    /* caller can follow with a direct call to Hear_again() if
@@ -1792,7 +1792,7 @@ do_storms()
 	pline("Kaboom!!!  Boom!!  Boom!!");
 	if(!u.uinvulnerable) {
 	    stop_occupation();
-	    nomul(-3);
+	    nomul(-3, "frightened by thunder");
 	    nomovemsg = 0;
 	}
     } else
