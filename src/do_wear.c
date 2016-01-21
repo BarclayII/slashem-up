@@ -691,7 +691,7 @@ Amulet_on()
 				} while (sleeptime < 1 || sleeptime > 500);
 			if (sleeptime > 0) {
 				You("sit down and fall asleep.");
-				nomul(-sleeptime, "asleep");
+				nomul(-sleeptime);
 				u.usleep = 1;
 				nomovemsg = "You wake up from your refreshing nap.";
 		HSleeping = rnd(100);
@@ -1345,7 +1345,7 @@ register struct obj *otmp;
 
 	if(cursed(otmp)) return(0);
 	if(delay) {
-		nomul(delay, "taking off clothes");
+		nomul(delay);
 		if (is_helmet(otmp)) {
 			nomovemsg = "You finish taking off your helmet.";
 			afternmv = Helmet_off;
@@ -1610,7 +1610,7 @@ dowear()
 	setworn(otmp, mask);
 	delay = -objects[otmp->otyp].oc_delay;
 	if(delay){
-		nomul(delay, "wearing clothes");
+		nomul(delay);
 		if(is_boots(otmp)) afternmv = Boots_on;
 		if(is_helmet(otmp)) afternmv = Helmet_on;
 		if(is_gloves(otmp)) afternmv = Gloves_on;
@@ -1805,7 +1805,7 @@ find_ac()
             else */
 		    uac -= (u.ulevel / 3) + 1;
 	}
-	if (Race_if(PM_DOPPELGANGER) && !uarm) uac -= (u.ulevel / 6) + 1;
+	if (Race_if(PM_DOPPELGANGER) && !uarm) uac -= (u.ulevel / 4) + 1;
 	if (Race_if(PM_HUMAN_WEREWOLF) && !uarm) uac -= (u.ulevel / 4) + 1;
 
 	/* Harlow - make sure it doesn't wrap around ;) */
