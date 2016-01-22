@@ -59,7 +59,7 @@ STATIC_DCL NEARDATA const char *odd_skill_names[];
 /* KMH, balance patch -- updated */
 STATIC_OVL NEARDATA const short skill_names_indices[P_NUM_SKILLS] = {
 	0,                DAGGER,         KNIFE,        AXE,
-	PICK_AXE,         SHORT_SWORD,    BROADSWORD,   LONG_SWORD,
+	PICK_AXE,         SHORT_SWORD,    BROADSWORD,   LONG_SWORD,	KATANA,
 	TWO_HANDED_SWORD, SCIMITAR,       PN_SABER,     CLUB,
 	PN_PADDLE,        MACE,           MORNING_STAR,   FLAIL,
 	PN_HAMMER,        QUARTERSTAFF,   PN_POLEARMS,  SPEAR,

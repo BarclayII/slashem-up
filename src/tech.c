@@ -152,7 +152,7 @@ static const struct innate_tech
 	und_tech[] = { {   1, T_TURN_UNDEAD, 1},
 		       {   1, T_PRACTICE, 1},
 		       /* {   5, T_SHIELD_PUMMEL, 1}, */
-		       {  7, T_SHIELD_BLOCK, 1},
+		       {  5, T_SHIELD_BLOCK, 1},
 		       {   0, 0, 0} },
 	val_tech[] = { {   1, T_PRACTICE, 1},
 		       /* {   1, T_SHIELD_SLAM, 1}, */

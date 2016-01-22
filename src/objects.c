@@ -176,7 +176,7 @@ WEAPON("silver long sword", (char *)0,
 	1, 0, 0,  2, 48, 75,  8, 12, 0, S,   P_LONG_SWORD,SILVER, HI_SILVER),
 	/* STEPHEN WHITE'S NEW CODE */
 WEAPON("katana", "samurai sword",
-	0, 0, 0,  4, 40, 80, 10, 12, 1, S,   P_LONG_SWORD, IRON, HI_METAL),
+	0, 0, 0,  4, 40, 80, 10, 12, 1, S,   P_KATANA, IRON, HI_METAL),
 
 /* Two-handed swords */
 WEAPON("two-handed sword", (char *)0,

@@ -24,34 +24,35 @@
 #define P_SHORT_SWORD			5
 #define P_BROAD_SWORD			6
 #define P_LONG_SWORD			7
-#define P_TWO_HANDED_SWORD		8
-#define P_SCIMITAR			9
-#define P_SABER				10
-#define P_CLUB				11	/* Bludgeon with a heavy shaft */
-#define P_PADDLE			12	/* Bludgeon with a flattened shaft */
-#define P_MACE				13	/* Bludgeon with a spiked shaft? */
-#define P_MORNING_STAR			14	/* Spiked ball chained to stick */
-#define P_FLAIL				15	/* Two pieces hinged or chained together */
-#define P_HAMMER			16	/* Bludgeon with a heavy head on the end */
-#define P_QUARTERSTAFF			17	/* Bludgeon with a long shaft */
-#define P_POLEARMS			18
-#define P_SPEAR				19
-#define P_JAVELIN			20
-#define P_TRIDENT			21
-#define P_LANCE				22
-#define P_BOW				23
-#define P_SLING				24
+#define P_KATANA			8
+#define P_TWO_HANDED_SWORD		9
+#define P_SCIMITAR			10
+#define P_SABER				11
+#define P_CLUB				12	/* Bludgeon with a heavy shaft */
+#define P_PADDLE			13	/* Bludgeon with a flattened shaft */
+#define P_MACE				14	/* Bludgeon with a spiked shaft? */
+#define P_MORNING_STAR			15	/* Spiked ball chained to stick */
+#define P_FLAIL				16	/* Two pieces hinged or chained together */
+#define P_HAMMER			17	/* Bludgeon with a heavy head on the end */
+#define P_QUARTERSTAFF			18	/* Bludgeon with a long shaft */
+#define P_POLEARMS			19
+#define P_SPEAR				20
+#define P_JAVELIN			21
+#define P_TRIDENT			22
+#define P_LANCE				23
+#define P_BOW				24
+#define P_SLING				25
 #ifdef FIREARMS
-#define P_FIREARM			25	/* KMH */
+#define P_FIREARM			26	/* KMH */
 #endif
-#define P_CROSSBOW			26
-#define P_DART				27
-#define P_SHURIKEN			28
-#define P_BOOMERANG			29
-#define P_WHIP				30
-#define P_UNICORN_HORN			31	
+#define P_CROSSBOW			27
+#define P_DART				28
+#define P_SHURIKEN			29
+#define P_BOOMERANG			30
+#define P_WHIP				31
+#define P_UNICORN_HORN			32	
 #ifdef LIGHTSABERS
-#define P_LIGHTSABER			32	/* last weapon */
+#define P_LIGHTSABER			33	/* last weapon */
 #endif
 #define P_FIRST_WEAPON			P_DAGGER
 #ifdef LIGHTSABERS
