@@ -79,7 +79,7 @@ STATIC_OVL NEARDATA const char *tech_names[] = {
 	"power surge",
 	"spirit bomb",
 	"draw blood",
-	"sleeping punch",
+	"hypnosis",
 	"paralyze",
 	"shield slam",
 	"shield block",
@@ -177,7 +177,7 @@ static const struct innate_tech
 	dop_tech[] = { {   1, T_LIQUID_LEAP, 1},
 		       {   0, 0, 0} },
 	/* Droven techniques and elven techniques are now seperated... */
-	dro_tech[] = { {   1, T_SLEEP_PUNCH, 1},
+	dro_tech[] = { {   1, T_HYPNOSIS, 1},
 		       {   0, 0, 0} },
 	dwa_tech[] = { {   1, T_RAGE, 1},
 		       {   0, 0, 0} },
@@ -647,16 +647,14 @@ int tech_no;
 		techt_inuse(tech_no) = d(2,4) + techlev(tech_no)/5 + 2;
 		t_timeout = rn1(500,500) / (techlev(tech_no) / 5 + 1);
 		break;
-	    case T_SLEEP_PUNCH:
-		if (Upolyd || uwep || uarmg) {
-		    You("must be %s to use your sleeping punch.",
-				Upolyd ? "in your original form" :
-				"bare-handed");
+	    case T_HYPNOSIS:
+		if (Upolyd) {
+		    You("must be in your original form to perform hypnosis.");
 		    return 0;
 		}
 		Your("hands are surrounded with a dark blue aura.");
 		techt_inuse(tech_no) = rn1(techlev(tech_no),1) * d(5,4);
-		t_timeout = rn1(500,500);
+		t_timeout = rn1(500,1000);
 		break;
             case T_BERSERK:
 		You("fly into a berserk rage!");
@@ -1670,7 +1668,7 @@ tech_timeout()
 			/* Lose berserk status */
 			repeat_hit = 0;
 			break;
-		    case T_SLEEP_PUNCH:
+		    case T_HYPNOSIS:
 			pline_The("dark blue aura around your hands fades.");
 			break;
 		    case T_BERSERK:
