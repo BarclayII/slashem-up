@@ -825,6 +825,10 @@ gcrownu()
 	You_feel("unworthy.");
     }
     update_inventory();
+
+    /* lastly, confer an extra skill slot/credit beyond the
+       up-to-29 you can get from gaining experience levels */
+    add_weapon_skill(1);
     return;
 }
 #endif	/*ELBERETH*/
