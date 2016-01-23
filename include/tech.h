@@ -88,7 +88,7 @@ struct blitz_tab {
 #define T_POWER_SURGE 	39
 #define T_SPIRIT_BOMB 	40
 #define T_DRAW_BLOOD	41
-#define T_SLEEP_PUNCH	42
+#define T_HYPNOSIS	42
 #define T_PARALYZE	43
 #define T_SHIELD_SLAM	44
 #define T_SHIELD_BLOCK	45
