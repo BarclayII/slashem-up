@@ -563,7 +563,7 @@ int	mntmp;
 	 * We can't do the above, since there's no such thing as an
 	 * "experience level of you as a monster" for a polymorphed character.
 	 */
-	mlvl = ((mntmp == u.ulycn) ? u.ulevel : (int)mons[mntmp].mlevel);
+	mlvl = ((mntmp == u.ulycn && Race_if(PM_HUMAN_WEREWOLF)) ? u.ulevel : (int)mons[mntmp].mlevel);
 	if (youmonst.data->mlet == S_DRAGON && mntmp >= PM_GRAY_DRAGON) {
 		u.mhmax = In_endgame(&u.uz) ? (8*mlvl) : (4*mlvl + d(mlvl,4));
 	} else if (is_golem(youmonst.data)) {
