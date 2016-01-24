@@ -1233,7 +1233,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 		if (youdefend && !mindless(youmonst.data)) {
 			pline_The((!multi) ? 
 			"heavy blade strikes you and you give in to pain!" :
-			"heavy blade hurts you even more!"
+			"heavy blade strikes you!"
 			);
 			nomovemsg = "You regain consciousness.";
 			nomul(multi - d(1,5), "knocked out");
@@ -1242,7 +1242,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			int rnd_tmp = d(1,5);
 		    	pline_The(mdef->mcanmove ? 
 				"heavy blade knocks %s unconscious!" :
-				"heavy blade hurts %s even more!", 
+				"heavy blade strikes %s!", 
 				    (canseemon(mdef)) ? mon_nam(mdef) :
 				    "it");
 			mdef->mcanmove = 0;
