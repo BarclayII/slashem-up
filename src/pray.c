@@ -1410,7 +1410,7 @@ dosacrifice()
 			  case 2: 
 			  case 3:
 			       You("are terrified, and unable to move.");
-			       nomul(-3);
+			       nomul(-3, "frightened by %s", a_monnam(dmon));
 			       nomovemsg = 0;
 			       break;                
 			  case 4:
@@ -1848,7 +1848,7 @@ dopray()
 	}
     }
 #endif
-    nomul(-3);
+    nomul(-3, "praying");
     nomovemsg = "You finish your prayer.";
     afternmv = prayer_done;
 
@@ -2019,7 +2019,7 @@ turn_undead()
 		    }
 	    }
 	}
-	nomul(-2);
+	nomul(-2, "turning undead");
 	nomovemsg = 0;
 	return(1);
 }

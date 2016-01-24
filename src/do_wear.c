@@ -691,7 +691,7 @@ Amulet_on()
 				} while (sleeptime < 1 || sleeptime > 500);
 			if (sleeptime > 0) {
 				You("sit down and fall asleep.");
-				nomul(-sleeptime);
+				nomul(-sleeptime, "asleep");
 				u.usleep = 1;
 				nomovemsg = "You wake up from your refreshing nap.";
 		HSleeping = rnd(100);
@@ -1345,7 +1345,7 @@ register struct obj *otmp;
 
 	if(cursed(otmp)) return(0);
 	if(delay) {
-		nomul(delay);
+		nomul(delay, "taking off clothes");
 		if (is_helmet(otmp)) {
 			nomovemsg = "You finish taking off your helmet.";
 			afternmv = Helmet_off;
@@ -1610,7 +1610,7 @@ dowear()
 	setworn(otmp, mask);
 	delay = -objects[otmp->otyp].oc_delay;
 	if(delay){
-		nomul(delay);
+		nomul(delay, "wearing clothes");
 		if(is_boots(otmp)) afternmv = Boots_on;
 		if(is_helmet(otmp)) afternmv = Helmet_on;
 		if(is_gloves(otmp)) afternmv = Gloves_on;

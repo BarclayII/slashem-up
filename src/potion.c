@@ -328,7 +328,7 @@ ghost_from_bottle()
 		Hallucination ? rndmonnam() : (const char *)"ghost");
 	if(flags.verbose)
 	    You("are frightened to death, and unable to move.");
-	nomul(-3);
+	nomul(-3, "frightened by a bottled %s", Hallucination ? rndmonnam() : "ghost");
 	nomovemsg = "You regain your composure.";
 }
 
@@ -669,7 +669,7 @@ peffects(otmp)
 		    else
 			Your("%s are frozen to the %s!",
 			     makeplural(body_part(FOOT)), surface(u.ux, u.uy));
-		    nomul(-(rn1(10, 25 - 12*bcsign(otmp))));
+		    nomul(-(rn1(10, 25 - 12*bcsign(otmp))), "paralyzed by a potion");
 		    nomovemsg = You_can_move_again;
 		    exercise(A_DEX, FALSE);
 		}
@@ -1604,7 +1604,7 @@ register struct obj *obj;
 		kn++;
 		if (!Free_action) {
 		    pline("%s seems to be holding you.", Something);
-		    nomul(-rnd(5));
+		    nomul(-rnd(5), "paralyzed by a potion");
 		    nomovemsg = You_can_move_again;
 		    exercise(A_DEX, FALSE);
 		} else You("stiffen momentarily.");
@@ -1613,7 +1613,7 @@ register struct obj *obj;
 		kn++;
 		if (!Free_action && !Sleep_resistance) {
 		    You_feel("rather tired.");
-		    nomul(-rnd(PSleep_resistance ? 2 : 5));
+		    nomul(-rnd(PSleep_resistance ? 2 : 5), "asleep");
 		    nomovemsg = You_can_move_again;
 		    exercise(A_DEX, FALSE);
 		} else You("yawn.");

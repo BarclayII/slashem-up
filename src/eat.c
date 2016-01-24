@@ -265,7 +265,7 @@ register struct obj *food;
 		if (!food || food->otyp == AMULET_OF_STRANGULATION) {
 			nomovemsg = "You recover your composure.";
 			You("choke over it.");
-			nomul(-2);
+			nomul(-2, "choking");
 			return;
 		}
 		You("stuff yourself and then vomit voluminously.");
@@ -1042,7 +1042,7 @@ register int pm;
                     /* A pile of gold can't ride. */
 		    if (u.usteed) dismount_steed(DISMOUNT_FELL);
 #endif
-		    nomul(-tmp);
+		    nomul(-tmp, "mimicking something");
 		    Sprintf(buf, Hallucination ?
 			"You suddenly dread being peeled and mimic %s again!" :
 			"You now prefer mimicking %s again.",
@@ -1447,7 +1447,7 @@ struct obj *obj;
 			   surface(u.ux,u.uy);
 		pline_The("world spins and %s %s.", what, where);
 		flags.soundok = 0;
-		nomul(-rnd(10));
+		nomul(-rnd(10), "passed out from rotten food");
 		nomovemsg = "You are conscious again.";
 		afternmv = Hear_again;
 		return(1);
@@ -1748,7 +1748,7 @@ struct obj *otmp;
 				pline("Hmm. Nothing happens.");
 			} else {
 				pline("You feel drowsy...");
-				nomul(-rn2(50));
+				nomul(-rn2(50), "asleep");
 				u.usleep = 1;
 				nomovemsg = "You wake up.";
 			}
@@ -2762,7 +2762,7 @@ is_fainted()
 void
 reset_faint()	/* call when a faint must be prematurely terminated */
 {
-	if(is_fainted()) nomul(0);
+	if(is_fainted()) nomul(0, NULL);
 }
 
 #if 0
@@ -2836,7 +2836,7 @@ boolean incr;
 				stop_occupation();
 				You("faint from lack of food.");
 				flags.soundok = 0;
-				nomul(-10+(u.uhunger/10));
+				nomul(-10+(u.uhunger/10), "fainted from hunger");
 				nomovemsg = "You regain consciousness.";
 				afternmv = unfaint;
 				newhs = FAINTED;
@@ -2974,7 +2974,7 @@ void
 vomit()		/* A good idea from David Neves */
 {
 	make_sick(0L, (char *) 0, TRUE, SICK_VOMITABLE);
-	nomul(-2);
+	nomul(-2, "vomiting");
 	nomovemsg = 0;
 }
 

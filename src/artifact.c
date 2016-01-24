@@ -1058,7 +1058,7 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 	    if (Antimagic) {
 		resisted = TRUE;
 	    } else {
-		nomul(-3);
+		nomul(-3, "scared by Magicbane");
 		nomovemsg = "";
 		if (magr && magr == u.ustuck && sticks(youmonst.data)) {
 		    setustuck((struct monst *)0);
@@ -1236,7 +1236,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			"heavy blade hurts you even more!"
 			);
 			nomovemsg = "You regain consciousness.";
-			nomul(multi - d(1,5));
+			nomul(multi - d(1,5), "knocked out");
 			return TRUE;
 		}else if (!youdefend && !mindless(mdef->data)) {
 			int rnd_tmp = d(1,5);
@@ -1741,7 +1741,7 @@ arti_invoke(obj)
 		    /* Ignores free action */
 		    You("are frightened to death.");
 		    nomovemsg = 0;
-		    nomul(-rnd(100));
+		    nomul(-rnd(100), "frightened to death");
 		    exercise(A_DEX, FALSE);
 		    exercise(A_WIS, FALSE);
 		    break;

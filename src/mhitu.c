@@ -425,7 +425,7 @@ mattacku(mtmp)
 		 * invisible, or you might be blind....
 		 */
 	
-	if(!ranged) nomul(0);
+	if(!ranged) nomul(0, NULL);
 	if(mtmp->mhp <= 0 || (Underwater && !is_swimmer(mtmp->data)))
 	    return(0);
 
@@ -1478,7 +1478,7 @@ dopois:
 			if (Blind) You("are frozen!");
 			else You("are frozen by %s!", mon_nam(mtmp));
 			nomovemsg = 0;	/* default: "you can move again" */
-			nomul(-rnd(10));
+			nomul(-rnd(10), "paralyzed by %s", a_monnam(mtmp));
 			exercise(A_DEX, FALSE);
 		    }
 		}
@@ -1492,7 +1492,7 @@ dopois:
 			if (Blind) You("are mercilessly tickled!");
 			else You("are mercilessly tickled by %s!", mon_nam(mtmp));
 			nomovemsg = 0;	/* default: "you can move again" */
-			nomul(-rnd(10));
+			nomul(-rnd(10), "tickled by %s", a_monnam(mtmp));
 			exercise(A_DEX, FALSE);
 			exercise(A_CON, FALSE);
 		    }
@@ -2607,7 +2607,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		    } else if (FSleep_resistance) {
 			pline("You yawn.");
 		    } else {
-			nomul(-rnd(PSleep_resistance ? 5 : 10));
+			nomul(-rnd(PSleep_resistance ? 5 : 10), "asleep");
 			u.usleep = 1;
 			nomovemsg = "You wake up.";
 			if (Blind)  You("are put to sleep!");
@@ -2681,7 +2681,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 	                else {
 	                        You("are frozen by %s!", mon_nam(mtmp));
 				nomovemsg = 0;
-	                        nomul(-rnd(4));
+	                        nomul(-rnd(4), "paralyzed by %s", a_monnam(mtmp));
 	                        exercise(A_DEX, FALSE);
 	                }
 	        }

@@ -876,7 +876,7 @@ struct obj *obj;
 	return;
     }
     You("peer into %s...", the(xname(obj)));
-    nomul(-rnd(10));
+    nomul(-rnd(10), "peering into a crystal orb");
     nomovemsg = "";
     if (obj->spe <= 0)
 	pline_The("vision is unclear.");
@@ -1215,7 +1215,7 @@ register int aflag;
 			if(rnl(7-fund)) continue;
 			cvt_sdoor_to_door(&levl[x][y]);	/* .typ = DOOR */
 			exercise(A_WIS, TRUE);
-			nomul(0);
+			nomul(0, NULL);
 			if (Blind && !aflag)
 			    feel_location(x,y);	/* make sure it shows up */
 			else
@@ -1227,7 +1227,7 @@ register int aflag;
 			levl[x][y].typ = SCORR_OPEN;
 			unblock_point(x,y);	/* vision */
 			exercise(A_WIS, TRUE);
-			nomul(0);
+			nomul(0, NULL);
 			newsym(x,y);
 			You("reveal a secret passage.");
 			display_nhwindow(WIN_MESSAGE, TRUE);
@@ -1274,7 +1274,7 @@ register int aflag;
 			}
 
 			if ((trap = t_at(x,y)) && !trap->tseen && !rnl(8)) {
-			    nomul(0);
+			    nomul(0, NULL);
 
 			    if (trap->ttyp == STATUE_TRAP) {
  				mtmp = activate_statue_trap(trap, x, y, FALSE);

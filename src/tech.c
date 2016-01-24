@@ -1064,7 +1064,7 @@ int tech_no;
 			change_luck(-1);
 		    You("reform!");
 		    teleds(cc.x, cc.y, FALSE);
-		    nomul(-1);
+		    nomul(-1, "reforming");
 		    nomovemsg = "";
 	    	}
 		t_timeout = rn1(1000,500);
@@ -1147,7 +1147,7 @@ int tech_no;
 			}
 		    }
 		}
-		nomul(-2); /* You need to recover */
+		nomul(-2, "raising zombies"); /* You need to recover */
 		nomovemsg = 0;
 		t_timeout = rn1(1000,500);
 		break;

@@ -27,6 +27,8 @@ E char SAVEP[];
 E NEARDATA int bases[MAXOCLASSES];
 
 E NEARDATA int multi;
+E NEARDATA char nomulmsg[BUFSZ];
+E NEARDATA const char *default_nomulmsg;
 #if 0
 E NEARDATA int warnlevel;
 #endif

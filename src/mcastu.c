@@ -262,7 +262,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	    return(0);
 	}
 
-	nomul(0);
+	nomul(0, NULL);
 
 	mtmp->m_en -= spellev * 5; /* Use up the energy now */
 
@@ -801,13 +801,13 @@ int spellnum;
 	    shieldeff(u.ux, u.uy);
 	    if (multi >= 0)
 		You("stiffen briefly.");
-	    nomul(-1);
+	    nomul(-1, "paralyzed by magic");
 	} else {
 	    if (multi >= 0)
 		You("are frozen in place!");
 	    dmg = 4 + (int)mtmp->m_lev;
 	    if (Half_spell_damage) dmg = (dmg + 1) / 2;
-	    nomul(-dmg);
+	    nomul(-dmg, "paralyzed by magic");
 	}
 	nomovemsg = 0;
 	dmg = 0;
@@ -986,7 +986,7 @@ buzzmu(mtmp, mattk)		/* monster uses spell (ranged) */
 	    return(0);
 	}
 	if(lined_up(mtmp) && rn2(3)) {
-	    nomul(0);
+	    nomul(0, NULL);
 	    if(mattk->adtyp && (mattk->adtyp < 11)) { /* no cf unsigned >0 */
 		if(canseemon(mtmp))
 		    pline("%s zaps you with a %s!", Monnam(mtmp),

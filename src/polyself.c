@@ -901,7 +901,7 @@ rehumanize()
 	}
 
 	if (!uarmg) selftouch("No longer petrify-resistant, you");
-	nomul(0);
+	nomul(0, NULL);
 
 	flags.botl = 1;
 	vision_full_recalc = 1;
@@ -1304,7 +1304,7 @@ dogaze()
 			    nomul((u.ulevel > 6 || rn2(4)) ?
 				    -d((int)mtmp->m_lev+1,
 					    (int)mtmp->data->mattk[0].damd)
-				    : -200);
+				    : -200, "frozen by %s", a_monnam(mtmp));
 			    return 1;
 			} else
 			    You("stiffen momentarily under %s gaze.",
@@ -1761,7 +1761,7 @@ polyatwill()      /* Polymorph under conscious control (#youpoly) */
 		u.uen -= EN_DOPP;
 		if (multi >= 0) {
 		    if (occupation) stop_occupation();
-		    else nomul(0);
+		    else nomul(0, NULL);
 		}
 		polyself(FALSE);
 		if (Upolyd) { /* You actually polymorphed */
@@ -1792,7 +1792,7 @@ polyatwill()      /* Polymorph under conscious control (#youpoly) */
 		if (!Upolyd) {
 		    if (multi >= 0) {
 			if (occupation) stop_occupation();
-			else nomul(0);
+			else nomul(0, NULL);
 		    }
 		    you_were();
 		} else {
