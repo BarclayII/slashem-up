@@ -1887,6 +1887,9 @@ arti_invoke(obj)
 	case OBJ_DETECTION:
 		(void)object_detect(obj, 0);
 		break;
+	case TRAP_DETECTION:
+		(void)trap_detect(NULL);
+		break;
 	case CREATE_PORTAL: {
 	    int i, num_ok_dungeons, last_ok_dungeon = 0;
 	    d_level newlev;

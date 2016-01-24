@@ -207,7 +207,7 @@ A("Deluder",               CLOAK_OF_DISPLACEMENT,
 
 A("Perceiver",		   ELVEN_LEATHER_HELM,
 	(SPFX_RESTR|SPFX_ESP|SPFX_HSPDAM), 0, 0,
-	NO_ATTK,      NO_DFNS,        NO_CARY,        0, A_NEUTRAL, NON_PM, PM_ELF, 5000L ),
+	NO_ATTK,      NO_DFNS,        NO_CARY,     TRAP_DETECTION, A_NEUTRAL, NON_PM, PM_ELF, 5000L ),
 
 #ifdef TOURIST
 A("Whisperfeet",               SPEED_BOOTS,

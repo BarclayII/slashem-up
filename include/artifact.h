@@ -75,5 +75,6 @@ struct artifact {
 #define OBJ_DETECTION	(LAST_PROP+16)
 #define SCARING		(LAST_PROP+17)
 #define SMOKE_CLOUD	(LAST_PROP+18)
+#define TRAP_DETECTION	(LAST_PROP+19)
 
 #endif /* ARTIFACT_H */
