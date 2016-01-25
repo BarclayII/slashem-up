@@ -1410,7 +1410,7 @@ dosacrifice()
 			  case 2: 
 			  case 3:
 			       You("are terrified, and unable to move.");
-			       nomul(-3, "frightened by %s", a_monnam(dmon));
+			       nomul(-3, "frightened by %s", a_monnam_or_sth(dmon));
 			       nomovemsg = 0;
 			       break;                
 			  case 4:

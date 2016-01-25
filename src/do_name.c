@@ -562,6 +562,12 @@ rndghostname()
  * a_monnam:	a newt		it	an invisible orc	Fido
  * m_monnam:	newt		xan	orc			Fido
  * y_monnam:	your newt     your xan	your invisible orc	Fido
+ * [BarclayII] added more variants
+ * 		      seen        unseen           detected             named
+ * a_monnam_or_sth: a newt	something 	an invisible orc        Fido
+ * Amonnam_or_sth:  A newt	Something	An invisible orc	Fido
+ * Monnam_or_sth: The newt	Something	The invisible orc	Fido
+ * mon_nam_or_sth: the newt	something	the invisible orc	Fido
  */
 
 /* Bug: if the monster is a priest or shopkeeper, not every one of these
@@ -582,6 +588,7 @@ const char *adjective;
 int suppress;
 /* SUPPRESS_IT, SUPPRESS_INVISIBLE, SUPPRESS_HALLUCINATION, SUPPRESS_SADDLE.
  * EXACT_NAME: combination of all the above
+ * IT_TO_SOMETHING: replace "it" with "something"
  */
 boolean called;
 {
@@ -616,7 +623,11 @@ boolean called;
 
 	/* unseen monsters, etc.  Use "it" */
 	if (do_it) {
-	    Strcpy(buf, "it");
+	    if (suppress & IT_TO_SOMETHING) {
+		Strcpy(buf, "something");
+	    } else {
+		Strcpy(buf, "it");
+	    }
 	    return buf;
 	}
 
@@ -780,6 +791,15 @@ register struct monst *mtmp;
 		mtmp->mnamelth ? SUPPRESS_SADDLE : 0, FALSE));
 }
 
+char *
+mon_nam_or_sth(mtmp)
+register struct monst *mtmp;
+{
+	return(x_monnam(mtmp, ARTICLE_THE, (char *)0,
+		(mtmp->mnamelth ? SUPPRESS_SADDLE : 0) | IT_TO_SOMETHING,
+		FALSE));
+}
+
 /* print the name as if mon_nam() was called, but assume that the player
  * can always see the monster--used for probing and for monsters aggravating
  * the player with a cursed potion of invisibility
@@ -798,6 +818,16 @@ Monnam(mtmp)
 register struct monst *mtmp;
 {
 	register char *bp = mon_nam(mtmp);
+
+	*bp = highc(*bp);
+	return(bp);
+}
+
+char *
+Monnam_or_sth(mtmp)
+register struct monst *mtmp;
+{
+	register char *bp = mon_nam_or_sth(mtmp);
 
 	*bp = highc(*bp);
 	return(bp);
@@ -863,10 +893,29 @@ register struct monst *mtmp;
 }
 
 char *
+a_monnam_or_sth(mtmp)
+register struct monst *mtmp;
+{
+	return x_monnam(mtmp, ARTICLE_A, (char *)0,
+			(mtmp->mnamelth ? SUPPRESS_SADDLE : 0) | IT_TO_SOMETHING,
+			FALSE);
+}
+
+char *
 Amonnam(mtmp)
 register struct monst *mtmp;
 {
 	register char *bp = a_monnam(mtmp);
+
+	*bp = highc(*bp);
+	return(bp);
+}
+
+char *
+Amonnam_or_sth(mtmp)
+register struct monst *mtmp;
+{
+	register char *bp = a_monnam_or_sth(mtmp);
 
 	*bp = highc(*bp);
 	return(bp);

@@ -2567,7 +2567,7 @@ register struct attack *mattk;
 				 */
 				You("digest %s.", mon_nam(mdef));
 				if (Slow_digestion) tmp *= 2;
-				nomul(-tmp, "digesting %s", a_monnam(mdef));
+				nomul(-tmp, "digesting %s", a_monnam_or_sth(mdef));
 				nomovemsg = msgbuf;
 			    } else pline("%s", msgbuf);
 			    if (mdef->data == &mons[PM_GREEN_SLIME]) {
@@ -3270,7 +3270,7 @@ uchar aatyp;
 			else {
 			    You("are frozen by %s gaze!",
 				  s_suffix(mon_nam(mon)));
-			    nomul((ACURR(A_WIS) > 12 || rn2(4)) ? -tmp : -127, "frozen by %s", a_monnam(mon));
+			    nomul((ACURR(A_WIS) > 12 || rn2(4)) ? -tmp : -127, "frozen by %s", a_monnam_or_sth(mon));
 			}
 		    } else {
 			pline("%s cannot defend itself.",
@@ -3282,7 +3282,7 @@ uchar aatyp;
 		} else { /* gelatinous cube */
 		    You("are frozen by %s!", mon_nam(mon));
 	    	    nomovemsg = 0;	/* default: "you can move again" */
-		    nomul(-tmp, "frozen by %s", a_monnam(mon));
+		    nomul(-tmp, "frozen by %s", a_monnam_or_sth(mon));
 		    exercise(A_DEX, FALSE);
 		}
 		break;

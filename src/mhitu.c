@@ -1478,7 +1478,7 @@ dopois:
 			if (Blind) You("are frozen!");
 			else You("are frozen by %s!", mon_nam(mtmp));
 			nomovemsg = 0;	/* default: "you can move again" */
-			nomul(-rnd(10), "paralyzed by %s", a_monnam(mtmp));
+			nomul(-rnd(10), "paralyzed by %s", a_monnam_or_sth(mtmp));
 			exercise(A_DEX, FALSE);
 		    }
 		}
@@ -1492,7 +1492,7 @@ dopois:
 			if (Blind) You("are mercilessly tickled!");
 			else You("are mercilessly tickled by %s!", mon_nam(mtmp));
 			nomovemsg = 0;	/* default: "you can move again" */
-			nomul(-rnd(10), "tickled by %s", a_monnam(mtmp));
+			nomul(-rnd(10), "tickled by %s", a_monnam_or_sth(mtmp));
 			exercise(A_DEX, FALSE);
 			exercise(A_CON, FALSE);
 		    }
@@ -2681,7 +2681,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 	                else {
 	                        You("are frozen by %s!", mon_nam(mtmp));
 				nomovemsg = 0;
-	                        nomul(-rnd(4), "paralyzed by %s", a_monnam(mtmp));
+	                        nomul(-rnd(4), "paralyzed by %s", a_monnam_or_sth(mtmp));
 	                        exercise(A_DEX, FALSE);
 	                }
 	        }

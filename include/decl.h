@@ -386,6 +386,7 @@ E const char *materialnm[];
 #define SUPPRESS_HALLUCINATION  0x04
 #define SUPPRESS_SADDLE		0x08
 #define EXACT_NAME		0x0F
+#define IT_TO_SOMETHING		0x10
 
 
 /*** Vision ***/

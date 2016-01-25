@@ -427,7 +427,7 @@ register int roomno;
 		    set_malign(mtmp);
 		    if(flags.verbose)
 			You("are frightened to death, and unable to move.");
-		    nomul(-3, "frightened by %s in a temple", a_monnam(mtmp));
+		    nomul(-3, "frightened by %s in a temple", a_monnam_or_sth(mtmp));
 		    nomovemsg = "You regain your composure.";
 	       }
 	   }
