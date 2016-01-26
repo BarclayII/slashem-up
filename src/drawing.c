@@ -863,6 +863,7 @@ boolean is_rlevel;
 	    showsyms[S_vodoor]  = 0xce;
 	    showsyms[S_hodoor]  = 0xce;
 	    showsyms[S_room]    = 0xfa; /* centered dot */
+	    showsyms[S_darkroom]= 0x20;	/* space */
 	    showsyms[S_corr]    = 0xb1;
 	    showsyms[S_litcorr] = 0xb2;
 	    showsyms[S_upstair] = 0xf0; /* Greek Xi */
