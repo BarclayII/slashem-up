@@ -337,7 +337,7 @@ aligntyp atyp;
 	int tryct, pm;
 
 	for (tryct = 0; tryct < 20; tryct++) {
-	    pm = rn1(PM_DEMOGORGON + 1 - PM_ORCUS, PM_ORCUS);
+	    pm = rn1(PM_LUCIFER + 1 - PM_ORCUS, PM_ORCUS);
 	    if (!(mvitals[pm].mvflags & G_GONE) &&
 		    (atyp == A_NONE || sgn(mons[pm].maligntyp) == sgn(atyp)))
 		return(pm);
