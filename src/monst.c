@@ -4409,6 +4409,7 @@ struct permonst _mons2[] = {
 	M2_NOPOLY|M2_PNAME|M2_HOSTILE|M2_STRONG|M2_MALE|M2_PRINCE|
 	  M2_DEMON|M2_STALK|M2_NASTY,
 	M3_WAITFORU|M3_WANTSAMUL|M3_INFRAVISIBLE|M3_INFRAVISION, HI_LORD),
+   /* Satan == The Wizard of Yendor */
 
    /* Cthulhu MUST be placed after Demogorgon so he will not be summoned as a 
       random demon lord or demon prince.  See minion.c */
