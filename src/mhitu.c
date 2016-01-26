@@ -1735,6 +1735,11 @@ dopois:
 			return 3;
 		break;
 #endif
+	    case AD_GRAB:
+		buf[0] = '\0';
+		if (steal(mtmp, buf) == -1)
+			return 2;
+		break;
 	    case AD_SAMU:
 		hitmsg(mtmp, mattk);
 		/* when the Wiz hits, 1/20 steals the amulet */

@@ -1095,6 +1095,7 @@ mdamagem(magr, mdef, mattk)
 		goto physical;
 	    case AD_WERE:
 	    case AD_HEAL:
+	    case AD_GRAB:
 	    case AD_PHYS:
 physical:
 		if (mattk->aatyp == AT_WEAP && otmp) {
