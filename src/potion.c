@@ -21,7 +21,6 @@ static NEARDATA const char beverages[] = { POTION_CLASS, 0 };
 STATIC_DCL long FDECL(itimeout, (long));
 STATIC_DCL long FDECL(itimeout_incr, (long,int));
 STATIC_DCL void NDECL(ghost_from_bottle);
-STATIC_DCL short FDECL(mixtype, (struct obj *,struct obj *));
 
 STATIC_DCL void FDECL(healup_mon, (struct monst *, int,int,BOOLEAN_P,BOOLEAN_P));
 	/* For healing monsters - analogous to healup for players */
@@ -1708,14 +1707,15 @@ alchemy_init()
 				POT_WATER-POT_BOOZE, POT_BOOZE);
 			}while(!strcmp("smoky", OBJ_DESCR(objects[objtyp]))
 				|| !strcmp("milky", OBJ_DESCR(objects[objtyp]))
-				);
+				|| objtyp == p1 || objtyp == p2);
 			alchemy_table[i][j] = objtyp;
 		    }
 }
 
-STATIC_OVL short
-mixtype(o1, o2)
+short
+mixtype(o1, o2, force_success)
 register struct obj *o1, *o2;
+boolean force_success;
 /* returns the potion type when o1 is dipped in o2 */
 {
 	/* cut down on the number of cases below */
@@ -1819,11 +1819,12 @@ register struct obj *o1, *o2;
 			&& ((uarmc && uarmc->otyp == LAB_COAT) ||
 				/* let's assume healers understand alchemy 
 				 * quite well */
-				Role_if(PM_HEALER)))
+				Role_if(PM_HEALER) ||
+				force_success || !rn2(2)))
 		return alchemy_table[o1->otyp - POT_BOOZE][o2->otyp - POT_BOOZE];
 	/* MRKR: Extra alchemical effects. */
 
-	if (o2->otyp == POT_ACID && o1->oclass == GEM_CLASS) {
+	if ((force_success || o2->otyp == POT_ACID) && o1->oclass == GEM_CLASS) {
 	  const char *potion_descr;
 
 	  /* Note: you can't create smoky, milky or clear potions */
@@ -2946,7 +2947,7 @@ dodip()
 		 * potion of amnesia always produces potion of amnesia */
 		if (obj->otyp == POT_AMNESIA || potion->otyp == POT_AMNESIA)
 			obj->otyp = POT_AMNESIA;
-		else if ((mixture = mixtype(obj, potion)) != 0) {
+		else if ((mixture = mixtype(obj, potion, FALSE)) != 0) {
 			obj->otyp = mixture;
 		} else {
 		    switch (obj->odiluted ? 1 : 
@@ -3160,7 +3161,7 @@ dodip()
 
 	potion->in_use = FALSE;         /* didn't go poof */
 	if ((obj->otyp == UNICORN_HORN || obj->oclass == GEM_CLASS) &&
-	    (mixture = mixtype(obj, potion)) != 0) {
+	    (mixture = mixtype(obj, potion, FALSE)) != 0) {
 		char oldbuf[BUFSZ], newbuf[BUFSZ];
 		short old_otyp = potion->otyp;
 		boolean old_dknown = FALSE;
