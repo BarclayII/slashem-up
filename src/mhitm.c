@@ -2005,7 +2005,7 @@ int mdead;
 	int i, tmp;
 
 #ifdef ENHANCED_MAGE_ARTI
-	if (m_carrying_arti(mdef, ART_STORM_WHISTLE)) {
+	if (m_carrying_arti(mdef, ART_WINTERTIDE)) {
 		tmp = d(1, 10);
 		if (canseemon(magr)){
 			pline("%s is suddenly covered in frost!", Monnam(magr));
@@ -2028,7 +2028,7 @@ int mdead;
 				return (mdead | mhit | MM_AGR_DIED);
 		}
 	}
-	if (m_carrying_arti(mdef, ART_CANDLE_OF_ETERNAL_FLAME)) {
+	if (m_carrying_arti(mdef, ART_SUMMERTIDE)) {
 		tmp = d(1, 10);
 		if (canseemon(magr)){
 			pline("%s is suddenly on fire!", Monnam(magr));

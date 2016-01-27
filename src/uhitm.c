@@ -3093,7 +3093,7 @@ uchar aatyp;
 
 #ifdef ENHANCED_MAGE_ARTI
 	/* If carrying the Storm Whistle, deal passive cold damage */
-	if (m_carrying_arti(mon, ART_STORM_WHISTLE)) {
+	if (m_carrying_arti(mon, ART_WINTERTIDE)) {
 		tmp = d(1, 10);
 		if (monnear(mon, u.ux, u.uy)) {
 			pline("Magic frost suddenly surrounds you!");
@@ -3107,7 +3107,7 @@ uchar aatyp;
 		}
 	}
 	/* If carrying the Candle of Eternal Flame, deal passive fire damage */
-	if (m_carrying_arti(mon, ART_CANDLE_OF_ETERNAL_FLAME)) {
+	if (m_carrying_arti(mon, ART_SUMMERTIDE)) {
 		tmp = d(1, 10);
 		if (monnear(mon, u.ux, u.uy)) {
 			pline("Magic fire suddenly surrounds you!");

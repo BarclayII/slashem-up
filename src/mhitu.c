@@ -3155,7 +3155,7 @@ register struct attack *mattk;
 	int i, tmp;
 
 #ifdef ENHANCED_MAGE_ARTI
-	if (carrying_arti(ART_STORM_WHISTLE)) {
+	if (carrying_arti(ART_WINTERTIDE)) {
 		tmp = d(1, 10);
 		pline("%s is suddenly covered in frost!", Monnam(mtmp));
 		if (resists_cold(mtmp)) {
@@ -3174,7 +3174,7 @@ register struct attack *mattk;
 			return 2;
 		}		
 	}
-	if (carrying_arti(ART_CANDLE_OF_ETERNAL_FLAME)) {
+	if (carrying_arti(ART_SUMMERTIDE)) {
 		tmp = d(1, 10);
 		pline("%s is suddenly on fire!", Monnam(mtmp));
 		tmp += destroy_mitem(mtmp, SCROLL_CLASS, AD_FIRE);

@@ -201,7 +201,7 @@ STAIR:(45,10),up
 DRAWBRIDGE:(17,02),south,closed
 DRAWBRIDGE:(17,14),north,closed
 # Objects
-OBJECT:'(',"magic whistle",(17,08),blessed,0,"The Storm Whistle"
+OBJECT:'(',"magic whistle",(17,08),blessed,0,"Wintertide"
 OBJECT:random,random,random
 OBJECT:random,random,random
 OBJECT:random,random,random

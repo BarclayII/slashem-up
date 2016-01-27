@@ -241,7 +241,7 @@ A("Deep Freeze",                ATHAME,
 #endif
 
 
-A("Serpent's Tongue",            DAGGER,
+A("Serpent's Tongue",            KNIFE,
 	SPFX_RESTR, 0, 0,
         PHYS(2,0),      NO_DFNS,        NO_CARY,        0, A_CHAOTIC, PM_NECROMANCER, NON_PM, 400L ),
 	/* See artifact.c for special poison damage */
@@ -380,14 +380,18 @@ A("The Palantir of Westernesse",	CRYSTAL_BALL,
 #endif
 
 /* STEPHEN WHITE'S NEW CODE */
-/* Passive attack code in mhitm.c, mhitu.c, uhitm.c */
+/* [BarclayII]
+ * Passive attack code in mhitm.c, mhitu.c, uhitm.c
+ * Renamed the quest artifacts to Summertide and Wintertide as they sounds
+ * cool.  The names come from ToME, although the base item is different.
+ */
 #ifdef ENHANCED_MAGE_ARTI
-A("The Candle of Eternal Flame",        MAGIC_CANDLE,
+A("Summertide",        MAGIC_CANDLE,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), (SPFX_TCTRL|SPFX_REGEN), 0,
 	NO_ATTK,        NO_DFNS,        CARY(AD_COLD),
 	0,         A_NEUTRAL, PM_FLAME_MAGE, NON_PM, 50000L ),
 #else
-A("The Candle of Eternal Flame",        MAGIC_CANDLE,
+A("Summertide",        MAGIC_CANDLE,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), (SPFX_WARN|SPFX_TCTRL), 0,
 	NO_ATTK,        NO_DFNS,        CARY(AD_COLD),
 	SUMMON_FIRE_ELEMENTAL,         A_NEUTRAL, PM_FLAME_MAGE, NON_PM, 50000L ),
@@ -399,12 +403,12 @@ A("The Staff of Aesculapius",	QUARTERSTAFF,
 	HEALING,	A_NEUTRAL, PM_HEALER, NON_PM, 5000L ),
 /* STEPHEN WHITE'S NEW CODE */
 #ifdef ENHANCED_MAGE_ARTI
-A("The Storm Whistle",          MAGIC_WHISTLE,
+A("Wintertide",          MAGIC_WHISTLE,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), (SPFX_TCTRL|SPFX_EREGEN), 0,
 	NO_ATTK,        NO_DFNS,        CARY(AD_FIRE),
 	0,         A_LAWFUL, PM_ICE_MAGE, NON_PM, 4000L ),
 #else
-A("The Storm Whistle",          MAGIC_WHISTLE,
+A("Wintertide",          MAGIC_WHISTLE,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), (SPFX_WARN|SPFX_TCTRL), 0,
 	NO_ATTK,        NO_DFNS,        CARY(AD_FIRE),
 	SUMMON_WATER_ELEMENTAL,         A_LAWFUL, PM_ICE_MAGE, NON_PM, 4000L ),

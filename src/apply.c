@@ -1199,7 +1199,7 @@ register struct obj *otmp;
 {
 	register boolean candle = Is_candle(otmp);
 
-	if (((candle && otmp->oartifact != ART_CANDLE_OF_ETERNAL_FLAME)
+	if (((candle && otmp->oartifact != ART_SUMMERTIDE)
 		|| otmp->otyp == CANDELABRUM_OF_INVOCATION) &&
 		otmp->lamplit) {
 	    char buf[BUFSZ];

@@ -2103,7 +2103,7 @@ artifact_light(obj)
 {
     return get_artifact(obj) && (obj->oartifact == ART_SUNSWORD ||
 	    obj->oartifact == ART_HOLY_SPEAR_OF_LIGHT ||
-	    obj->oartifact == ART_CANDLE_OF_ETERNAL_FLAME);
+	    obj->oartifact == ART_SUMMERTIDE);
 }
 
 /* KMH -- Talking artifacts are finally implemented */

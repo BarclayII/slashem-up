@@ -199,7 +199,7 @@ NON_DIGGABLE:(00,00,34,16)
 DRAWBRIDGE:(17,02),south,closed
 DRAWBRIDGE:(17,14),north,closed
 # Objects
-OBJECT:'(',"magic candle",(17,08),blessed,0,"The Candle of Eternal Flame"
+OBJECT:'(',"magic candle",(17,08),blessed,0,"Summertide"
 OBJECT:random,random,random
 OBJECT:random,random,random
 OBJECT:random,random,random
