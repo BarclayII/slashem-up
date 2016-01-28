@@ -5721,6 +5721,57 @@ shk_brew(slang, shkp)
 	}
 }
 
+static NEARDATA const char food_class[] = { FOOD_CLASS, 0 };
+
+static void
+shk_food_examination(slang, shkp)
+	char *slang;
+	struct monst *shkp;
+{
+	struct obj *obj;
+	int mnum;
+	char *buf[BUFSZ];
+
+	if (!(obj = getobj(food_class, "examine"))) return;
+
+	if (obj->otyp != CORPSE) {
+		verbalize("We only do corpse examination here.");
+		return;
+	}
+
+	mnum = otmp->corpsenm;
+	if (mnum >= NUMMONS || mnum < 0) {
+		/* NOTREACHED */
+		verbalize("What did you gave me just now?");
+		return;
+	}
+
+	Sprintf(buf, "This kind of corpse");
+
+	charge = 50;
+	shk_smooth_charge(&charge, 30, 80);
+
+	if (!shk_offer_price(slang, charge, shkp)) return;
+
+
+	if (mnum == PM_LIZARD || mnum == PM_LICHEN) {
+		Sprintf(eos(buf), " never rots");
+	} else {
+		long age = peek_at_iced_corpse_age(obj);
+		if ((monstermoves - age) / 10 > 5) {
+			Sprintf(buf, "This corpse is probably tainted!");
+			if (youmonst.data == &mons[PM_GHOUL] ||
+			    youmonst.data == &mons[PM_GHAST])
+				Sprintf(eos(buf), " Maybe you like it, though.");
+			verbalize(buf);
+			return;
+		}
+	}
+
+	if (vegan(&mons[mnum]))
+		Sprintf("is vegan");
+}
+
 
 /*
 ** FUNCTION shk_obj_match
