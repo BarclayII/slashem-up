@@ -1372,12 +1372,13 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 		pline("There is a flurry of blows!");
 		int time = 1;
 		/* I suppose this could theoretically continue forever... */
-		while (dieroll < 5) {
+		do {
 		   *dmgptr += rnd(8) + 1 + otmp->spe;
 		   time++;
 		   dieroll = rn2(11);
-		}
+		} while (dieroll < 5);
 		if (time == 1)
+			/* NOTREACHED */
 			pline_The("rapier strikes %s!", hittee);
 		else if (time == 2)
 			pline_The("rapier strikes %s twice!", hittee);
