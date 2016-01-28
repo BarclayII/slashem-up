@@ -1384,6 +1384,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			pline_The("rapier strikes %s twice!", hittee);
 		else
 			pline_The("rapier strikes %s %d times in a row!", hittee, time);
+		return TRUE;
 	   }
 #endif
 #if 0
