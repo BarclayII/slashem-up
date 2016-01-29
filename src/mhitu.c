@@ -1911,17 +1911,17 @@ dopois:
 		dmg = 0;
 		break;
 	    case AD_DETH:
-		pline("%s reaches out with its deadly touch.", Monnam(mtmp));
+		pline("%s reaches out with its deadly attack.", Monnam(mtmp));
 		if (is_undead(youmonst.data)) {
 		    /* Still does normal damage */
-		    pline("Was that the touch of death?");
+		    pline("Was that a death magic?");
 		    break;
 		}
 		switch (rn2(20)) {
 		case 19: case 18: case 17:
 		    if (!Antimagic) {
 			killer_format = KILLED_BY_AN;
-			killer = "touch of death";
+			killer = "death magic";
 			done(DIED);
 			dmg = 0;
 			break;
