@@ -5943,7 +5943,7 @@ shk_food_examination(slang, shkp)
 	verbalize(buf);
 	if (obj->otyp == TIN &&
 	    (acidic(&mons[mnum]) || poisonous(&mons[mnum])))
-		verbalize("The tin is safe to consume, though.");
+		verbalize("The tin is safe to consume, however.");
 }
 
 
