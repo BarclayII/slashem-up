@@ -1559,7 +1559,8 @@ physical:
 	    	} else {
 	    	    mon_drain_en(mdef, 
 				((mdef->m_lev > 0) ? (rnd(mdef->m_lev)) : 0) + 1);
-	    	}	    
+	    	}
+		break;	
 	    case AD_BLND:
 		if (nohit) break;                
 	       
