@@ -5934,7 +5934,7 @@ shk_food_examination(slang, shkp)
 	} else {
 		for (i = 0; i < ndescr; ++i) {
 			Sprintf(eos(buf), "%s%s%s",
-			    i == ndescr - 1 ? "and " : "",
+			    (i == ndescr - 1 && i != 0) ? "and " : "",
 			    descr[i],
 			    i == ndescr - 1 ? "." : ", ");
 		}
