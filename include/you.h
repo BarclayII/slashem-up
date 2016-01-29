@@ -157,6 +157,10 @@ extern struct Role urole;
 			   Role_if(PM_WIZARD) || \
 			   Role_if(PM_FLAME_MAGE) || \
 			   Role_if(PM_ICE_MAGE)))
+/* also used to see if you're allowed to eat cats and dogs */
+#define CANNIBAL_ALLOWED() (Role_if(PM_CAVEMAN) || Race_if(PM_ORC) || \
+			    Race_if(PM_HUMAN_WEREWOLF) || Race_if(PM_VAMPIRE))
+
 
 /* used during initialization for race, gender, and alignment
    as well as for character class */

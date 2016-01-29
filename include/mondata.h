@@ -240,6 +240,9 @@
 				   (ptr) == &mons[PM_KILLER_TRIPE_RATION]) && \
 				   (!is_undead(ptr) || is_vampire(ptr)))
 
+#define corpse_never_rots(ptr)	((ptr) == &mons[PM_LIZARD] || \
+				 (ptr) == &mons[PM_LICHEN])
+
 #define befriend_with_obj(ptr, obj) ((obj)->oclass == FOOD_CLASS && ( \
 		is_domestic(ptr) || \
 		/* [Tom] Dorothy wants more pets... */ \
