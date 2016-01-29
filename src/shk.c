@@ -5939,7 +5939,11 @@ shk_food_examination(slang, shkp)
 			    i == ndescr - 1 ? "." : ", ");
 		}
 	}
+
 	verbalize(buf);
+	if (obj->otyp == TIN &&
+	    (acidic(&mons[mnum]) || poisonous(&mons[mnum])))
+		verbalize("The tin is safe to consume, though.");
 }
 
 
