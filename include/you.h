@@ -151,12 +151,15 @@ extern struct Role urole;
 #define Role_if(X)	(urole.malenum == (X))
 #define Role_switch	(urole.malenum)
 
-
-#define NECRO_PERFORMER	 ((u.ualign.type == A_CHAOTIC) && \
+/* Vampiric Mages */
+#define NECRO_PERFORMER() ((u.ualign.type == A_CHAOTIC) && \
 			  (Role_if(PM_NECROMANCER) || \
 			   Role_if(PM_WIZARD) || \
-			   Role_if(PM_FLAME_MAGE) || \
 			   Role_if(PM_ICE_MAGE)))
+/* also used to see if you're allowed to eat cats and dogs */
+#define CANNIBAL_ALLOWED() (Role_if(PM_CAVEMAN) || Race_if(PM_ORC) || \
+			    Race_if(PM_HUMAN_WEREWOLF) || Race_if(PM_VAMPIRE))
+
 
 /* used during initialization for race, gender, and alignment
    as well as for character class */
