@@ -62,6 +62,9 @@ Run the executable and you'll be fine.
 
 Adjust the console font and font size to have better experience.
 
+Legacy console recommended if you want to use TrueType font, as sometimes symbols
+will not be rendered correctly.
+
 ## Linux users
 
 I'll fill this section if I have time.  But since you're a Linux
