@@ -1171,6 +1171,8 @@ int tech_no;
 					eaten_stat(mons[corpsenm].cnutrit, obj);
 			    obj->corpsenm = corpsenm;
 			    mtmp = revive(obj);
+			    if (corpsenm == PM_TROLL_MUMMY)
+				mtmp->mwont_revive = 0;
                             goto try_tame;
 			}
 		    }
