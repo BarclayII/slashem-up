@@ -58,10 +58,6 @@ char msgbuf[BUFSZ];
 #define FAINTED		5
 #define STARVED		6
 
-/* also used to see if you're allowed to eat cats and dogs */
-#define CANNIBAL_ALLOWED() (Role_if(PM_CAVEMAN) || Race_if(PM_ORC) || \
-			    Race_if(PM_HUMAN_WEREWOLF) || Race_if(PM_VAMPIRE))
-
 #ifndef OVLB
 
 STATIC_DCL NEARDATA const char comestibles[];
@@ -1238,8 +1234,7 @@ opentin()		/* called during each move whilst opening a tin */
 	    r = tin.tin->cursed ? ROTTEN_TIN :	/* always rotten if cursed */
 		    (tin.tin->spe == -1) ? HOMEMADE_TIN :  /* player made it */
 			rn2(TTSZ-1);		/* else take your pick */
-	    if (r == ROTTEN_TIN && (tin.tin->corpsenm == PM_LIZARD ||
-			tin.tin->corpsenm == PM_LICHEN))
+	    if (r == ROTTEN_TIN && corpse_never_rots(&mons[tin.tin->corpsenm]))
 		r = HOMEMADE_TIN;		/* lizards don't rot */
 	    else if (tin.tin->spe == -1 && !tin.tin->blessed && !rn2(7))
 		r = ROTTEN_TIN;			/* some homemade tins go bad */
@@ -1479,7 +1474,7 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 	if (!vegan(&mons[mnum])) u.uconduct.unvegan++;
 	if (!vegetarian(&mons[mnum])) violated_vegetarian();
 
-	if (mnum != PM_LIZARD && mnum != PM_LICHEN) {
+	if (!corpse_never_rots(&mons[mnum])) {
 		long age = peek_at_iced_corpse_age(otmp);
 
 		rotted = (monstermoves - age)/(10L + rn2(20));
@@ -1593,7 +1588,7 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 		return 3;
 	}
 
-	if (!tp && mnum != PM_LIZARD && mnum != PM_LICHEN &&
+	if (!tp && !corpse_never_rots(&mons[mnum]) &&
 			(otmp->orotten || !rn2(7))) {
 	    if (rottenfood(otmp)) {
 		otmp->orotten = TRUE;
@@ -2232,7 +2227,7 @@ struct obj *otmp;
 		    stoneorslime = (!Unchanging && !flaming(youmonst.data) &&
 			youmonst.data != &mons[PM_GREEN_SLIME]);
 
-		if (cadaver && mnum != PM_LIZARD && mnum != PM_LICHEN) {
+		if (cadaver && !corpse_never_rots(&mons[mnum])) {
 			long age = peek_at_iced_corpse_age(otmp);
 			/* worst case rather than random
 			   in this calculation to force prompt */

@@ -84,6 +84,7 @@ STATIC_OVL NEARDATA const char *tech_names[] = {
 	"shield slam",
 	"shield block",
 	"shield pummel",
+	"call undead",
 };
 
 static const struct innate_tech 
@@ -132,6 +133,7 @@ static const struct innate_tech
 		       {   1, T_RAISE_ZOMBIES, 1},
 		       {  10, T_POWER_SURGE, 1},
 		       {  15, T_SIGIL_TEMPEST, 1},
+		       {  20, T_CALL_UNDEAD, 1},
 		       {   0, 0, 0} },
 	pri_tech[] = { {   1, T_TURN_UNDEAD, 1},
 		       {   1, T_BLESSING, 1},
@@ -1150,6 +1152,47 @@ int tech_no;
 		nomul(-2, "raising zombies"); /* You need to recover */
 		nomovemsg = 0;
 		t_timeout = rn1(1000,500);
+		break;
+	    case T_CALL_UNDEAD:
+		You("call the undead from the grave...");
+		for(i = -1; i <= 1; i++) for(j = -1; j <= 1; j++) {
+		    int corpsenm;
+                    mtmp = (struct monst *)0;
+
+		    if (!isok(u.ux+i, u.uy+j)) continue;
+		    for (obj = level.objects[u.ux+i][u.uy+j]; obj; obj = otmp) {
+			otmp = obj->nexthere;
+
+			if (obj->otyp != CORPSE) continue;
+			corpsenm = raise_undead(obj);
+			if (corpsenm != -1 && !cant_create(&corpsenm, TRUE)) {
+			    if (obj->oeaten)
+				obj->oeaten =
+					eaten_stat(mons[corpsenm].cnutrit, obj);
+			    obj->corpsenm = corpsenm;
+			    mtmp = revive(obj);
+			    if (corpsenm == PM_TROLL_MUMMY)
+				mtmp->mwont_revive = 0;
+                            goto try_tame;
+			}
+		    }
+                    if (!rn2(32))
+                        mtmp = makemon(rn2(3) ? &mons[PM_SHADOW] :
+					&mons[PM_SHADE],
+                                       u.ux, u.uy, NO_MM_FLAGS);
+try_tame:	    if (mtmp)
+			if (Role_if(PM_NECROMANCER)) {
+			    if (!resist(mtmp, SPBOOK_CLASS, 0, TELL)) {
+				mtmp = tamedog(mtmp, (struct obj *) 0);
+				if (mtmp) You("dominate %s!", mon_nam(mtmp));
+			    }
+			} 
+			else
+			    setmangry(mtmp);
+		}
+		nomul(-2, "calling undead");
+		nomovemsg = 0;
+		t_timeout = rn1(1000, 500);
 		break;
             case T_REVIVE: 
 		if (u.uswallow) {

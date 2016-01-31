@@ -42,7 +42,7 @@ int
 raise_undead(obj)
 struct obj *obj;
 {
-	if (!NECRO_PERFORMER)
+	if (!NECRO_PERFORMER())
 		return NON_PM;
 	int corpsenm, i, mlet;
 	struct monst *mnew = (struct monst *)0;

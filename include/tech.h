@@ -93,8 +93,9 @@ struct blitz_tab {
 #define T_SHIELD_SLAM	44
 #define T_SHIELD_BLOCK	45
 #define T_SHIELD_PUMMEL 46
+#define T_CALL_UNDEAD	47
 
-#define MAXTECH 46
+#define MAXTECH 47
 
 
 #endif /* TECH_H */
