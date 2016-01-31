@@ -151,8 +151,8 @@ extern struct Role urole;
 #define Role_if(X)	(urole.malenum == (X))
 #define Role_switch	(urole.malenum)
 
-/* Vampiric Mages */
-#define NECRO_PERFORMER() ((u.ualign.type == A_CHAOTIC) && \
+/* Vampiric Mages and their brotherhood */
+#define NECRO_PERFORMER() ((u.ualignbase[A_ORIGINAL] == A_CHAOTIC) && \
 			  (Role_if(PM_NECROMANCER) || \
 			   Role_if(PM_WIZARD) || \
 			   Role_if(PM_ICE_MAGE)))
