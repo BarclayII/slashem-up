@@ -1070,7 +1070,7 @@ struct monst *mtmp;
 	boolean ranged_stuff = lined_up(mtmp);
 	boolean reflection_skip = (Reflecting && rn2(2));
 	boolean death_immune = (FDisint_resistance || nonliving(youmonst.data) ||
-				is_demon(youmonst.data));
+				is_demon(youmonst.data) || Antimagic);
 	boolean death_skip = (reflection_skip || (death_immune && rn2(2)));
 	boolean sleep_skip = (reflection_skip || (FSleep_resistance && rn2(2)));
 	boolean fire_skip  = (reflection_skip || (FFire_resistance && rn2(2)));
