@@ -957,6 +957,8 @@ mdamagem(magr, mdef, mattk)
 	int armpro, num, tmp = d((int)mattk->damn, (int)mattk->damd);
 	boolean cancelled;
 	int canhitmon, objenchant;
+	int typ;
+
 	boolean pick_hit_stone = (made_of_rock(mdef->data) && 
 			          otmp && is_pick(otmp));
         boolean nohit = FALSE;
@@ -1032,7 +1034,9 @@ mdamagem(magr, mdef, mattk)
 	armpro = magic_negation(mdef);
 	cancelled = magr->mcan || !(rn2(10) >= 3 * armpro);
 
-	switch(mattk->adtyp) {
+	typ = (mattk->adtyp == AD_RBRE ? rnd(AD_ACID) : mattk->adtyp);
+
+	switch(typ) {
 	    case AD_DGST:
 		if (nohit) nohit = FALSE;                
 		/* eating a Rider or its corpse is fatal */

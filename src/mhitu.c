@@ -2419,7 +2419,8 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 	register struct monst *mtmp;
 	register struct attack  *mattk;
 {
-	switch(mattk->adtyp) {
+	int typ = (mattk->adtyp == AD_RBRE ? rnd(AD_ACID) : mattk->adtyp);
+	switch(typ) {
 	    case AD_STON:
 		if (mtmp->mcan || !mtmp->mcansee) {
 		    if (!canseemon(mtmp)) break;	/* silently */
@@ -2553,7 +2554,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		    pline("%s attacks you with a freezing gaze!", Monnam(mtmp));
 		    stop_occupation();
 		    if (FCold_resistance) {
-			pline_The("fire doesn't feel hot!");
+			pline_The("frost doesn't feel cold!");
 			dmg = 0;
 		    } else if (PCold_resistance) {
 			    shieldeff(u.ux, u.uy);
@@ -2562,6 +2563,107 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		    if ((int) mtmp->m_lev > rn2(20))
 			destroy_item(POTION_CLASS, AD_FIRE);
 		    if (dmg) mdamageu(mtmp, dmg);
+		}
+		break;
+	    case AD_ELEC:
+		if (!mtmp->mcan && canseemon(mtmp) &&
+			couldsee(mtmp->mx, mtmp->my) &&
+			mtmp->mcansee && !mtmp->mspec_used && rn2(5)) {
+		    int dmg;
+		    if (mattk->damn && mattk->damd)
+		        dmg = d((int)mattk->damn,(int)mattk->damd);
+		    else
+			dmg = d(2,6);
+
+		    pline("%s attacks you with a shocking gaze!", Monnam(mtmp));
+		    stop_occupation();
+		    if (FShock_resistance) {
+			pline_The("gaze doesn't shock you!");
+			dmg = 0;
+		    } else if (PShock_resistance) {
+			    shieldeff(u.ux, u.uy);
+			    dmg = (dmg + 1) / 2;
+		    }
+		    if ((int) mtmp->m_lev > rn2(20))
+			destroy_item(RING_CLASS, AD_ELEC);
+		    if ((int) mtmp->m_lev > rn2(20))
+			destroy_item(WAND_CLASS, AD_ELEC);
+		    if (dmg) mdamageu(mtmp, dmg);
+		}
+		break;
+	    case AD_ACID:
+		if (!mtmp->mcan && canseemon(mtmp) &&
+			couldsee(mtmp->mx, mtmp->my) &&
+			mtmp->mcansee && !mtmp->mspec_used && rn2(5)) {
+		    int dmg;
+		    if (mattk->damn && mattk->damd)
+		        dmg = d((int)mattk->damn,(int)mattk->damd);
+		    else
+			dmg = d(2,6);
+
+		    pline("%s gazes you and you're covered in acid!", Monnam(mtmp));
+		    stop_occupation();
+		    if (Acid_resistance) {
+			shieldeff(u.ux, u.uy);
+			pline_The("acid seems harmless.");
+			dmg = 0;
+		    } else {
+			exercise(A_STR, FALSE);
+			if (Stoned)
+			    fix_petrification();
+			if (!rn2(3)) erode_armor(&youmonst, TRUE);
+		    }
+		    if (dmg) mdamageu(mtmp, dmg);
+		}
+		break;
+	    case AD_MAGM:
+		if (!mtmp->mcan && canseemon(mtmp) &&
+			couldsee(mtmp->mx, mtmp->my) &&
+			mtmp->mcansee && !mtmp->mspec_used && rn2(5)) {
+		    int dmg;
+		    if (mattk->damn && mattk->damd)
+		        dmg = d((int)mattk->damn,(int)mattk->damd);
+		    else
+			dmg = d(2,6);
+
+		    pline("%s gazes you and a hail of magic missiles hit you!", Monnam(mtmp));
+		    stop_occupation();
+		    if (Antimagic && !rn2(3)) {
+			shieldeff(u.ux, u.uy);
+			pline_The("magic missiles bounce off!");
+			dmg = 0;
+		    }
+		    if (dmg) mdamageu(mtmp, dmg);
+		}
+		break;
+	    case AD_DISN:
+		if (!mtmp->mcan && canseemon(mtmp) &&
+			couldsee(mtmp->mx, mtmp->my) &&
+			mtmp->mcansee && !mtmp->mspec_used && !rn2(5)) {
+		    pline("%s gazes you!", Monnam(mtmp));
+		    pline("A disintegration beam hits you!");
+		    /* Uh oh */
+		    if (uarms && !(EDisint_resistance & W_ARMS))
+			(void) destroy_arm(uarms);
+		    else if (uarmc && !(EDisint_resistance & W_ARMC))
+			(void) destroy_arm(uarmc);
+		    else if (uarm && !(EDisint_resistance & W_ARM) && !uarmc)
+			(void) destroy_arm(uarm);
+
+#ifdef TOURIST
+		    else if (uarmu && !uarm && !uarmc) (void) destroy_arm(uarmu);
+#endif
+		    else if (FDisint_resistance || Invulnerable) {
+			pline("You are unharmed!");
+		    } else if (PDisint_resistance) {
+			pline("The disintegration beam rips through you!");
+			mdamageu(mtmp, ((Upolyd ? u.mhmax : u.uhpmax) + 1) / 2);
+		    } else {
+			done(DIED);
+			return 1;   /* life saved */
+		    }
+		} else {
+		    pline("%s attacks you with a seemingly piercing gaze.", Monnam(mtmp));
 		}
 		break;
 #ifdef PM_BEHOLDER /* work in progress */
