@@ -1029,27 +1029,35 @@ struct monst *mtmp;
 	return 0;
 }
 
+/*
+ * [BarclayII]
+ * The lower the value, the higher the priority.
+ * Does not apply for misc/defensive.
+ * See find_offensive() for explanation.
+ */
 #define MUSE_WAN_DEATH 1
 #define MUSE_WAN_SLEEP 2
-#define MUSE_WAN_FIREBALL 3
-#define MUSE_WAN_FIRE 4
-#define MUSE_WAN_COLD 5
-#define MUSE_WAN_LIGHTNING 6
-#define MUSE_WAN_MAGIC_MISSILE 7
-#define MUSE_WAN_STRIKING 8
-#define MUSE_SCR_FIRE 9
-#define MUSE_POT_PARALYSIS 10
-#define MUSE_POT_BLINDNESS 11
-#define MUSE_POT_CONFUSION 12
-#define MUSE_POT_SLEEPING 13
-#define MUSE_POT_ACID 14
-#define MUSE_FROST_HORN 15
-#define MUSE_FIRE_HORN 16
-#define MUSE_WAN_DRAINING 17	/* KMH */
+#define MUSE_WAN_SLOW_MONSTER 3
+#define MUSE_WAN_LIGHTNING 4
+#define MUSE_WAN_FIREBALL 5
+#define MUSE_WAN_FIRE 6
+#define MUSE_FIRE_HORN 7
+#define MUSE_WAN_COLD 8
+#define MUSE_FROST_HORN 9
+#define MUSE_WAN_DRAINING 10	/* KMH */
+#define MUSE_WAN_MAGIC_MISSILE 11
+#define MUSE_WAN_STRIKING 12
+#define MUSE_POT_AMNESIA 13
+#define MUSE_POT_PARALYSIS 14
+#define MUSE_POT_SLEEPING 15
+#define MUSE_POT_BLINDNESS 16
+#define MUSE_POT_CONFUSION 17
+#define MUSE_WAN_CANCELLATION 18	/* Lethe */
+#define MUSE_POT_ACID 19
 /*#define MUSE_WAN_TELEPORTATION 18*/
-#define MUSE_SCR_EARTH 19
-#define MUSE_POT_AMNESIA 20
-#define MUSE_WAN_CANCELLATION 21	/* Lethe */
+#define MUSE_SCR_EARTH 20
+#define MUSE_SCR_FIRE 21	/* NYI */
+#define MUSE_NO_OFFENSIVE 99
 
 /* Select an offensive item/action for a monster.  Returns TRUE iff one is
  * found.
@@ -1061,10 +1069,17 @@ struct monst *mtmp;
 	register struct obj *obj;
 	boolean ranged_stuff = lined_up(mtmp);
 	boolean reflection_skip = (Reflecting && rn2(2));
+	boolean death_immune = (FDisint_resistance || nonliving(youmonst.data) ||
+				is_demon(youmonst.data) || Antimagic);
+	boolean death_skip = (reflection_skip || (death_immune && rn2(2)));
+	boolean sleep_skip = (reflection_skip || (FSleep_resistance && rn2(2)));
+	boolean fire_skip  = (reflection_skip || (FFire_resistance && rn2(2)));
+	boolean cold_skip  = (reflection_skip || (FCold_resistance && rn2(2)));
+	boolean elec_skip  = (reflection_skip || (FShock_resistance && rn2(2)));
+	boolean magic_skip = (Antimagic && rn2(2));
+	boolean drain_skip = (magic_skip || (Drain_resistance && rn2(2)));
 	struct obj *helmet = which_armor(mtmp, W_ARMH);
 
-	m.offensive = (struct obj *)0;
-	m.has_offense = 0;
 	if (mtmp->mpeaceful || is_animal(mtmp->data) ||
 				mindless(mtmp->data) || nohands(mtmp->data))
 		return FALSE;
@@ -1078,111 +1093,129 @@ struct monst *mtmp;
 		return FALSE;
 
 	if (!ranged_stuff) return FALSE;
-#define nomore(x) if(m.has_offense==x) continue;
+
+	m.offensive = (struct obj *)0;
+	m.has_offense = MUSE_NO_OFFENSIVE;
+#define nomore(x) if(m.has_offense<x) continue;
 	for(obj=mtmp->minvent; obj; obj=obj->nobj) {
 		/* nomore(MUSE_WAN_DEATH); */
-		if (!reflection_skip) {
-		    if(obj->otyp == WAN_DEATH && obj->spe > 0) {
+		    nomore(MUSE_WAN_DEATH);
+		    if(!death_skip && obj->otyp == WAN_DEATH && obj->spe > 0) {
 			m.offensive = obj;
 			m.has_offense = MUSE_WAN_DEATH;
 		    }
 		    nomore(MUSE_WAN_SLEEP);
-		    if(obj->otyp == WAN_SLEEP && obj->spe > 0 && multi >= 0) {
+		    if(!sleep_skip && obj->otyp == WAN_SLEEP && obj->spe > 0 && multi >= 0) {
 			m.offensive = obj;
 			m.has_offense = MUSE_WAN_SLEEP;
+		    }
+		    nomore(MUSE_WAN_SLOW_MONSTER);
+		    if (obj->otyp == WAN_SLOW_MONSTER && obj->spe > 0 && HFast) {
+			m.offensive = obj;
+			m.has_offense = MUSE_WAN_SLOW_MONSTER;
 		    }
 /*WAC fixed*/
 /* [Tom] doesn't work...*/
 
+		    /* [BarclayII] monsters now understand chain reactions
+		     * so lightning is more fun than fireball (for exploding wands),
+		     * fire is more fun than cold (for burning potions, and armors),
+		     * the above are more fun than draining (for big potential damage),
+		     * draining is more fun than magic missile (for multiple level loss),
+		     * magic missile is more fun than striking (for reflection) */
+		    nomore(MUSE_WAN_LIGHTNING);
+		    if(!elec_skip && obj->otyp == WAN_LIGHTNING && obj->spe > 0) {
+			m.offensive = obj;
+			m.has_offense = MUSE_WAN_LIGHTNING;
+		    }
 		    nomore(MUSE_WAN_FIREBALL);                    
-		    if(obj->otyp == WAN_FIREBALL && obj->spe > 0) {
+		    if(!fire_skip && obj->otyp == WAN_FIREBALL && obj->spe > 0) {
 			m.offensive = obj;
 			m.has_offense = MUSE_WAN_FIREBALL;
                     }
 		    nomore(MUSE_WAN_FIRE);
-		    if(obj->otyp == WAN_FIRE && obj->spe > 0) {
+		    if(!fire_skip && obj->otyp == WAN_FIRE && obj->spe > 0) {
 			m.offensive = obj;
 			m.has_offense = MUSE_WAN_FIRE;
 		    }
 		    nomore(MUSE_FIRE_HORN);
-		    if(obj->otyp == FIRE_HORN && obj->spe > 0) {
+		    if(!fire_skip && obj->otyp == FIRE_HORN && obj->spe > 0) {
 			m.offensive = obj;
 			m.has_offense = MUSE_FIRE_HORN;
 		    }
 		    nomore(MUSE_WAN_COLD);
-		    if(obj->otyp == WAN_COLD && obj->spe > 0) {
+		    if(!cold_skip && obj->otyp == WAN_COLD && obj->spe > 0) {
 			m.offensive = obj;
 			m.has_offense = MUSE_WAN_COLD;
 		    }
 		    nomore(MUSE_FROST_HORN);
-		    if(obj->otyp == FROST_HORN && obj->spe > 0) {
+		    if(!cold_skip && obj->otyp == FROST_HORN && obj->spe > 0) {
 			m.offensive = obj;
 			m.has_offense = MUSE_FROST_HORN;
 		    }
-		    nomore(MUSE_WAN_LIGHTNING);
-		    if(obj->otyp == WAN_LIGHTNING && obj->spe > 0) {
+		    nomore(MUSE_WAN_DRAINING);
+		    if(!drain_skip && obj->otyp == WAN_DRAINING && obj->spe > 0) {
 			m.offensive = obj;
-			m.has_offense = MUSE_WAN_LIGHTNING;
+			m.has_offense = MUSE_WAN_DRAINING;
 		    }
 		    nomore(MUSE_WAN_MAGIC_MISSILE);
-		    if(obj->otyp == WAN_MAGIC_MISSILE && obj->spe > 0) {
+		    if(!magic_skip && obj->otyp == WAN_MAGIC_MISSILE && obj->spe > 0) {
 			m.offensive = obj;
 			m.has_offense = MUSE_WAN_MAGIC_MISSILE;
 		    }
-		}
-		nomore(MUSE_WAN_DRAINING);
-		if(obj->otyp == WAN_DRAINING && obj->spe > 0) {
-			m.offensive = obj;
-			m.has_offense = MUSE_WAN_DRAINING;
-		}
-		nomore(MUSE_WAN_STRIKING);
-		if(obj->otyp == WAN_STRIKING && obj->spe > 0) {
+		    nomore(MUSE_WAN_STRIKING);
+		    if(!magic_skip && obj->otyp == WAN_STRIKING && obj->spe > 0) {
 			m.offensive = obj;
 			m.has_offense = MUSE_WAN_STRIKING;
-		}
-		nomore(MUSE_POT_PARALYSIS);
-		if(obj->otyp == POT_PARALYSIS && multi >= 0) {
-			m.offensive = obj;
-			m.has_offense = MUSE_POT_PARALYSIS;
-		}
-		nomore(MUSE_POT_BLINDNESS);
-		if(obj->otyp == POT_BLINDNESS && !attacktype(mtmp->data, AT_GAZE)) {
-			m.offensive = obj;
-			m.has_offense = MUSE_POT_BLINDNESS;
-		}
-		nomore(MUSE_POT_CONFUSION);
-		if(obj->otyp == POT_CONFUSION) {
-			m.offensive = obj;
-			m.has_offense = MUSE_POT_CONFUSION;
-		}
-		nomore(MUSE_POT_SLEEPING);
-		if(obj->otyp == POT_SLEEPING) {
-			m.offensive = obj;
-			m.has_offense = MUSE_POT_SLEEPING;
-		}
-		/* Mik's Lethe patch - monsters use !oAmnesia */
-		nomore(MUSE_POT_AMNESIA);
-		if (obj->otyp == POT_AMNESIA) {
+		    }
+		    /* Mik's Lethe patch - monsters use !oAmnesia */
+		    nomore(MUSE_POT_AMNESIA);
+		    if (obj->otyp == POT_AMNESIA) {
 			m.offensive   = obj;
 			m.has_offense = MUSE_POT_AMNESIA;
-		}
-		nomore(MUSE_POT_SLEEPING);
-		if(obj->otyp == POT_SLEEPING) {
+		    }
+		    nomore(MUSE_POT_PARALYSIS);
+		    if(obj->otyp == POT_PARALYSIS && multi >= 0) {
+			m.offensive = obj;
+			m.has_offense = MUSE_POT_PARALYSIS;
+		    }
+		    nomore(MUSE_POT_SLEEPING);
+		    if(!sleep_skip && obj->otyp == POT_SLEEPING) {
 			m.offensive = obj;
 			m.has_offense = MUSE_POT_SLEEPING;
-		}
-		/* KMH, balance patch -- monsters use potion of acid */
-		nomore(MUSE_POT_ACID);
-		if(obj->otyp == POT_ACID) {
+		    }
+		    nomore(MUSE_POT_BLINDNESS);
+		    if(obj->otyp == POT_BLINDNESS && !attacktype(mtmp->data, AT_GAZE)) {
+			m.offensive = obj;
+			m.has_offense = MUSE_POT_BLINDNESS;
+		    }
+		    nomore(MUSE_POT_CONFUSION);
+		    if(obj->otyp == POT_CONFUSION) {
+			m.offensive = obj;
+			m.has_offense = MUSE_POT_CONFUSION;
+		    }
+		    /*
+		     * [BarclayII]
+		     * Cancellation can be an annoyance, but not so dangerous than
+		     * other wands.
+		     */
+		    nomore(MUSE_WAN_CANCELLATION);
+		    if (obj->otyp == WAN_CANCELLATION && obj->spe > 0) {
+			m.offensive   = obj;
+			m.has_offense = MUSE_WAN_CANCELLATION;
+		    }
+		    /* KMH, balance patch -- monsters use potion of acid */
+		    nomore(MUSE_POT_ACID);
+		    if(obj->otyp == POT_ACID) {
 			m.offensive = obj;
 			m.has_offense = MUSE_POT_ACID;
-		}
-		/* we can safely put this scroll here since the locations that
-		 * are in a 1 square radius are a subset of the locations that
-		 * are in wand range
-		 */
-		nomore(MUSE_SCR_EARTH);
-		if (obj->otyp == SCR_EARTH
+		    }
+		    /* we can safely put this scroll here since the locations that
+		     * are in a 1 square radius are a subset of the locations that
+		     * are in wand range
+		     */
+		    nomore(MUSE_SCR_EARTH);
+		    if (obj->otyp == SCR_EARTH
 		       && ((helmet && is_metallic(helmet)) ||
 				mtmp->mconf || amorphous(mtmp->data) ||
 				passes_walls(mtmp->data) ||
@@ -1190,18 +1223,14 @@ struct monst *mtmp;
 				unsolid(mtmp->data) || !rn2(10))
 		       && dist2(mtmp->mx,mtmp->my,mtmp->mux,mtmp->muy) <= 2
 		       && mtmp->mcansee && haseyes(mtmp->data)
+		       && mtmp->mhp <= 2
 #ifdef REINCARNATION
 		       && !Is_rogue_level(&u.uz)
 #endif
 		       && (!In_endgame(&u.uz) || Is_earthlevel(&u.uz))) {
-		    m.offensive = obj;
-		    m.has_offense = MUSE_SCR_EARTH;
-		}
-		nomore(MUSE_WAN_CANCELLATION);
-		if (obj->otyp == WAN_CANCELLATION && obj->spe > 0) {
-			m.offensive   = obj;
-			m.has_offense = MUSE_WAN_CANCELLATION;
-		}
+		        m.offensive = obj;
+		        m.has_offense = MUSE_SCR_EARTH;
+		    }
 #if 0
 		nomore(MUSE_SCR_FIRE);
 		if (obj->otyp == SCR_FIRE && resists_fire(mtmp)
@@ -1212,6 +1241,8 @@ struct monst *mtmp;
 		}
 #endif
 	}
+	/* TODO: dirty kludge for compatibility. */
+	if (m.has_offense == MUSE_NO_OFFENSIVE) m.has_offense = 0;
 	return((boolean)(!!m.has_offense));
 #undef nomore
 }
@@ -1310,6 +1341,17 @@ register struct obj *otmp;
 		}
 		if (cansee(mtmp->mx, mtmp->my) && zap_oseen)
 			makeknown(WAN_DRAINING);
+		break;
+	case WAN_SLOW_MONSTER:
+		if (mtmp == &youmonst) {
+			if (HFast & (TIMEOUT | INTRINSIC)) {
+				u_slow_down();
+			}
+		} else if (!resist(mtmp, otmp->oclass, 0, NOTELL)) {
+			mon_adjust_speed(mtmp, -1, otmp);
+			m_dowear(mtmp, FALSE);
+		}
+		makeknown(WAN_SLOW_MONSTER);
 		break;
 	}
 	if (reveal_invis) {
@@ -1475,6 +1517,7 @@ struct monst *mtmp;
 	case MUSE_WAN_STRIKING:
 	case MUSE_WAN_DRAINING:	/* KMH */
 	case MUSE_WAN_CANCELLATION:  /* Lethe */
+	case MUSE_WAN_SLOW_MONSTER:
 		zap_oseen = oseen;
 		mzapmsg(mtmp, otmp, FALSE);
 		otmp->spe--;
@@ -1701,7 +1744,7 @@ struct monst *mtmp;
 		) return 0;
 	if (difficulty > 7 && !rn2(35)) return WAN_DEATH;
 	if (difficulty > 6 && !rn2(25)) return WAN_FIREBALL;
-	switch (rn2(9 - (difficulty < 4) + 4 * (difficulty > 6))) {
+	switch (rn2(10 - (difficulty < 4) + 4 * (difficulty > 6))) {
 
 		case 0: {
 		    struct obj *helmet = which_armor(mtmp, W_ARMH);
@@ -1715,12 +1758,13 @@ struct monst *mtmp;
 		case 4: return POT_BLINDNESS;
 		case 5: return POT_SLEEPING;
 		case 6: return POT_PARALYSIS;
-		case 7: return WAN_MAGIC_MISSILE;
-		case 8: return WAN_SLEEP;
-		case 9: return WAN_FIRE;
-		case 10: return WAN_COLD;
-		case 11: return WAN_LIGHTNING;
-		case 12: return WAN_DRAINING;
+		case 7: return WAN_SLOW_MONSTER;
+		case 8: return WAN_MAGIC_MISSILE;
+		case 9: return WAN_SLEEP;
+		case 10: return WAN_FIRE;
+		case 11: return WAN_COLD;
+		case 12: return WAN_LIGHTNING;
+		case 13: return WAN_DRAINING;
 	}
 	/*NOTREACHED*/
 	return 0;
@@ -2168,6 +2212,7 @@ struct obj *obj;
 		    typ == WAN_DRAINING	||
 		    typ == WAN_HEALING ||
 		    typ == WAN_EXTRA_HEALING ||
+		    typ == WAN_SLOW_MONSTER ||
 		    typ == WAN_CANCELLATION)
 		return TRUE;
 	    break;
