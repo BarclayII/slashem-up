@@ -2639,7 +2639,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 	    case AD_DISN:
 		if (!mtmp->mcan && canseemon(mtmp) &&
 			couldsee(mtmp->mx, mtmp->my) &&
-			mtmp->mcansee && !mtmp->mspec_used && !rn2(5)) {
+			mtmp->mcansee && !mtmp->mspec_used && rn2(3)) {
 		    pline("%s gazes you!", Monnam(mtmp));
 		    pline("A disintegration beam hits you!");
 		    /* Uh oh */
