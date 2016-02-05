@@ -2277,6 +2277,47 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 		case AD_DISE:
 		    if (!diseasemu(mtmp->data)) tmp = 0;
 		    break;
+		case AD_DRIN:
+		    if (!uarmh || uarmh->otyp != DUNCE_CAP) {
+			Your("brain is being dissolved!");
+			/* No such thing as mindless players... */
+			if (ABASE(A_INT) <= ATTRMIN(A_INT)) {
+			    int lifesaved = 0;
+			    struct obj *wore_amulet = uamul;
+
+			    while(1) {
+				/* avoid looping on "die(y/n)?" */
+				if (lifesaved && (discover || wizard)) {
+				    if (wore_amulet && !uamul) {
+					/* used up AMULET_OF_LIFE_SAVING; still
+					   subject to dying from brainlessness */
+					wore_amulet = 0;
+				    } else {
+					/* explicitly chose not to die;
+					   arbitrarily boost intelligence */
+					ABASE(A_INT) = ATTRMIN(A_INT) + 4;
+					You_feel("like a scarecrow.");
+					break;
+				    }
+				}
+
+				if (lifesaved)
+				    pline("Unfortunately your brain is still gone.");
+				else
+				    Your("last thought fades away.");
+				killer = "brainlessness";
+				killer_format = KILLED_BY;
+				done(DIED);
+				lifesaved++;
+			    }
+			}
+		    }
+		    /* adjattrib gives dunce cap message when appropriate */
+		    (void) adjattrib(A_INT, -rnd(4), FALSE);
+		    forget_levels(50);	/* lose memory of 25% of levels */
+		    forget_objects(50);	/* lose memory of 25% of objects */
+		    exercise(A_WIS, FALSE);
+		    break;
 		default:
 		    tmp = 0;
 		    break;
