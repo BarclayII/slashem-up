@@ -1472,15 +1472,18 @@ physical:
 		break;
 	    /* WAC DEATH (gaze) */
 	    case AD_DETH:
+	    case AD_DISN:
 		if (rn2(16)) {
 		    /* No death, but still cause damage */
 		    break;
 		} 
 		if (vis && mattk->aatyp == AT_GAZE) 
 		    pline("%s gazes intently!", Monnam(magr));
-		if (mattk->aatyp == AT_GAZE && mon_reflects(mdef, (char *)0)) {
+		if (mattk->aatyp == AT_GAZE && mon_reflects(mdef, (char *)0) && mattk->adtyp == AD_DETH) {
 		    /* WAC reflected gaze 
 		     * Oooh boy...that was a bad move :B 
+		     * [BarclayII]
+		     * disintegration gaze doesn't respect reflection.
 		     */
 		    tmp = 0;
 		    if (vis) {

@@ -206,6 +206,9 @@ int lawful_minion(int difficulty)
 /* this routine returns the # of an appropriate minion,
    given a difficulty rating from 1 to 30 */
 {
+   /* in rare cases can a lawful character receive Planetars and Solars.
+    * Solars are so powerful that it's fully capable of killing Cthulhu... */
+   if (rn2(10)) difficulty = difficulty * 8 / 10;
    difficulty = difficulty + rn2(5) - 2;
    if (difficulty < 0) difficulty = 0;
    if (difficulty > 30) difficulty = 30;
