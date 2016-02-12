@@ -5789,8 +5789,7 @@ shk_food_examination(slang, shkp)
 		descr[ndescr++] = "never rots";
 	} else {
 		long age = peek_at_iced_corpse_age(obj);
-		if ((monstermoves - age) / 10 > 5 && mnum != PM_ACID_BLOB &&
-		    obj->otyp == CORPSE) {
+		if ((monstermoves - age) / 10 > 5 && mnum != PM_ACID_BLOB) {
 			Sprintf(buf, "This corpse may be tainted!");
 			if (youmonst.data == &mons[PM_GHOUL] ||
 			    youmonst.data == &mons[PM_GHAST]) {
