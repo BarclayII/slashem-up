@@ -1240,7 +1240,7 @@ opentin()		/* called during each move whilst opening a tin */
 		r = ROTTEN_TIN;			/* some homemade tins go bad */
 	    which = 0;	/* 0=>plural, 1=>as-is, 2=>"the" prefix */
 	    if (Hallucination) {
-		what = rndmonnam();
+		what = rndmonnam(NULL);
 	    } else {
 		what = mons[tin.tin->corpsenm].mname;
 		if (mons[tin.tin->corpsenm].geno & G_UNIQ)

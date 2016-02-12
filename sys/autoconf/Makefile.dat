@@ -11,7 +11,7 @@ EXEEXT = @EXEEXT@
 # SHELL=E:/GEMINI2/MUPFEL.TTP
 # UUDECODE=uudecode
 
-VARDAT = data rumors quest.dat oracles options
+VARDAT = data rumors quest.dat oracles options engrave epitaph bogusmon
 
 all:	$(VARDAT) spec_levs quest_levs dungeon
 
@@ -273,6 +273,15 @@ data:	data.base ../util/makedefs
 
 rumors:	rumors.tru rumors.fal ../util/makedefs
 	../util/makedefs -r
+
+engrave: engrave.txt ../util/makedefs
+	../util/makedefs -s
+
+epitaph: epitaph.txt ../util/makedefs
+	../util/makedefs -s
+
+bogusmon: bogusmon.txt ../util/makedefs
+	../util/makedefs -s
 
 quest.dat:	quest.txt ../util/makedefs
 	../util/makedefs -q

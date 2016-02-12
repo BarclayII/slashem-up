@@ -8,6 +8,7 @@
 
 STATIC_DCL void FDECL(do_oname, (struct obj *));
 STATIC_DCL const char * NDECL(rndvladnam);
+STATIC_DCL char *FDECL(bogusmon, (char *, char *));
 static void FDECL(getpos_help, (BOOLEAN_P,const char *));
 
 extern const char what_is_an_unknown_object[];		/* from pager.c */
@@ -697,8 +698,10 @@ boolean called;
 		Strcat(buf, rndvladnam());
 		name_at_start = TRUE;
 	    } else {
-		Strcat(buf, rndmonnam());
-		name_at_start = FALSE;
+		char rnamecode;
+		char *rname = rndmonnam(&rnamecode);
+		Strcat(buf, rname);
+		name_at_start = bogon_is_pname(rnamecode);
 	    }
 	} else if (mtmp->mnamelth) {
 	    char *name = NAME(mtmp);
@@ -942,89 +945,61 @@ char *outbuf;
     return outbuf;
 }
 
-static const char * const bogusmons[] = {
-	"jumbo shrimp", "giant pigmy", "gnu", "killer penguin",
-	"giant cockroach", "giant slug", "pterodactyl",
-	"tyrannosaurus rex", "rot grub", "bookworm", "master lichen",
-	"hologram", "jester", "attorney", "sleazoid",
-	"killer tomato", "amazon", "robot", "battlemech",
-	"rhinovirus", "harpy", "lion-dog", "rat-ant", "Y2K bug",
-						/* misc. */
-	"grue", "Christmas-tree monster", "luck sucker", "paskald",
-	"brogmoid", "dornbeast",		/* Quendor (Zork, &c.) */
-	"Ancient Multi-Hued Dragon", "Evil Iggy",
-						/* Moria */
-	"emu", "kestrel", "xeroc", "venus flytrap",
-						/* Rogue */
-	"creeping coins",			/* Wizardry */
-	"siren",                                /* Greek legend */
-	"killer bunny",				/* Monty Python */
-	"rodent of unusual size",		/* The Princess Bride */
-	"Smokey the bear",	/* "Only you can prevent forest fires!" */
-	"Luggage",				/* Discworld */
-	"Ent",					/* Lord of the Rings */
-	"tangle tree", "wiggle",                /* Xanth */
-	"white rabbit", "snark",		/* Lewis Carroll */
-	"pushmi-pullyu",			/* Dr. Doolittle */
-	"smurf",				/* The Smurfs */
-	"tribble", "Klingon", "Borg",		/* Star Trek */
-	"Ewok",					/* Star Wars */
-	"Totoro",				/* Tonari no Totoro */
-	"ohmu",					/* Nausicaa */
-	"youma",				/* Sailor Moon */
-	"nyaasu",				/* Pokemon (Meowth) */
-	"Godzilla", "King Kong",		/* monster movies */
-	"earthquake beast",			/* old L of SH */
-	"Invid",				/* Robotech */
-	"Terminator",				/* The Terminator */
-	"boomer",				/* Bubblegum Crisis */
-	"Dalek",				/* Dr. Who ("Exterminate!") */
-	"microscopic space fleet", "Ravenous Bugblatter Beast of Traal",
-						/* HGttG */
-	"teenage mutant ninja turtle",		/* TMNT */
-	"samurai rabbit",			/* Usagi Yojimbo */
-	"aardvark",				/* Cerebus */
-	"Audrey II",				/* Little Shop of Horrors */
-	"witch doctor", "one-eyed one-horned flying purple people eater",
-						/* 50's rock 'n' roll */
-	"Barney the dinosaur",			/* saccharine kiddy TV */
-	"Azog the Orc King", "Morgoth",		/* Angband */
-
-	/*[Tom] new wacky names */
-	"commando", "green beret", "sherman tank", 
-						/* Military */
-	"Jedi knight", "tie fighter", "protocol droid", "R2 unit", "Emperor",
-						/* Star Wars */
-	"Vorlon",				/* Babylon 5 */
-	"keg","Diet Pepsi",
-						/* drinks */
-	"questing beast",		/* King Arthur */
-	"Predator",				/* Movie */
-	"green light", "automobile", "invisible Wizard of Yendor",
-	"piece of yellowish-brown glass", "wand of nothing",
-	"ocean","ballpoint pen","paper cut",	
-						/* misc */
-	"Rune", "Gurk", "Yuval",		/* people I know */
-	"mother-in-law"				/* common pest */
-};
-
-/* Return a random monster name, for hallucination.
- * KNOWN BUG: May be a proper name (Godzilla, Barney), may not
- * (the Terminator, a Dalek).  There's no elegant way to deal
- * with this without radically modifying the calling functions.
- */
-const char *
-rndmonnam()
+/* fake monsters used to be in a hard-coded array, now in a data file */
+STATIC_OVL char *
+bogusmon(buf, code)
+char *buf, *code;
 {
-	int name;
+    char *mname = buf;
 
-	do {
-	    name = rn1(SPECIAL_PM + SIZE(bogusmons) - LOW_PM, LOW_PM);
-	} while (name < SPECIAL_PM &&
-	    (type_is_pname(&mons[name]) || (mons[name].geno & G_NOGEN)));
+    get_rnd_text(NH_BOGUSMONFILE, buf);
+    /* strip prefix if present */
+    if (!letter(*mname)) {
+        if (code)
+            *code = *mname;
+        ++mname;
+    } else {
+        if (code)
+            *code = '\0';
+    }
+    return mname;
+}
+/* return a random monster name, for hallucination */
 
-	if (name >= SPECIAL_PM) return bogusmons[name - SPECIAL_PM];
-	return mons[name].mname;
+char *
+rndmonnam(code)
+char *code;
+{
+    static char buf[BUFSZ];
+    char *mname;
+    int name;
+#define BOGUSMONSIZE 100 /* arbitrary */
+
+    if (code)
+        *code = '\0';
+
+    do {
+        name = rn1(SPECIAL_PM + BOGUSMONSIZE - LOW_PM, LOW_PM);
+    } while (name < SPECIAL_PM
+             && (type_is_pname(&mons[name]) || (mons[name].geno & G_NOGEN)));
+
+    if (name >= SPECIAL_PM) {
+        mname = bogusmon(buf, code);
+    } else {
+        mname = strcpy(buf, mons[name].mname);
+    }
+    return mname;
+#undef BOGUSMONSIZE
+}
+
+/* check bogusmon prefix to decide whether it's a personal name */
+boolean
+bogon_is_pname(code)
+char code;
+{
+    if (!code)
+        return FALSE;
+    return index("-+=", code) ? TRUE : FALSE;
 }
 
 /*

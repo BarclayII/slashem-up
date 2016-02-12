@@ -273,9 +273,14 @@ priestname(mon, pname)
 register struct monst *mon;
 char *pname;		/* caller-supplied output buffer */
 {
-	const char *what = Hallucination ? rndmonnam() : mon->data->mname;
+	char whatcode = '\0';
+	const char *what = Hallucination ? rndmonnam(&whatcode) : mon->data->mname;
 
-	Strcpy(pname, "the ");
+	if (!mon->ispriest && !mon->isminion) /* should never happen...  */
+		return strcpy(pname, what);       /* caller must be confused */
+
+	*pname = '\0';
+	if (!Hallucination || !bogon_is_pname(whatcode)) Strcpy(pname, "the ");
 	if (mon->minvis) Strcat(pname, "invisible ");
 	if (mon->ispriest || mon->data == &mons[PM_ALIGNED_PRIEST] ||
 					mon->data == &mons[PM_ANGEL]) {

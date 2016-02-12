@@ -397,7 +397,8 @@ E char *FDECL(Amonnam_or_sth, (struct monst *));
 E char *FDECL(a_monnam, (struct monst *));
 E char *FDECL(a_monnam_or_sth, (struct monst *));
 E char *FDECL(distant_monnam, (struct monst *,int,char *));
-E const char *NDECL(rndmonnam);
+E char *FDECL(rndmonnam, (char *));
+E boolean FDECL(bogon_is_pname, (CHAR_P));
 E const char *FDECL(hcolor, (const char *));
 E const char *NDECL(rndcolor);
 #ifdef REINCARNATION
@@ -1913,6 +1914,7 @@ E char *FDECL(root_plselection_prompt, (char *, int, int, int, int, int));
 /* ### rumors.c ### */
 
 E char *FDECL(getrumor, (int,char *, BOOLEAN_P));
+E char *FDECL(get_rnd_text, (const char *, char *));
 E void FDECL(outrumor, (int,int));
 E void FDECL(outoracle, (BOOLEAN_P, BOOLEAN_P));
 E void FDECL(save_oracles, (int,int));

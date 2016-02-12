@@ -65,6 +65,9 @@ static	const char	SCCS_Id[] = "@(#)makedefs.c\t3.4\t2002/02/03";
 #define ORACLE_FILE	"oracles"
 #define DATA_FILE	"data"
 #define RUMOR_FILE	"rumors"
+#define EPITAPH_FILE	"epitaph"
+#define ENGRAVE_FILE	"engrave"
+#define BOGUSMON_FILE	"bogusmon"
 #define DGN_I_FILE	"dungeon.def"
 #define DGN_O_FILE	"dungeon.pdf"
 #define MON_STR_C	"monstr.c"
@@ -173,6 +176,7 @@ void NDECL(do_monstr);
 void NDECL(do_permonst);
 void NDECL(do_questtxt);
 void NDECL(do_rumors);
+void FDECL(do_rnd_access_file, (const char *));
 void NDECL(do_oracles);
 void NDECL(do_vision);
 /*WAC filenames*/
@@ -330,6 +334,12 @@ char	*options;
 		case 'r':
 		case 'R':	do_rumors();
 				break;
+		case 's':
+		case 'S':
+				do_rnd_access_file(EPITAPH_FILE);
+				do_rnd_access_file(ENGRAVE_FILE);
+				do_rnd_access_file(BOGUSMON_FILE);
+				break;
 		case 'h':
 		case 'H':	do_oracles();
 				break;
@@ -433,6 +443,36 @@ do_rumors()
 	Fclose(ofp);
 	free(infile);
 	return;
+}
+
+void
+do_rnd_access_file(fname)
+const char *fname;
+{
+	Sprintf(filename, DATA_IN_TEMPLATE, fname);
+	Strcat(filename, ".txt");
+	if (!(ifp = fopen(filename, RDTMODE))) {
+		perror(filename);
+		exit(EXIT_FAILURE);
+	}
+	filename[0] = '\0';
+#ifdef FILE_PREFIX
+	Strcat(filename, file_prefix);
+#endif
+	Sprintf(eos(filename), DATA_TEMPLATE, fname);
+	if (!(ofp = fopen(filename, WRTMODE))) {
+		perror(filename);
+		exit(EXIT_FAILURE);
+	}
+	Fprintf(ofp, "%s", Dont_Edit_Data);
+
+	while (fgets(in_line, sizeof(in_line), ifp) != 0) {
+		if (in_line[0] != '#' && in_line[0] != '\n')
+			fputs(xcrypt(in_line), ofp);
+	}
+
+	Fclose(ifp);
+	Fclose(ofp);
 }
 
 /*
