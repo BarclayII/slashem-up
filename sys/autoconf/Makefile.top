@@ -104,7 +104,7 @@ CNF_SHARE_PROXYND = gltile64.png gltile32.png gltile16.png \
 # CNF_SHARE_DATND = $(CNF_SHARE_PROXYND)
 CNF_SHARE_DATND = @CNF_SHARE_DATND@
 
-CNF_SHARE_DATD = data oracles options quest.dat rumors
+CNF_SHARE_DATD = data oracles options quest.dat rumors engrave epitaph bogusmon
 CNF_SHARE_DAT = $(CNF_SHARE_DATD) $(CNF_SHARE_DATND)
 
 # Some versions of make use the SHELL environment variable as the shell
@@ -164,6 +164,15 @@ manpages:
 
 data: $(GAME)
 	( cd dat ; $(MAKE) data )
+
+engrave: $(GAME)
+	( cd dat ; $(MAKE) engrave )
+
+epitaph: $(GAME)
+	( cd dat ; $(MAKE) epitaph )
+
+bogusmon: $(GAME)
+	( cd dat ; $(MAKE) bogusmon )
 
 rumors: $(GAME)
 	( cd dat ; $(MAKE) rumors )

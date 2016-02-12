@@ -26,6 +26,10 @@
 #define NH_DEBUGHELP_AREA	FILE_AREA_SHARE
 #define NH_RUMORFILE	"rumors"	/* a file with fortune cookies */
 #define NH_RUMORAREA	FILE_AREA_SHARE
+#define NH_ENGRAVEFILE	"engrave"
+#define NH_EPITAPHFILE	"epitaph"
+#define NH_BOGUSMONFILE	"bogusmon"
+#define NH_RNDTEXTAREA	FILE_AREA_SHARE
 #define NH_ORACLEFILE	"oracles"	/* a file with oracular information */
 #define NH_ORACLEAREA	FILE_AREA_SHARE
 #define NH_DATAFILE	"data"	/* a file giving the meaning of symbols used */

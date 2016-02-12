@@ -754,6 +754,9 @@ spotless: clean
 	-$(DEL) $(DAT)\guioptions
 	-$(DEL) $(DAT)\oracles
 	-$(DEL) $(DAT)\rumors
+	-$(DEL) $(DAT)\engrave
+	-$(DEL) $(DAT)\epitaph
+	-$(DEL) $(DAT)\bogusmon
 	-$(DEL) $(DAT)\quest.dat
 	-$(DEL) $(DAT)\nhshare
 	-$(DEL) $(DAT)\nhushare
@@ -1331,6 +1334,15 @@ $(DAT)\quest.dat: utility.tag  $(DAT)\quest.txt
 $(DAT)\oracles:	     utility.tag    $(DAT)\oracles.txt
 	-makedefs -h
 
+$(DAT)\engrave: utility.tag $(DAT)\engrave.txt
+	-makedefs -s
+
+$(DAT)\epitaph: utility.tag $(DAT)\epitaph.txt
+	-makedefs -s
+
+$(DAT)\bogusmon: utility.tag $(DAT)\bogusmon.txt
+	-makedefs -s
+
 sp_lev.tag:     utility.tag         $(DAT)\beholder.des $(DAT)\bigroom.des \
 		$(DAT)\blkmar.des   $(DAT)\castle.des   $(DAT)\grund.des \
 		$(DAT)\dragons.des  $(DAT)\endgame.des  $(DAT)\gehennom.des \
@@ -1411,9 +1423,13 @@ $(DAT)\dungeon:	  utility.tag  $(DAT)\dungeon.def
 # DLB stuff
 #
 $(DAT)\nhshare:	dlb_main.exe $(DAT)\data $(DAT)\rumors $(DAT)\dungeon \
-		$(DAT)\oracles $(DAT)\quest.dat sp_lev.tag
+		$(DAT)\oracles $(DAT)\quest.dat $(DAT)\engrave $(DAT)\epitaph \
+		$(DAT)\bogusmon sp_lev.tag
 	$(ECHO) data >$(DAT)\dlb.lst
 	$(ECHO) oracles >>$(DAT)\dlb.lst
+	$(ECHO) engrave >>$(DAT)\dlb.lst
+	$(ECHO) epitaph >>$(DAT)\dlb.lst
+	$(ECHO) bogusmon >>$(DAT)\dlb.lst
 ifeq ($(USE_GUI),Y)
 	$(ECHO) guioptions >>$(DAT)\dlb.lst
 else

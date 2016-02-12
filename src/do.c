@@ -297,7 +297,7 @@ giveback:
 		break;
 	    case RIN_AGGRAVATE_MONSTER:
 		pline("Several %s buzz angrily around the sink.", 
-				Hallucination ? makeplural(rndmonnam()) : "flies");
+				Hallucination ? makeplural(rndmonnam(NULL)) : "flies");
 		break;
 	    case RIN_SHOCK_RESISTANCE:
 		pline("Static electricity surrounds the sink.");

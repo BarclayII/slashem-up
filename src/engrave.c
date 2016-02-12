@@ -10,89 +10,6 @@
 /*STATIC_VAR NEARDATA struct engr *head_engr;*/
 
 #ifdef OVLB
-/* random engravings */
-static const char *random_mesg[] = {
-	"Elbereth",
-	/* trap engravings */
-	"Vlad was here", "ad aerarium",
-	/* take-offs and other famous engravings */
-	"Owlbreath", "Galadriel",
-	"Kilroy was here",
-	"A.S. ->", "<- A.S.", /* Journey to the Center of the Earth */
-	"You won't get it up the steps", /* Adventure */
-	"Lasciate ogni speranza o voi ch'entrate.", /* Inferno */
-	"Well Come", /* Prisoner */
-	"We apologize for the inconvenience.", /* So Long... */
-	"See you next Wednesday", /* Thriller */
-	"notary sojak", /* Smokey Stover */
-	"For a good time call 8?7-5309",
-	"Please don't feed the animals.", /* Various zoos around the world */
-	"Madam, in Eden, I'm Adam.", /* A palindrome */
-	"Two thumbs up!", /* Siskel & Ebert */
-	"Hello, World!", /* The First C Program */
-#ifdef MAIL
-	"You've got mail!", /* AOL */
-#endif
-	"As if!", /* Clueless */
-	/* [Tom] added these */
-	"Y?v?l s??ks!", /* just kidding... */
-	"T?m ?as h?r?",
-	/* Tsanth added these */
-	"Gazortenplatz", /* Tribute to David Fizz */
-	"John 3:16", /* You see this everywhere; why not here? */
-	"Exhale! Exhale! Exhale!", /* Prodigy */
-	"All you need is love.", /* The Beatles */
-	"Please don't feed the animals.", /* Various zoos around the world */
-	"....TCELES B HSUP   A magic spell?", /* Final Fantasy I (US) */
-	"Turn around.", /* Various people at various times in history */
-	"You've got mail!", /* AOL */
-	"UY WUZ HERE", /* :] */
-	"Time flies when you're having fun.", /* Who said this first, anyway? */
-	"As if!", /* Clueless */
-	"How bizarre, how bizarre.", /* OMC */
-	"Silly rabbit, Trix are for kids!", /* Trix */
- 	"I'll be back!", /* Terminator */
- 	"That is not dead which can eternal lie.", /* HPL */
-	/* NetHack 3.6.0 new ones */
-	/* helpful guidances */
-	"Don't go this way",
-	"Go left --->",
-	"<--- Go right",
-	"X marks the spot",
-	"X <--- You are here.",
-	"Here be dragons",
-	"Save now, and do your homework!",
-	"There was a hole here.  It's gone now.",
-	"The Vibrating Square",
-	"This is a pit!",
-	"This is not the dungeon you are looking for.",
-	"Watch out, there's a gnome with a wand of death behind that door!",
-	/* misc fun */
-	"This square deliberately left blank.",
-	/* Viking graffiti */
-	"Haermund Hardaxe carved these runes",
-	/* Advertising */
-	"Need a light?  Come visit the Minetown branch of Izchak's Lighting Store!",
-	"Snakes on the Astral Plane - Soon in a dungeon near you",
-	"You are the one millionth visitor to this place!  Please wait 200 turns for your wand of wishing.",
-	/* DnD */
-	"Warning, Exploding runes!",
-	/* "Whispers Underground" Ben Aaronovitch */
-	"If you can read these words then you are not only a nerd but probably dead.",
-	/* [BarclayII] added these */
-	"My pet ferret can play better than you!", /* sudo */
-	"Citation needed", /* Wikipedia */
-	"Halt and Catch Fire", /* an instruction */
-	"Make love, not war.", /* an old slogan */
-	"I put on my robe and wizard hat...", /* bash.org */
-	"Lorem ipsum dolor sit amet", /* placeholder */
-	"There are no Easter Eggs in this dungeon.", /* aptitude */
-	"Because We Are Mean (TM)", /* Cygwin motto */
-	"All Your Base Are Belong To Us.", /* Zero Wing */
-	"But the princess is in another dungeon!", /* Super Mario Bros. */
-	"Here's a nickel, kid. Get yourself a better computer.", /* Dilbert */
-	"THIS! IS! SPARTA!", /* 300 */
-};
 
 char *
 random_engraving(outbuf)
@@ -103,7 +20,7 @@ char *outbuf;
 	/* a random engraving may come from the "rumors" file,
 	   or from the list above */
 	if (!rn2(4) || !(rumor = getrumor(0, outbuf, TRUE)) || !*rumor)
-	    Strcpy(outbuf, random_mesg[rn2(SIZE(random_mesg))]);
+		get_rnd_text(NH_ENGRAVEFILE, outbuf);
 
 	wipeout_text(outbuf, (int)(strlen(outbuf) / 4), 0);
 	return outbuf;
@@ -1420,46 +1337,6 @@ struct engr *ep;
 	ep->engr_y = ty;
 }
 
-
-/* Epitaphs for random headstones */
-static const char *epitaphs[] = {
-	"Rest in peace",
-	"R.I.P.",
-	"Rest In Pieces",
-	"Note -- there are NO valuable items in this grave",
-	"1994-1995. The Longest-Lived Hacker Ever",
-	"The Grave of the Unknown Hacker",
-	"We weren't sure who this was, but we buried him here anyway",
-	"Sparky -- he was a very good dog",
-	"Beware of Electric Third Rail",
-	"Made in Taiwan",
-	"Og friend. Og good dude. Og died. Og now food",
-	"Beetlejuice Beetlejuice Beetlejuice",
-	"Look out below!",
-	"Please don't dig me up. I'm perfectly happy down here. -- Resident",
-	"Postman, please note forwarding address: Gehennom, Asmodeus's Fortress, fifth lemure on the left",
-	"Mary had a little lamb/Its fleece was white as snow/When Mary was in trouble/The lamb was first to go",
-	"Be careful, or this could happen to you!",
-	"Soon you'll join this fellow in hell! -- the Wizard of Yendor",
-	"Caution! This grave contains toxic waste",
-	"Sum quod eris",
-	"Here lies an Atheist, all dressed up and no place to go",
-	"Here lies Ezekiel, age 102.  The good die young.",
-	"Here lies my wife: Here let her lie! Now she's at rest and so am I.",
-	"Here lies Johnny Yeast. Pardon me for not rising.",
-	"He always lied while on the earth and now he's lying in it",
-	"I made an ash of myself",
-	"Soon ripe. Soon rotten. Soon gone. But not forgotten.",
-	"Here lies the body of Jonathan Blake. Stepped on the gas instead of the brake.",
-	"Go away!",
-	/* From SLASH'EM */
-	"This old man, he played one, he played knick-knack on my thumb.",
-	/* [BarclayII] more epitaphs */
-	"This place intentionally left blank.",
-#define SUDO_SANDWICH	31
-	"sudo make me a sandwich",
-};
-
 /* Create a headstone at the given location.
  * The caller is responsible for newsym(x, y).
  */
@@ -1468,18 +1345,15 @@ make_grave(x, y, str)
 int x, y;
 const char *str;
 {
-	int i = rn2(SIZE(epitaphs));
+	char buf[BUFSZ];
 	/* Can we put a grave here? */
 	if ((levl[x][y].typ != ROOM && levl[x][y].typ != GRAVE) || t_at(x,y)) return;
 
 	/* Make the grave */
 	levl[x][y].typ = GRAVE;
 
-	if (i == SUDO_SANDWICH && !str) {
-		mksobj_at(SANDWICH, x, y, TRUE, FALSE);
-	}
 	/* Engrave the headstone */
-	if (!str) str = epitaphs[i];
+	if (!str) str = get_rnd_text(NH_EPITAPHFILE, buf);
 	del_engr_at(x, y);
 	make_engr_at(x, y, str, 0L, HEADSTONE);
 

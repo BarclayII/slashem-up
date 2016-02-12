@@ -1885,7 +1885,7 @@ boolean from_invent;
 	    	    if (!rn2(3) && (mtmp = makemon(&mons[PM_HOMUNCULUS],x,y, NO_MM_FLAGS)) != 0) {
 			pline("%s is released!", !canspotmon(mtmp) ?
 			    Something : Hallucination ?
-			    An(rndmonnam()) : "The picture-painting demon");
+			    An(rndmonnam(NULL)) : "The picture-painting demon");
 			mtmp->mpeaceful = !obj->cursed;
 			/*if (obj->blessed && rn2(2)) 
 				tamedog(mtmp, (struct obj *)0);*/
