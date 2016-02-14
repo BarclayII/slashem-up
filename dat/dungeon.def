@@ -87,10 +87,16 @@ RNDLEVEL:	"stor" "S" @ (19, 8) 66 3
 LEVEL:		"guild" "G" @ (26, 6) 50
 
 # Big rooms...
-RNDLEVEL:	"bigrm" "none" @ (20, 15) 10 5
-RNDLEVEL:	"bigrm" "none" @ (20, 15) 10 5
-RNDLEVEL:	"bigrm" "none" @ (20, 15) 10 5
-RNDLEVEL:	"bigrm" "none" @ (20, 15) 10 5
+LEVEL:		"bigrm-1" "none" @ (20, 15) 50
+LEVEL:		"bigrm-2" "none" @ (20, 15) 50
+LEVEL:		"bigrm-3" "none" @ (20, 15) 50
+LEVEL:		"bigrm-4" "none" @ (20, 15) 50
+LEVEL:		"bigrm-5" "none" @ (20, 15) 50
+LEVEL:		"bigrm-6" "none" @ (20, 15) 50
+LEVEL:		"bigrm-7" "none" @ (20, 15) 50
+LEVEL:		"bigrm-8" "none" @ (20, 15) 50
+LEVEL:		"bigrm-9" "none" @ (20, 15) 50
+LEVEL:		"bigrm-10" "none" @ (20, 15) 50
 
 
 # The famous Fort Ludios...
