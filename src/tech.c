@@ -782,7 +782,7 @@ int tech_no;
 			}else{
 			    u.usteed->mtame += rnd((techlev(tech_no) + 2) / 3);
 			    pline("%s gets tamer.", Monnam(u.usteed));
-			    t_timeout = rn1(1000,500);
+			    t_timeout = rn1(200, 200);
 			}
                 } else
                         Your("technique is only effective when riding a monster.");
