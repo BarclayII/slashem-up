@@ -4245,6 +4245,7 @@ deltrap(trap)
 register struct trap *trap;
 {
 	register struct trap *ttmp;
+	struct monst *mtmp;
 
 	clear_conjoined_pits(trap);
 	if(trap == ftrap)
@@ -4259,7 +4260,15 @@ register struct trap *trap;
 	}
 	maybe_finish_sokoban();
 #ifdef DISPLAY_LAYERS
-	levl[trap->tx][trap->ty].mem_trap = NO_TRAP;
+	/* [BarclayII]
+	 * Trap memory is removed only if the player can actually *see* the
+	 * trap being removed.
+	 * Although you can see an invisible pixie caught in a magical
+	 * explosion (and therefore removing a magic trap), I simply assume
+	 * that the player can't really tell what happened to the trap itself.
+	 */
+	if (cansee(trap->tx, trap->ty))
+		levl[trap->tx][trap->ty].mem_trap = NO_TRAP;
 #endif
 	dealloc_trap(trap);
 }
