@@ -287,10 +287,8 @@ moveloop()
 #endif
 			    }
 			}
-			long ch = (80 - (40 * night())) / 2 * 
-					 (Race_if(PM_HUMAN_WEREWOLF) ? 
-					  u.ulevel * u.ulevel :
-					  2);
+			long ch = (80 - (40 * night())) *
+			    (Race_if(PM_HUMAN_WEREWOLF) ? u.ulevel : 1);
 			ch = (ch > LARGEST_INT) ? LARGEST_INT : ch;
 			/* delayed change may not be valid anymore */
 			if ((change == 1 && !Polymorph) ||
