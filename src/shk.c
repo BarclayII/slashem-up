@@ -3410,6 +3410,7 @@ boolean shk_buying;
 	if (obj->oartifact) {
 	    tmp = arti_cost(obj);
 	    if (shk_buying) tmp /= 4;
+	    return tmp;
 	}
 	switch(obj->oclass) {
 	case FOOD_CLASS:
