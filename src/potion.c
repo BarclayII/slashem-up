@@ -979,7 +979,7 @@ peffects(otmp)
 					You("hit your %s on the %s.",
 						body_part(HEAD),
 						ceiling(u.ux,u.uy));
-					losehp(uarmh ? 1 : rnd(10),
+					physdmg(uarmh ? 1 : rnd(10),
 						"colliding with the ceiling",
 						KILLED_BY);
 				} else (void) doup();
@@ -1189,7 +1189,7 @@ boolean your_fault;
 		distance = 0;
 		pline_The("%s crashes on your %s and breaks into shards.",
 			botlnam, body_part(HEAD));
-		losehp(rnd(2), "thrown potion", KILLED_BY_AN);
+		physdmg(rnd(2), "thrown potion", KILLED_BY_AN);
 	} else {
 		distance = distu(mon->mx,mon->my);
 		if (!cansee(mon->mx,mon->my)) pline("Crash!");

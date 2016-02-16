@@ -1752,8 +1752,7 @@ boolean was_swallowed;			/* digestion */
 			      body_part(STOMACH));
 			Sprintf(killer_buf, "%s explosion",
 				s_suffix(mdat->mname));
-			if (Half_physical_damage) tmp = (tmp+1) / 2;
-			losehp(tmp, killer_buf, KILLED_BY_AN);
+			physdmg(tmp, killer_buf, KILLED_BY_AN);
 		    } else {
 			if (flags.soundok) You_hear("an explosion.");
 			magr->mhp -= tmp;

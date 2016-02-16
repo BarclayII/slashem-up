@@ -1654,7 +1654,7 @@ int magic; /* 0=Physical, otherwise skill level */
 #ifdef STEED
 			if (!u.usteed)
 #endif
-		    losehp(rnd(10), "jumping out of a bear trap", KILLED_BY);
+		    physdmg(rnd(10), "jumping out of a bear trap", KILLED_BY);
 		    set_wounded_legs(side, rn1(1000,500));
 		    break;
 		  }
@@ -2771,7 +2771,7 @@ struct obj *obj;
 	if (dam <= 0) dam = 1;
 	You("hit your %s with your bullwhip.", body_part(FOOT));
 	Sprintf(buf, "killed %sself with %s bullwhip", uhim(), uhis());
-	losehp(dam, buf, NO_KILLER_PREFIX);
+	physdmg(dam, buf, NO_KILLER_PREFIX);
 	flags.botl = 1;
 	return 1;
 
@@ -3028,7 +3028,7 @@ use_pole (obj)
 		case 1:
 		    /* Snag yourself */
 		    You("hook yourself!");
-		    losehp(rn1(10,10), "a fishing hook", KILLED_BY);
+		    physdmg(rn1(10,10), "a fishing hook", KILLED_BY);
 		    return 1;
 		case 2:
 		    /* Reel in a fish */
@@ -3277,7 +3277,7 @@ use_grapple (obj)
 	default:	/* Yourself (oops!) */
 	    if (P_SKILL(typ) <= P_BASIC) {
 		You("hook yourself!");
-		losehp(rn1(10,10), "a grappling hook", KILLED_BY);
+		physdmg(rn1(10,10), "a grappling hook", KILLED_BY);
 		return (1);
 	    }
 	    break;

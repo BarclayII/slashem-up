@@ -166,7 +166,7 @@ const char *verb;
 			mtmp->mtrapped = 0;
 		    } else {
 			if (!Passes_walls && !throws_rocks(youmonst.data)) {
-			    losehp(rnd(15), "squished under a boulder",
+			    physdmg(rnd(15), "squished under a boulder",
 				   NO_KILLER_PREFIX);
 			    return FALSE;	/* player remains trapped */
 			} else u.utrap = 0;
@@ -1326,12 +1326,12 @@ boolean at_stairs, falling, portal;
 			}
 		    }
 #ifdef STEED
-		    /* falling off steed has its own losehp() call */
+		    /* falling off steed has its own physdmg() call */
 		    if (u.usteed)
 			dismount_steed(DISMOUNT_FELL);
 		    else
 #endif
-			losehp(rnd(3), "falling downstairs", KILLED_BY);
+			physdmg(rnd(3), "falling downstairs", KILLED_BY);
 		    selftouch("Falling, you");
 		} else if (u.dz && at_ladder)
 		    You("climb down the ladder.");

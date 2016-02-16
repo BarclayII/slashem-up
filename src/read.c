@@ -458,6 +458,7 @@ int curse_bless;
 		if (is_on) Ring_gone(obj);
 		s = rnd(3 * abs(obj->spe));	/* amount of damage */
 		useup(obj);
+		/* is ring explosion a physical one, as in 3.6.0? */
 		losehp(s, "exploding ring", KILLED_BY_AN);
 	    } else {
 		long mask = is_on ? (obj == uleft ? LEFT_RING :
@@ -1600,7 +1601,7 @@ register struct obj	*sobj;
 			stackobj(otmp2);
 			newsym(u.ux, u.uy);
 		    }
-		    if (dmg) losehp(dmg, "scroll of earth", KILLED_BY_AN);
+		    if (dmg) physdmg(dmg, "scroll of earth", KILLED_BY_AN);
 		}
 	    } else
 		    pline("The rocks on the ceiling shake for a moment and calm down.");

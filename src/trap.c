@@ -735,7 +735,7 @@ unsigned trflags;
 		    stackobj(otmp);
 		    newsym(u.ux,u.uy);	/* map the rock */
 
-		    losehp(dmg, "falling rock", KILLED_BY_AN);
+		    physdmg(dmg, "falling rock", KILLED_BY_AN);
 		    exercise(A_STR, FALSE);
 		}
 		break;
@@ -812,16 +812,14 @@ unsigned trflags;
 
 		    pline("%s you!", A_gush_of_water_hits);
 		    You("are covered with rust!");
-		    if (Half_physical_damage) dam = (dam+1) / 2;
-		    losehp(dam, "rusting away", KILLED_BY);
+		    physdmg(dam, "rusting away", KILLED_BY);
 		    break;
 		} else if (u.umonnum == PM_FLAMING_SPHERE) {
 		    int dam = u.mhmax;
 
 		    pline("%s you!", A_gush_of_water_hits);
 		    You("are extinguished!");
-		    if (Half_physical_damage) dam = (dam+1) / 2;
-		    losehp(dam, "drenching", KILLED_BY);
+		    physdmg(dam, "drenching", KILLED_BY);
 		    break;
 		} else if (u.umonnum == PM_GREMLIN && rn2(3)) {
 		    pline("%s you!", A_gush_of_water_hits);
@@ -953,7 +951,7 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 #endif
 		    if (ttype == SPIKED_PIT) {
 			oldumort = u.umortality;
-			losehp(Maybe_Half_Phys(rnd(adj_pit ? 6 : 10)),
+			physdmg(rnd(adj_pit ? 6 : 10),
 				plunged
 				? "deliberately plunged into a pit of iron spikes"
 				: adj_pit ? "stepped into a pit of iron spikes"
@@ -970,7 +968,7 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 			/* plunging flyers take spike damage but not pit damage */
 			if (!adj_pit &&
 			    !(plunged && (Flying || is_clinger(youmonst.data))))
-			    losehp(Maybe_Half_Phys(rnd(6)),
+			    physdmg(rnd(6),
 				    plunged ? "deliberately plunged into a pit"
 				    : "fell into a pit",
 				    NO_KILLER_PREFIX);
@@ -2558,7 +2556,7 @@ long hmask, emask;     /* might cancel timeout */
 			     * ceases knocks you off your feet.
 			     */
 			    You("fall over.");
-			    losehp(rnd(2), "dangerous winds", KILLED_BY);
+			    physdmg(rnd(2), "dangerous winds", KILLED_BY);
 #ifdef STEED
 			    if (u.usteed) dismount_steed(DISMOUNT_FELL);
 #endif
@@ -2777,7 +2775,7 @@ domagictrap()
 /* KMH, balance patch -- Idea by Wolfgang von Hansen <wvh@geodesy.inka.de> */
 				dmg = jumble_pack();
 				if (dmg)
-					losehp(dmg, "violence", KILLED_BY);
+					physdmg(dmg, "violence", KILLED_BY);
 			break;
 			}
 	     case 17:	You(Hallucination ?

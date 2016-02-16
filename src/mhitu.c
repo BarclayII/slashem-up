@@ -3158,8 +3158,7 @@ register struct monst *mon;
 				You_feel("exhausted.");
 			        exercise(A_STR, FALSE);
 				tmp = rn1(10, 6);
-				if(Half_physical_damage) tmp = (tmp+1) / 2;
-				losehp(tmp, "exhaustion", KILLED_BY);
+				physdmg(tmp, "exhaustion", KILLED_BY);
 				break;
 			}
 		}

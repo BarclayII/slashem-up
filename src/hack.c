@@ -795,14 +795,14 @@ dosinkfall()
 	       are really still worn has no effect on bones data */
 	    ELevitation = HLevitation = 0L;
 	    You("crash to the floor!");
-	    losehp(rn1(8, 25 - (int)ACURR(A_CON)),
+	    physdmg(rn1(8, 25 - (int)ACURR(A_CON)),
 		   fell_on_sink, NO_KILLER_PREFIX);
 	    exercise(A_DEX, FALSE);
 	    selftouch("Falling, you");
 	    for (obj = level.objects[u.ux][u.uy]; obj; obj = obj->nexthere)
 		if (obj->oclass == WEAPON_CLASS || is_weptool(obj)) {
 		    You("fell on %s.", doname(obj));
-		    losehp(rnd(3), fell_on_sink, NO_KILLER_PREFIX);
+		    physdmg(rnd(3), fell_on_sink, NO_KILLER_PREFIX);
 		    exercise(A_CON, FALSE);
 		}
 	    ELevitation = save_ELev;

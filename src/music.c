@@ -341,7 +341,7 @@ do_pit:		    chasm = maketrap(x,y,PIT);
 				    You("fall into a chasm!");
 				    u.utrap = rn1(6,2);
 				    u.utraptype = TT_PIT;
-				    losehp(rnd(6),"fell into a chasm",
+				    physdmg(rnd(6),"fell into a chasm",
 					NO_KILLER_PREFIX);
 				    selftouch("Falling, you");
 			    }

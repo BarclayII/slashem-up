@@ -156,6 +156,11 @@ NEARDATA extern coord bhitpos;	/* place where throw or zap hits or stops */
  */
 #define Maybe_Half_Phys(dmg) \
     ((Half_physical_damage) ? (((dmg) + 1) / 2) : (dmg))
+#define Maybe_Half_Spell(dmg) \
+    ((Half_spell_damage) ? (((dmg) + 1) / 2) : (dmg))
+#define physdmg(n, knam, k_format) losehp(Maybe_Half_Phys(n), knam, k_format)
+/* [BarclayII] provide an interface anyway */
+#define spelldmg(n, knam, k_format) losehp(Maybe_Half_Spell(n), knam, k_format)
 
 /* flags for special ggetobj status returns */
 #define ALL_FINISHED	  0x01  /* called routine already finished the job */

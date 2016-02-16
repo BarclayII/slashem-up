@@ -1038,7 +1038,7 @@ struct obj *obj;
 		You("hit yourself with %s.", yname(uwep));
 		Sprintf(buf, "%s own %s", uhis(),
 				OBJ_NAME(objects[obj->otyp]));
-		losehp(dam, buf, KILLED_BY);
+		physdmg(dam, buf, KILLED_BY);
 		flags.botl=1;
 		return(1);
 	} else if(u.dz == 0) {
@@ -1083,7 +1083,7 @@ struct obj *obj;
 			    pline("Sparks fly as you whack the %s.%s",
 				sobj_at(STATUE, rx, ry) ? "statue" : "boulder",
 				vibrate ? " The axe-handle vibrates violently!" : "");
-			    if (vibrate) losehp(2, "axing a hard object", KILLED_BY);
+			    if (vibrate) physdmg(2, "axing a hard object", KILLED_BY);
 			} else if (u.utrap && u.utraptype == TT_PIT && trap
 				&& (trap_with_u = t_at(u.ux, u.uy))
 				&& (trap->ttyp == PIT || trap->ttyp == SPIKED_PIT)
@@ -1362,7 +1362,7 @@ zap_dig()
 			      "ladder" : "stairs", ceiling(u.ux, u.uy));
 		    You("loosen a rock from the %s.", ceiling(u.ux, u.uy));
 		    pline("It falls on your %s!", body_part(HEAD));
-		    losehp(rnd((uarmh && is_metallic(uarmh)) ? 2 : 6),
+		    physdmg(rnd((uarmh && is_metallic(uarmh)) ? 2 : 6),
 			   "falling rock", KILLED_BY_AN);
 		    otmp = mksobj_at(ROCK, u.ux, u.uy, FALSE, FALSE);
 		    if (otmp) {

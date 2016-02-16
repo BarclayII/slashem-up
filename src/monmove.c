@@ -511,8 +511,7 @@ register struct monst *mtmp;
 				dmg = (mdat == &mons[PM_CTHULHU])?
 					rn1(10, 10) :
 					rn1(4, 4);
-				if (Half_spell_damage) dmg = (dmg+1) / 2;
-				losehp(dmg, "psychic blast", KILLED_BY_AN);
+				spelldmg(dmg, "psychic blast", KILLED_BY_AN);
 			}
 		}
 		for(m2=fmon; m2; m2 = nmon) {

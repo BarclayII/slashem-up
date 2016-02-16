@@ -1271,8 +1271,7 @@ register struct obj *otmp;
 			} else if (rnd(20) < 10 + u.uac) {
 			    pline_The("wand hits you!");
 			    tmp = d(2,12);
-			    if(Half_spell_damage) tmp = (tmp+1) / 2;
-			    losehp(tmp, "wand", KILLED_BY_AN);
+			    spelldmg(tmp, "wand", KILLED_BY_AN);
 			} else pline_The("wand misses you.");
 			stop_occupation();
 			nomul(0, NULL);
@@ -1647,7 +1646,7 @@ struct monst *mtmp;
 			stackobj(otmp2);
 			newsym(u.ux, u.uy);
 		    }
-		    if (dmg) losehp(dmg, "scroll of earth", KILLED_BY_AN);
+		    if (dmg) physdmg(dmg, "scroll of earth", KILLED_BY_AN);
 		}
 	    xxx_noobj:
 
