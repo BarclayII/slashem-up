@@ -57,8 +57,10 @@ const struct innate {
 
 	mon_abil[] = { {   1, &(HFast), "", "" },
 		     {   1, &(HSee_invisible), "", "" },
+#if 0			/* [BarclayII] now wards */
 		     {   3, &(HSleep_resistance), "awake", "tired" },
 		     {   5, &(HPoison_resistance), "healthy", "" },
+#endif
 		     {   7, &(HStealth), "stealthy", "" },
 		     {   9, &(HWarning), "sensitive", "" },
 		     {   11, &(HSearching), "perceptive", "unaware" },

@@ -85,6 +85,8 @@ STATIC_OVL NEARDATA const char *tech_names[] = {
 	"shield block",
 	"shield pummel",
 	"call undead",
+	"ward against sleep",
+	"ward against poison",
 };
 
 static const struct innate_tech 
@@ -119,7 +121,9 @@ static const struct innate_tech
 		       {   1, T_DASH, 1},
 		       {   1, T_BLITZ, 1},
 		       {   2, T_CHI_STRIKE, 1},
+		       {   3, T_WARD_SLEEP, 1},
 	  	       {   4, T_CHI_HEALING, 1},
+		       {   5, T_WARD_POISON, 1},
 	  	       {   6, T_E_FIST, 1},
 		       {   8, T_DRAW_ENERGY, 1},
 		       {  10, T_G_SLAM, 1},
@@ -1254,6 +1258,22 @@ try_tame:	    if (mtmp)
 		t_timeout = rn1(1000,500);
 
 	    	break;
+	    case T_WARD_SLEEP:
+		if (HSleep_resistance & FROMSTART) return (0);
+
+		You("focus yourself and feel awake.");
+		HSleep_resistance += rn1(100, 50);
+		HSleep_resistance += techlev(tech_no);
+		t_timeout = rn1(1000, 500);
+		break;
+	    case T_WARD_POISON:
+		if (HPoison_resistance & FROMSTART) return (0);
+
+		You("control your energy against poison.");
+		HPoison_resistance += rn1(100, 50);
+		HPoison_resistance += techlev(tech_no);
+		t_timeout = rn1(1000, 500);
+		break;
 	    case T_TINKER:
 		if (Blind) {
 			You("can't do any tinkering if you can't see!");

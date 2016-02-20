@@ -195,7 +195,7 @@ A("Mjollnir",                   HEAVY_HAMMER,           /* Mjo:llnir */
 /* STEPHEN WHITE'S NEW CODE */
 A("Gauntlets of Defense",    GAUNTLETS_OF_DEXTERITY,
 	SPFX_RESTR, SPFX_HPHDAM, 0,
-	NO_ATTK,        NO_DFNS,        NO_CARY,    INVIS, A_NEUTRAL, PM_MONK, NON_PM, 5000L ),
+	NO_ATTK,        NO_DFNS,        NO_CARY,    INVIS, A_NEUTRAL, NON_PM, NON_PM, 5000L ),
 
 A("Mirrorbright",               SHIELD_OF_REFLECTION,
 	(SPFX_RESTR|SPFX_REFLECT), 0, 0,
