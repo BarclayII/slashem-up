@@ -1176,7 +1176,7 @@ postmov:
 			  /* vampires deliberately change into fog clouds
 			   * for a short period to bypass locked doors */
 			  mon_spec_poly(mtmp, &mons[PM_FOG_CLOUD],
-			      rn1(25, 25), FALSE, cansee(mtmp->mx, mtmp->my), FALSE, FALSE)))) {
+			      rn1(100, 100), FALSE, cansee(mtmp->mx, mtmp->my), FALSE, FALSE)))) {
 			if (flags.verbose && canseemon(mtmp))
 			    pline("%s %s under the door.", Monnam(mtmp),
 				  (ptr == &mons[PM_FOG_CLOUD] ||
@@ -1250,7 +1250,7 @@ postmov:
 			if (!passes_bars(ptr)) {
 				if (!(can_fog(mtmp) &&
 				    mon_spec_poly(mtmp, &mons[PM_FOG_CLOUD],
-					rn1(25, 25), FALSE,
+					rn1(100, 100), FALSE,
 					cansee(mtmp->mx, mtmp->my), FALSE,
 					FALSE)))
 					impossible("cannot turn into fog?");
