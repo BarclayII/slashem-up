@@ -1216,7 +1216,7 @@ nexttry:	/* eels prefer the water, but if there is no water nearby,
 		if (artifact_door(nx, ny) ?
 		    levl[nx][ny].doormask & D_CLOSED && !(flag & OPENDOOR)
 		      || levl[nx][ny].doormask & D_LOCKED :
-		    !amorphous(mdat) &&
+		    !(amorphous(mdat) || can_fog(mon)) &&
 	       ((levl[nx][ny].doormask & D_CLOSED && !(flag & OPENDOOR)) ||
 		(levl[nx][ny].doormask & D_LOCKED && !(flag & UNLOCKDOOR))) &&
 	       !thrudoor) continue;

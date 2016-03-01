@@ -172,6 +172,11 @@
 				 (ptr) == &mons[PM_ANCIENT_OF_DEATH] || \
 				 (ptr) == &mons[PM_GAS_SPORE] || \
 				 (ptr) == &mons[PM_BAALPHEGOR])
+#define is_vampshifter(ptr)	((ptr) == &mons[PM_VAMPIRE] || \
+				 (ptr) == &mons[PM_VAMPIRE_LORD] || \
+				 (ptr) == &mons[PM_VAMPIRE_MAGE] || \
+				 (ptr) == &mons[PM_VLAD_THE_IMPALER] || \
+				 (ptr) == &mons[PM_COUNT_DRACULA])
 
 /* this returns the light's range, or 0 if none; if we add more light emitting
    monsters, we'll likely have to add a new light range field to mons[] */
