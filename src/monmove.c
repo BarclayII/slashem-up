@@ -15,6 +15,7 @@ STATIC_DCL int FDECL(disturb,(struct monst *));
 STATIC_DCL void FDECL(distfleeck,(struct monst *,int *,int *,int *));
 STATIC_DCL int FDECL(m_arrival, (struct monst *));
 STATIC_DCL void FDECL(watch_on_duty,(struct monst *));
+STATIC_DCL boolean FDECL(stuff_prevents_passage,(struct monst *));
 /* WAC for breath door busting */
 static int FDECL(bust_door_breath, (struct monst *));
 
@@ -1001,7 +1002,8 @@ not_special:
 	/* unicorn may not be able to avoid hero on a noteleport level */
 	if (is_unicorn(ptr) && !level.flags.noteleport) flag |= NOTONL;
 	if (passes_walls(ptr)) flag |= (ALLOW_WALL | ALLOW_ROCK);
-	if (passes_bars(ptr) && !In_sokoban(&u.uz)) flag |= ALLOW_BARS;
+	if ((passes_bars(ptr) || can_fog(mtmp)) && !In_sokoban(&u.uz))
+	    flag |= ALLOW_BARS;
 	if (can_tunnel) flag |= ALLOW_DIG;
 	if (is_human(ptr) || ptr == &mons[PM_MINOTAUR]) flag |= ALLOW_SSM;
 	if (is_undead(ptr) && ptr->mlet != S_GHOST) flag |= NOGARLIC;
@@ -1168,7 +1170,13 @@ postmov:
 		    struct rm *here = &levl[mtmp->mx][mtmp->my];
 		    boolean btrapped = (here->doormask & D_TRAPPED);
 
-		    if(here->doormask & (D_LOCKED|D_CLOSED) && amorphous(ptr)) {
+		    if(here->doormask & (D_LOCKED|D_CLOSED) &&
+			(amorphous(ptr) ||
+			 (can_fog(mtmp) &&
+			  /* vampires deliberately change into fog clouds
+			   * for a short period to bypass locked doors */
+			  mon_spec_poly(mtmp, &mons[PM_FOG_CLOUD],
+			      rn1(100, 100), FALSE, cansee(mtmp->mx, mtmp->my), FALSE, FALSE)))) {
 			if (flags.verbose && canseemon(mtmp))
 			    pline("%s %s under the door.", Monnam(mtmp),
 				  (ptr == &mons[PM_FOG_CLOUD] ||
@@ -1239,6 +1247,14 @@ postmov:
 			    add_damage(mtmp->mx, mtmp->my, 0L);
 		    }
 		} else if (levl[mtmp->mx][mtmp->my].typ == IRONBARS) {
+			if (!passes_bars(ptr)) {
+				if (!(can_fog(mtmp) &&
+				    mon_spec_poly(mtmp, &mons[PM_FOG_CLOUD],
+					rn1(100, 100), FALSE,
+					cansee(mtmp->mx, mtmp->my), FALSE,
+					FALSE)))
+					impossible("cannot turn into fog?");
+			}
 			if (flags.verbose && canseemon(mtmp))
 			    Norep("%s %s %s the iron bars.", Monnam(mtmp),
 				  /* pluralization fakes verb conjugation */
@@ -1413,7 +1429,8 @@ register struct monst *mtmp;
 		  || ((mx != u.ux || my != u.uy) &&
 		      !passes_walls(mtmp->data) &&
 		      (!ACCESSIBLE(levl[mx][my].typ) ||
-		       (closed_door(mx, my) && !can_ooze(mtmp))))
+		       (closed_door(mx, my) &&
+			!(can_ooze(mtmp) || can_fog(mtmp)))))
 		  || !couldsee(mx, my));
 	} else {
 found_you:
@@ -1425,60 +1442,67 @@ found_you:
 	mtmp->muy = my;
 }
 
+/*
+ * Inventory prevents passage under door.
+ * Used by can_ooze() and can_fog().
+ */
+STATIC_OVL boolean
+stuff_prevents_passage(mtmp)
+struct monst *mtmp;
+{
+    struct obj *chain, *obj;
+
+    if (mtmp == &youmonst) {
+        chain = invent;
+    } else {
+        chain = mtmp->minvent;
+    }
+    for (obj = chain; obj; obj = obj->nobj) {
+        int typ = obj->otyp;
+
+        if (typ == COIN_CLASS && obj->quan > 100L)
+            return TRUE;
+        if (obj->oclass != GEM_CLASS && !(typ >= ARROW && typ <= BOOMERANG)
+            && !(typ >= DAGGER && typ <= CRYSKNIFE) && typ != SLING
+            && !is_cloak(obj) && typ != FEDORA && !is_gloves(obj)
+            && typ != LEATHER_JACKET && typ != CREDIT_CARD && !is_shirt(obj)
+            && !(typ == CORPSE && verysmall(&mons[obj->corpsenm]))
+            && typ != FORTUNE_COOKIE && typ != CANDY_BAR && typ != PANCAKE
+            && typ != LEMBAS_WAFER && typ != LUMP_OF_ROYAL_JELLY
+            && obj->oclass != AMULET_CLASS && obj->oclass != RING_CLASS
+            && obj->oclass != VENOM_CLASS && typ != SACK
+            && typ != BAG_OF_HOLDING && typ != BAG_OF_TRICKS
+            && !Is_candle(obj) && typ != OILSKIN_SACK && typ != LEASH
+            && typ != STETHOSCOPE && typ != BLINDFOLD && typ != TOWEL
+            && typ != TIN_WHISTLE && typ != MAGIC_WHISTLE
+            && typ != MAGIC_MARKER && typ != TIN_OPENER && typ != SKELETON_KEY
+            && typ != LOCK_PICK)
+            return TRUE;
+        if (Is_container(obj) && obj->cobj)
+            return TRUE;
+    }
+    return FALSE;
+}
+
 boolean
 can_ooze(mtmp)
 struct monst *mtmp;
 {
-	struct obj *chain, *obj;
+    if (!amorphous(mtmp->data) || stuff_prevents_passage(mtmp))
+        return FALSE;
+    return TRUE;
+}
 
-	if (!amorphous(mtmp->data)) return FALSE;
-	if (mtmp == &youmonst) {
-#ifndef GOLDOBJ
-		if (u.ugold > 100L) return FALSE;
-#endif
-		chain = invent;
-	} else {
-#ifndef GOLDOBJ
-		if (mtmp->mgold > 100L) return FALSE;
-#endif
-		chain = mtmp->minvent;
-	}
-	for (obj = chain; obj; obj = obj->nobj) {
-		int typ = obj->otyp;
-
-#ifdef GOLDOBJ
-                if (typ == COIN_CLASS && obj->quan > 100L) return FALSE;
-#endif
-		if (obj->oclass != GEM_CLASS &&
-		    !(typ >= ARROW && typ <= BOOMERANG) &&
-		    !(typ >= DAGGER && typ <= CRYSKNIFE) &&
-		    typ != SLING &&
-		    !is_cloak(obj) && typ != FEDORA &&
-		    !is_gloves(obj) && typ != LEATHER_JACKET &&
-#ifdef TOURIST
-		    typ != CREDIT_CARD && !is_shirt(obj) &&
-#endif
-		    !(typ == CORPSE && verysmall(&mons[obj->corpsenm])) &&
-		    typ != FORTUNE_COOKIE && typ != CANDY_BAR &&
-		    typ != PANCAKE && typ != LEMBAS_WAFER &&
-		    typ != LUMP_OF_ROYAL_JELLY &&
-		    obj->oclass != AMULET_CLASS &&
-		    obj->oclass != RING_CLASS &&
-#ifdef WIZARD
-		    obj->oclass != VENOM_CLASS &&
-#endif
-		    typ != SACK && typ != BAG_OF_HOLDING &&
-		    typ != BAG_OF_TRICKS && !Is_candle(obj) &&
-		    typ != OILSKIN_SACK && typ != LEASH &&
-		    typ != STETHOSCOPE && typ != BLINDFOLD && typ != TOWEL &&
-		    typ != TIN_WHISTLE && typ != MAGIC_WHISTLE &&
-		    typ != MAGIC_MARKER && typ != TIN_OPENER &&
-		    typ != SKELETON_KEY && typ != LOCK_PICK
-		) return FALSE;
-		if (Is_container(obj) && obj->cobj) return FALSE;
-		    
-	}
-	return TRUE;
+/* monster can change form into a fog if necessary */
+/* [BarclayII] from NetHack 3.6.0, apparently a reference to Castlevania */
+boolean
+can_fog(mtmp)
+struct monst *mtmp;
+{
+    if (!(mvitals[PM_FOG_CLOUD].mvflags & G_GENOD) && is_vampshifter(mtmp->data)
+        && !Protection_from_shape_changers && !stuff_prevents_passage(mtmp))
+        return TRUE;
+    return FALSE;
 }
 
 static int

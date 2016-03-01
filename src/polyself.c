@@ -327,8 +327,11 @@ boolean forcecontrol;
 				you_were();
 			goto made_change;
 		} else if (isvamp) {
-			if (u.umonnum != PM_VAMPIRE_BAT)
-				mntmp = PM_VAMPIRE_BAT;
+			int rndvampshift = rn2(3) ?
+			    (rn2(2) ? PM_WOLF : PM_FOG_CLOUD) :
+			    PM_VAMPIRE_BAT;
+			if (u.umonnum != rndvampshift)
+				mntmp = rndvampshift;
 			else
 				mntmp = PM_HUMAN; /* newman() */
 		}
