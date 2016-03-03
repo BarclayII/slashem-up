@@ -1171,25 +1171,37 @@ postmov:
 		    boolean btrapped = (here->doormask & D_TRAPPED);
 
 		    if(here->doormask & (D_LOCKED|D_CLOSED) &&
-			(amorphous(ptr) ||
-			 (can_fog(mtmp) &&
-			  /*
-			   * [BarclayII]
-			   * Vampires deliberately change into fog clouds
-			   * for a short period to bypass locked doors as a
-			   * new feature from NetHack 3.6.0.
-			   *
-			   * Since SLASH'EM already implemented polymorph
-			   * timeouts, we don't need the whole bunch of
-			   * unpolymorph code for vampires there: we simply
-			   * set a short timeout for vampires via
-			   * mon_spec_poly().
-			   *
-			   * Use omx and omy here since vampires change into
-			   * fog clouds *before* entering locked doors.
-			   */
-			  mon_spec_poly(mtmp, &mons[PM_FOG_CLOUD],
-			      rn1(100, 100), FALSE, cansee(omx, omy), FALSE, FALSE)))) {
+			(amorphous(ptr) || can_fog(mtmp))) {
+			/*
+			 * [BarclayII]
+			 * Vampires deliberately change into fog clouds
+			 * for a short period to bypass locked doors as a
+			 * new feature from NetHack 3.6.0.
+			 *
+			 * Since SLASH'EM already implemented polymorph
+			 * timeouts, we don't need the whole bunch of
+			 * unpolymorph code for vampires there: we simply
+			 * set a short timeout for vampires via
+			 * mon_spec_poly().
+			 *
+			 * Dirty hack:
+			 * Use omx and omy before mon_spec_poly() since
+			 * vampires change into fog clouds *before* entering
+			 * locked doors.  This also prevents cloaks being
+			 * stuck on doors.
+			 */
+			int fogged = 0;
+			if (can_fog(mtmp)) {
+			    int nnmx = mtmp->mx, nnmy = mtmp->my;
+			    mtmp->mx = omx; mtmp->my = omy;
+			    fogged = mon_spec_poly(mtmp, &mons[PM_FOG_CLOUD],
+				rn1(100, 100), FALSE, cansee(omx, omy), FALSE, FALSE);
+			    mtmp->mx = nnmx; mtmp->my = nnmy;
+			    newsym(nnmx, nnmy);
+			    newsym(omx, omy);
+			    if (!fogged)
+				impossible("cannot turn into fog before locked door?");
+			}
 			if (flags.verbose && canseemon(mtmp))
 			    pline("%s %s under the door.", Monnam(mtmp),
 				  (ptr == &mons[PM_FOG_CLOUD] ||
@@ -1261,12 +1273,19 @@ postmov:
 		    }
 		} else if (levl[mtmp->mx][mtmp->my].typ == IRONBARS) {
 			if (!passes_bars(ptr)) {
-				if (!(can_fog(mtmp) &&
-				    mon_spec_poly(mtmp, &mons[PM_FOG_CLOUD],
-					rn1(100, 100), FALSE,
-					cansee(omx, omy), FALSE,
-					FALSE)))
-					impossible("cannot turn into fog?");
+			    if (can_fog(mtmp)) {
+				int fogged = 0;
+				int nnmx = mtmp->mx, nnmy = mtmp->my;
+				mtmp->mx = omx; mtmp->my = omy;
+				fogged = mon_spec_poly(mtmp, &mons[PM_FOG_CLOUD],
+				    rn1(100, 100), FALSE, cansee(omx, omy), FALSE, FALSE);
+				mtmp->mx = nnmx; mtmp->my = nnmy;
+				newsym(nnmx, nnmy);
+				newsym(omx, omy);
+				if (!fogged)
+				    impossible("fogging failed before iron bars?");
+			    } else
+				impossible("can not fog before iron bars?");
 			}
 			if (flags.verbose && canseemon(mtmp))
 			    Norep("%s %s %s the iron bars.", Monnam(mtmp),
