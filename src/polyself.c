@@ -377,7 +377,7 @@ boolean forcecontrol;
 			else if (!mvitals[mntmp].eaten) {
 				You("attempt an unfamiliar polymorph.");
 				/* [BarclayII] always have 1/3 chance of failing */
-				if (((rn2(5) + u.ulevel - 2) < mons[mntmp].mlevel) && !rn2(3))
+				if (((rn2(5) + u.ulevel - 2) < mons[mntmp].mlevel))
 				    mntmp = LOW_PM - 1; /* Didn't work for sure */
 				/* Either way, give it a shot */
 				break;
@@ -524,7 +524,7 @@ int	mntmp;
 		delayed_killer = 0;
 	}
 
-	u.mtimedone = rn1(500, 500);
+	u.mtimedone = Race_if(PM_DOPPELGANGER) ? rn1(20, 20) : rn1(500, 500);
 	u.umonnum = mntmp;
 	set_uasmon();
 
