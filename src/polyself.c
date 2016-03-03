@@ -327,6 +327,18 @@ boolean forcecontrol;
 				you_were();
 			goto made_change;
 		} else if (isvamp) {
+			/*
+			 * [BarclayII]
+			 * In NetHack 3.6.0 vampires can only polymorph to
+			 * vampire bat, wolf and fog cloud (possibly a
+			 * reference to Alucard in Castlevania?).  I decided
+			 * to partly adopt this feature: player vampires can
+			 * only polymorph into these three forms, while monster
+			 * vampires can polymorph into any form.  This feels
+			 * probably more like SLASH'EM since polymorphed
+			 * monsters will polymorph back upon timeout/killed
+			 * anyway.
+			 */
 			int rndvampshift = rn2(3) ?
 			    (rn2(2) ? PM_WOLF : PM_FOG_CLOUD) :
 			    PM_VAMPIRE_BAT;

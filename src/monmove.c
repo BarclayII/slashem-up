@@ -1173,10 +1173,23 @@ postmov:
 		    if(here->doormask & (D_LOCKED|D_CLOSED) &&
 			(amorphous(ptr) ||
 			 (can_fog(mtmp) &&
-			  /* vampires deliberately change into fog clouds
-			   * for a short period to bypass locked doors */
+			  /*
+			   * [BarclayII]
+			   * Vampires deliberately change into fog clouds
+			   * for a short period to bypass locked doors as a
+			   * new feature from NetHack 3.6.0.
+			   *
+			   * Since SLASH'EM already implemented polymorph
+			   * timeouts, we don't need the whole bunch of
+			   * unpolymorph code for vampires there: we simply
+			   * set a short timeout for vampires via
+			   * mon_spec_poly().
+			   *
+			   * Use omx and omy here since vampires change into
+			   * fog clouds *before* entering locked doors.
+			   */
 			  mon_spec_poly(mtmp, &mons[PM_FOG_CLOUD],
-			      rn1(100, 100), FALSE, cansee(mtmp->mx, mtmp->my), FALSE, FALSE)))) {
+			      rn1(100, 100), FALSE, cansee(omx, omy), FALSE, FALSE)))) {
 			if (flags.verbose && canseemon(mtmp))
 			    pline("%s %s under the door.", Monnam(mtmp),
 				  (ptr == &mons[PM_FOG_CLOUD] ||
@@ -1251,7 +1264,7 @@ postmov:
 				if (!(can_fog(mtmp) &&
 				    mon_spec_poly(mtmp, &mons[PM_FOG_CLOUD],
 					rn1(100, 100), FALSE,
-					cansee(mtmp->mx, mtmp->my), FALSE,
+					cansee(omx, omy), FALSE,
 					FALSE)))
 					impossible("cannot turn into fog?");
 			}
