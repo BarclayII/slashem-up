@@ -388,7 +388,6 @@ boolean forcecontrol;
 #ifdef EATEN_MEMORY
 			else if (!mvitals[mntmp].eaten) {
 				You("attempt an unfamiliar polymorph.");
-				/* [BarclayII] always have 1/3 chance of failing */
 				if (((rn2(5) + u.ulevel - 2) < mons[mntmp].mlevel))
 				    mntmp = LOW_PM - 1; /* Didn't work for sure */
 				/* Either way, give it a shot */
@@ -424,7 +423,7 @@ boolean forcecontrol;
         /* WAC Doppelgangers go through a 1/20 check rather than 1/5 */
         if (!polyok(&mons[mntmp]) ||
         		(Race_if(PM_DOPPELGANGER) ? (
-        			((u.ulevel < mons[mntmp].mlevel)
+        			((rn2(u.ulevel) < rn2(mons[mntmp].mlevel))
 #ifdef EATEN_MEMORY
         			 || !mvitals[mntmp].eaten
 #endif
